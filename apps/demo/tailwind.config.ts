@@ -4,7 +4,7 @@ export default {
   darkMode: ["class"],
   content: [
     "./src/**/*.{ts,tsx}",
-    "./packages/core/src/**/*.{ts,tsx}",
+    "../../packages/core/src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {

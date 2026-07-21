@@ -14,6 +14,8 @@ import { CompareProvider } from './contexts/CompareContext';
 import { RecentlyViewedProvider } from './contexts/RecentlyViewedContext';
 import { AccountProvider } from './contexts/AccountContext';
 import { SiteConfigProvider } from './contexts/SiteConfigContext';
+import { DataProviderWrapper } from './contexts/DataContext';
+import type { CatalogDataProvider } from './data/provider';
 import type { IndustryTemplate } from './types';
 import type { CurrencyCode } from './contexts/SiteConfigContext';
 import type { Language } from './i18n';
@@ -63,6 +65,8 @@ export interface CatalogProviderProps {
   defaultLanguage?: Language;
   /** Store configuration — overrides localStorage defaults */
   config?: CatalogConfig;
+  /** Optional custom Headless Data Provider (REST, GraphQL, Supabase, etc.) */
+  dataProvider?: CatalogDataProvider;
 }
 
 const defaultQueryClient = new QueryClient({
@@ -74,18 +78,17 @@ const defaultQueryClient = new QueryClient({
  *
  * Single wrapper that sets up every context your catalog needs.
  * Wrap your app (or page) once and get access to theming, cart,
- * wishlist, compare, recently-viewed, auth, account, i18n, and color mode.
+ * wishlist, compare, recently-viewed, auth, account, i18n, data-provider, and color mode.
  *
  * @example
  * ```tsx
- * import { CatalogProvider } from '@neverleans/catalog-core';
- * import { electronicsTheme } from '@neverleans/catalog-themes';
+ * import { CatalogProvider, restDataProvider } from '@neverleans/plug-store-core';
  *
  * function App() {
  *   return (
  *     <CatalogProvider
- *       defaultTheme="electronics"
- *       config={{ companyName: 'TechWorld', currency: 'USD' }}
+ *       dataProvider={restDataProvider('https://api.my-store.com')}
+ *       config={{ companyName: 'My Store', currency: 'BRL' }}
  *     >
  *       <YourAppContent />
  *     </CatalogProvider>
@@ -98,6 +101,7 @@ export const CatalogProvider = ({
   defaultTheme = 'fashion',
   defaultLanguage,
   config,
+  dataProvider,
 }: CatalogProviderProps) => {
   // Merge config into localStorage defaults before providers mount
   if (config && typeof window !== 'undefined') {
@@ -127,23 +131,25 @@ export const CatalogProvider = ({
           <ColorModeProvider>
             <SiteConfigProvider>
               <ThemeProvider>
-                <CartProvider>
-                  <AuthProvider>
-                    <AccountProvider>
-                      <WishlistProvider>
-                        <CompareProvider>
-                          <RecentlyViewedProvider>
-                            <TooltipProvider>
-                              <Toaster />
-                              <Sonner />
-                              {children}
-                            </TooltipProvider>
-                          </RecentlyViewedProvider>
-                        </CompareProvider>
-                      </WishlistProvider>
-                    </AccountProvider>
-                  </AuthProvider>
-                </CartProvider>
+                <DataProviderWrapper dataProvider={dataProvider}>
+                  <CartProvider>
+                    <AuthProvider>
+                      <AccountProvider>
+                        <WishlistProvider>
+                          <CompareProvider>
+                            <RecentlyViewedProvider>
+                              <TooltipProvider>
+                                <Toaster />
+                                <Sonner />
+                                {children}
+                              </TooltipProvider>
+                            </RecentlyViewedProvider>
+                          </CompareProvider>
+                        </WishlistProvider>
+                      </AccountProvider>
+                    </AuthProvider>
+                  </CartProvider>
+                </DataProviderWrapper>
               </ThemeProvider>
             </SiteConfigProvider>
           </ColorModeProvider>

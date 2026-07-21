@@ -12,6 +12,11 @@ export type {
   Order,
 } from './types';
 
+// ─── Headless Data Providers ──────────────────────────────────────────────────
+export type { CatalogDataProvider, DataProviderQueryParams } from './data/provider';
+export { dummyDataProvider, restDataProvider, customDataProvider } from './data/adapters';
+export { DataProviderWrapper, useCatalogData } from './contexts/DataContext';
+
 // ─── Core Providers ──────────────────────────────────────────────────────────
 export { CatalogProvider } from './CatalogProvider';
 export type { CatalogConfig, CatalogProviderProps } from './CatalogProvider';
