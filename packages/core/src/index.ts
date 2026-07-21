@@ -12,6 +12,22 @@ export type {
   Order,
 } from './types';
 
+// ─── Payment Gateways & Checkout ──────────────────────────────────────────────
+export type {
+  PaymentMethod,
+  CheckoutPayload,
+  PaymentResult,
+  PaymentGatewayAdapter,
+} from './lib/checkoutTypes';
+export {
+  whatsappGateway,
+  pixGateway,
+  stripeGateway,
+  mercadopagoGateway,
+} from './lib/checkoutAdapters';
+export { useCheckout } from './hooks/useCheckout';
+export type { UseCheckoutOptions } from './hooks/useCheckout';
+
 // ─── Headless Data Providers ──────────────────────────────────────────────────
 export type { CatalogDataProvider, DataProviderQueryParams } from './data/provider';
 export { dummyDataProvider, restDataProvider, customDataProvider } from './data/adapters';

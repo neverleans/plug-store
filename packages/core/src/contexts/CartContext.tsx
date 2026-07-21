@@ -7,6 +7,8 @@ interface CartContextType {
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  subtotal: number;
+  shippingCost: number;
   total: number;
   itemCount: number;
   discountCode: string;
@@ -50,11 +52,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const subtotal = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
   const discount = discountCode === 'SAVE10' ? subtotal * 0.1 : 0;
-  const total = subtotal - discount;
+  const shippingCost = subtotal > 500 || subtotal === 0 ? 0 : 25;
+  const total = subtotal - discount + shippingCost;
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, itemCount, discountCode, setDiscountCode, discount }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, subtotal, shippingCost, total, itemCount, discountCode, setDiscountCode, discount }}>
       {children}
     </CartContext.Provider>
   );
