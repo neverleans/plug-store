@@ -4,7 +4,7 @@ import { IndustryTemplate } from '@/types';
 
 // Map of industry template -> hero background image path.
 // Keep in sync with the backgrounds used in HomePage.tsx.
-const HERO_IMAGES: Record<IndustryTemplate, string> = {
+const HERO_IMAGES: Record<string, string> = {
   fashion: '/hero-fashion-bg.jpg',
   electronics: '/hero-electronics-bg.jpg',
   food: '/hero-food-bg.jpg',

@@ -13,10 +13,52 @@ export type IndustryTemplate =
   | 'homeware'
   | 'market'
   | 'wellness'
-  | 'stationery';
+  | 'stationery'
+  // Bebidas & Gastronomia
+  | 'winery'
+  | 'brewery'
+  | 'coffee'
+  | 'bakery'
+  | 'spices'
+  | 'chocolates'
+  // Entretenimento
+  | 'gaming'
+  | 'geek'
+  | 'music'
+  | 'boardgames'
+  | 'toys'
+  // Casa & Trabalho
+  | 'hardware'
+  | 'lighting'
+  | 'gardening'
+  | 'office'
+  | 'security'
+  // Esportes & Lazer
+  | 'cycling'
+  | 'outdoors'
+  | 'fishing'
+  | 'fitness'
+  | 'combat'
+  // Automotivo & Saúde
+  | 'motorcycles'
+  | 'optics'
+  | 'dental'
+  | 'medical'
+  | 'pharmacy'
+  // Variedades & Luxo
+  | 'watchmakers'
+  | 'perfume'
+  | 'handcrafted'
+  | 'party'
+  | 'flowers'
+  | 'leather'
+  | 'baby'
+  | 'spiritual'
+  | 'vintage'
+  | string;
 
 export interface ThemeConfig {
-  id: IndustryTemplate;
+  id: string;
   name: string;
   tagline: string;
   colors: {

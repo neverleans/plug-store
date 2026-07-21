@@ -94,13 +94,13 @@ export const setImportedProducts = (industry: IndustryTemplate, products: Produc
 export const getImportedProducts = getImported;
 export const clearImportedProducts = (industry: IndustryTemplate) => setImportedProducts(industry, []);
 
-export const getProducts = (industry: IndustryTemplate) => [...getImported(industry), ...allProducts[industry]];
-export const getCategories = (industry: IndustryTemplate) => allCategories[industry];
-export const getReviews = (industry: IndustryTemplate) => allReviews[industry];
+export const getProducts = (industry: IndustryTemplate) => [...getImported(industry), ...(allProducts[industry] || allProducts.fashion)];
+export const getCategories = (industry: IndustryTemplate) => allCategories[industry] || allCategories.fashion;
+export const getReviews = (industry: IndustryTemplate) => allReviews[industry] || allReviews.fashion;
 export const getFeaturedProducts = (industry: IndustryTemplate) => getProducts(industry).filter(p => p.featured);
 export const getProductById = (industry: IndustryTemplate, id: string) => getProducts(industry).find(p => p.id === id);
 export const getProductsByCategory = (industry: IndustryTemplate, category: string) => getProducts(industry).filter(p => p.category === category);
-export const getReviewsByProduct = (industry: IndustryTemplate, productId: string) => allReviews[industry].filter(r => r.productId === productId);
+export const getReviewsByProduct = (industry: IndustryTemplate, productId: string) => (allReviews[industry] || allReviews.fashion).filter(r => r.productId === productId);
 export const searchProducts = (industry: IndustryTemplate, query: string) => {
   const q = query.toLowerCase();
   return getProducts(industry).filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.tags.some(t => t.toLowerCase().includes(q)));
