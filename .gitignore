@@ -13,6 +13,20 @@ dist-ssr
 .turbo
 *.local
 
+# Environment
+.env
+.env.*
+!.env.example
+
+# Lockfiles from other package managers — this monorepo standardises on pnpm
+bun.lock
+bun.lockb
+package-lock.json
+yarn.lock
+
+# Coverage
+coverage
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
