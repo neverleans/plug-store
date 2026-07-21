@@ -13,6 +13,8 @@ import MiniCart from '@/components/cart/MiniCart';
 import DarkModeToggle from '@/components/common/DarkModeToggle';
 import { localizeCategory } from '@/i18n/dynamic';
 
+import PWAOfflineBanner from '@/components/common/PWAOfflineBanner';
+
 const Header = () => {
   const { theme, template } = useTheme();
   const { config } = useSiteConfig();
@@ -58,6 +60,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <PWAOfflineBanner />
       <div className="bg-primary px-4 py-1.5 text-center text-xs font-medium text-primary-foreground">
         {shippingBanner || t.freeShippingBanner}
       </div>

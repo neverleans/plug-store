@@ -12,6 +12,11 @@ export type {
   Order,
 } from './types';
 
+// ─── PWA & Offline Support ───────────────────────────────────────────────────
+export { usePWA } from './hooks/usePWA';
+export type { PWAInstallPromptEvent } from './hooks/usePWA';
+export { default as PWAOfflineBanner } from './components/common/PWAOfflineBanner';
+
 // ─── Payment Gateways & Checkout ──────────────────────────────────────────────
 export type {
   PaymentMethod,
