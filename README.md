@@ -41,7 +41,7 @@ Answer 3 quick prompts (Store Name, Initial Theme, Currency) and your applicatio
 
 ## 🔥 Key Features & Superpowers
 
-- 🎨 **15+ Turnkey Industry Themes**: Ready-to-use design systems for Fashion, Tech, Food, Furniture, Beauty, Sports, Books, Pets, Automotive, Art, Jewelry, Homeware, Market, Wellness, and Stationery.
+- 🎨 **50+ Turnkey Industry Themes**: Ready-to-use design systems for Fashion, Tech, Food, Furniture, Beauty, Sports, Books, Pets, Automotive, Art, Jewelry, Homeware, Market, Wellness, Stationery, Winery, Brewery, Coffee, Bakery, Spices, Chocolates, Gaming, Geek, Music, Boardgames, Toys, Hardware, Lighting, Gardening, Office, Security, Cycling, Outdoors, Fishing, Fitness, Combat, Motorcycles, Optics, Dental, Medical, Pharmacy, Watchmakers, Perfume, Handcrafted, Party, Flowers, Leather, Baby, Spiritual, and Vintage.
 - 💅 **Custom Brand Themes (`defineTheme`)**: Easily configure your client's exact brand colors, typography, hero styles, and card aesthetics.
 - 🔌 **Headless CMS & Data Providers**: Connect seamlessly to any backend API (REST, Supabase, Firebase, Prisma, GraphQL) via `restDataProvider` or `customDataProvider`.
 - 💳 **Turnkey Payment Gateways (`useCheckout`)**: Native support for **WhatsApp pre-filled orders**, **Pix Copia e Cola & QR Code**, **Stripe Checkout**, and **Mercado Pago**.
@@ -160,6 +160,24 @@ function CartSummary() {
   );
 }
 ```
+
+---
+
+## 🌟 PlugStore Open-Core & Ecosystem
+
+PlugStore is built on an **Open-Core philosophy**:
+- The core framework, CLI tool, 50 built-in themes, Headless Data Providers, and PWA engine are and will always remain **100% Free & Open Source under the Apache-2.0 License**.
+- To support ongoing development, we are building **PlugStore Pro** — an optional marketplace offering lifetime access to premium animated UI blocks, 3D interactive product showcases, and luxury admin dashboard templates for agencies and high-growth stores.
+
+---
+
+## 💖 Support the Project
+
+If PlugStore saved you hours of work or helped you ship client projects faster, consider supporting the project:
+
+- ⭐ **Star the Repository**: Help us gain visibility on GitHub!
+- 📢 **Share with the Community**: Tweet or blog about PlugStore.
+- 🪙 **Sponsor via GitHub Sponsors**: Become a backer or sponsor via [GitHub Sponsors](https://github.com/sponsors/neverleans).
 
 ---
 
