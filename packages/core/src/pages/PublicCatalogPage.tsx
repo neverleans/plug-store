@@ -19,9 +19,6 @@ const PublicCatalogPage = () => {
   const isPt = language === 'pt';
 
   const expectedSlug = (config.publicSlug || 'catalog').toLowerCase();
-  if (slug && slug.toLowerCase() !== expectedSlug) {
-    return <Navigate to={`/c/${expectedSlug}`} replace />;
-  }
 
   const brand = config.companyName || theme.name;
   const tagline = config.tagline || localizeTagline(template, theme.tagline, language);
@@ -43,6 +40,10 @@ const PublicCatalogPage = () => {
       );
     });
   }, [products, query, activeCat]);
+
+  if (slug && slug.toLowerCase() !== expectedSlug) {
+    return <Navigate to={`/c/${expectedSlug}`} replace />;
+  }
 
   return (
     <PageTransition>
