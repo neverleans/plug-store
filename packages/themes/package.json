@@ -1,9 +1,29 @@
 {
   "name": "@neverleans/plug-store-themes",
   "version": "0.1.0",
-  "description": "15 built-in industry themes and demo data for @neverleans/plug-store-core",
+  "description": "50 built-in industry design themes and the defineTheme customizer for @neverleans/plug-store-core",
   "author": "neverleans",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/neverleans/plug-store#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neverleans/plug-store.git",
+    "directory": "packages/themes"
+  },
+  "bugs": {
+    "url": "https://github.com/neverleans/plug-store/issues"
+  },
+  "keywords": [
+    "react",
+    "ecommerce",
+    "themes",
+    "design-system",
+    "tailwindcss",
+    "plug-store"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,7 +43,7 @@
     "lint": "eslint src"
   },
   "peerDependencies": {
-    "@neverleans/plug-store-core": "workspace:*"
+    "@neverleans/plug-store-core": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.16.5",

@@ -19,6 +19,24 @@
   ],
   "author": "neverleans",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/neverleans/plug-store#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neverleans/plug-store.git",
+    "directory": "packages/create-plug-store"
+  },
+  "bugs": {
+    "url": "https://github.com/neverleans/plug-store/issues"
+  },
+  "files": [
+    "bin"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "prompts": "^2.4.2",
     "kolorist": "^1.8.0"
