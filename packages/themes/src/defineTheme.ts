@@ -1,4 +1,4 @@
-import type { ThemeConfig, IndustryTemplate } from '@neverleans/catalog-core';
+import type { ThemeConfig, IndustryTemplate } from '@neverleans/plug-store-core';
 
 export const defaultThemeBase: Omit<ThemeConfig, 'id' | 'name' | 'tagline'> = {
   colors: {

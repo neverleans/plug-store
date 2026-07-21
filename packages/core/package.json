@@ -1,5 +1,5 @@
 {
-  "name": "@neverleans/catalog-core",
+  "name": "@neverleans/plug-store-core",
   "version": "0.1.0",
   "description": "A flexible, multi-theme catalog and e-commerce framework for React",
   "author": "neverleans",

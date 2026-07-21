@@ -14,10 +14,10 @@ importers:
 
   apps/demo:
     dependencies:
-      '@neverleans/catalog-core':
+      '@neverleans/plug-store-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@neverleans/catalog-themes':
+      '@neverleans/plug-store-themes':
         specifier: workspace:*
         version: link:../../packages/themes
       react:
@@ -277,7 +277,7 @@ importers:
 
   packages/themes:
     dependencies:
-      '@neverleans/catalog-core':
+      '@neverleans/plug-store-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

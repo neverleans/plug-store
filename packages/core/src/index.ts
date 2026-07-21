@@ -35,6 +35,10 @@ export { DEFAULT_COUPONS } from './contexts/SiteConfigContext';
 export { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 export { ColorModeProvider, useColorMode } from './contexts/ColorModeContext';
 
+// ─── Productivity Hooks ────────────────────────────────────────────────────────
+export { useCatalogLink } from './hooks/useCatalogLink';
+export { useCatalogAnalytics, trackEvent } from './hooks/useCatalogAnalytics';
+
 // ─── Layout Components ────────────────────────────────────────────────────────
 export { default as Header } from './components/layout/Header';
 export { default as Footer } from './components/layout/Footer';
@@ -50,6 +54,7 @@ export { default as MiniCart } from './components/cart/MiniCart';
 
 // ─── Common Components ────────────────────────────────────────────────────────
 export { default as SEOHead } from './components/common/SEOHead';
+export { default as CatalogSEO } from './components/common/CatalogSEO';
 export { default as ThemeSwitcher } from './components/common/ThemeSwitcher';
 export { default as CompareBar } from './components/common/CompareBar';
 export { default as DarkModeToggle } from './components/common/DarkModeToggle';

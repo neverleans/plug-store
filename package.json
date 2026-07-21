@@ -1,5 +1,5 @@
 {
-  "name": "neverleans-catalog-monorepo",
+  "name": "neverleans-plug-store-monorepo",
   "private": true,
   "version": "0.0.0",
   "packageManager": "pnpm@10.32.0",
@@ -8,8 +8,8 @@
     "build": "turbo build",
     "test": "turbo test",
     "lint": "turbo lint",
-    "build:core": "turbo build --filter=@neverleans/catalog-core",
-    "build:themes": "turbo build --filter=@neverleans/catalog-themes",
+    "build:core": "turbo build --filter=@neverleans/plug-store-core",
+    "build:themes": "turbo build --filter=@neverleans/plug-store-themes",
     "dev:demo": "turbo dev --filter=./apps/demo"
   },
   "devDependencies": {

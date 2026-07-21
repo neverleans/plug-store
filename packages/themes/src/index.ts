@@ -1,7 +1,5 @@
 export * from './defineTheme';
-
-// Import all themes and theme configs from core or local extracted themes
-import type { ThemeConfig, IndustryTemplate } from '@neverleans/catalog-core';
+import type { ThemeConfig } from '@neverleans/plug-store-core';
 
 export const themeConfigs: Record<string, ThemeConfig> = {
   fashion: {
