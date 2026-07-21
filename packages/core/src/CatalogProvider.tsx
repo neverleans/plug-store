@@ -16,7 +16,7 @@ import { AccountProvider } from './contexts/AccountContext';
 import { SiteConfigProvider } from './contexts/SiteConfigContext';
 import { DataProviderWrapper } from './contexts/DataContext';
 import type { CatalogDataProvider } from './data/provider';
-import type { IndustryTemplate } from './types';
+import type { IndustryTemplate, ThemeConfig } from './types';
 import type { CurrencyCode } from './contexts/SiteConfigContext';
 import type { Language } from './i18n';
 
@@ -60,7 +60,9 @@ export interface CatalogConfig {
 export interface CatalogProviderProps {
   children: ReactNode;
   /** Initial industry theme to load. Consumers can also use ThemeSwitcher to change at runtime. */
-  defaultTheme?: IndustryTemplate;
+  defaultTheme?: IndustryTemplate | string;
+  /** Pass a custom theme created with defineTheme */
+  customTheme?: ThemeConfig;
   /** Initial UI language */
   defaultLanguage?: Language;
   /** Store configuration — overrides localStorage defaults */
@@ -77,19 +79,24 @@ const defaultQueryClient = new QueryClient({
  * CatalogProvider
  *
  * Single wrapper that sets up every context your catalog needs.
- * Wrap your app (or page) once and get access to theming, cart,
+ * Wrap your app (or page) once and get access to custom/built-in theming, cart,
  * wishlist, compare, recently-viewed, auth, account, i18n, data-provider, and color mode.
  *
  * @example
  * ```tsx
- * import { CatalogProvider, restDataProvider } from '@neverleans/plug-store-core';
+ * import { CatalogProvider } from '@neverleans/plug-store-core';
+ * import { defineTheme } from '@neverleans/plug-store-themes';
+ *
+ * const clienteTheme = defineTheme({
+ *   id: 'minha-marca',
+ *   name: 'Minha Marca',
+ *   tagline: 'Estilo Próprio',
+ *   colors: { primary: '210 100% 50%', background: '0 0% 98%' },
+ * });
  *
  * function App() {
  *   return (
- *     <CatalogProvider
- *       dataProvider={restDataProvider('https://api.my-store.com')}
- *       config={{ companyName: 'My Store', currency: 'BRL' }}
- *     >
+ *     <CatalogProvider customTheme={clienteTheme}>
  *       <YourAppContent />
  *     </CatalogProvider>
  *   );
@@ -99,6 +106,7 @@ const defaultQueryClient = new QueryClient({
 export const CatalogProvider = ({
   children,
   defaultTheme = 'fashion',
+  customTheme,
   defaultLanguage,
   config,
   dataProvider,
@@ -112,9 +120,11 @@ export const CatalogProvider = ({
     } catch {}
   }
 
-  if (defaultTheme && typeof window !== 'undefined') {
+  const activeThemeId = customTheme ? customTheme.id : defaultTheme;
+
+  if (activeThemeId && typeof window !== 'undefined') {
     if (!localStorage.getItem('ecom-template')) {
-      localStorage.setItem('ecom-template', defaultTheme);
+      localStorage.setItem('ecom-template', activeThemeId);
     }
   }
 
@@ -130,7 +140,7 @@ export const CatalogProvider = ({
         <LanguageProvider>
           <ColorModeProvider>
             <SiteConfigProvider>
-              <ThemeProvider>
+              <ThemeProvider customTheme={customTheme}>
                 <DataProviderWrapper dataProvider={dataProvider}>
                   <CartProvider>
                     <AuthProvider>

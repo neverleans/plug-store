@@ -6,16 +6,41 @@ interface ThemeContextType {
   template: IndustryTemplate;
   theme: ThemeConfig;
   setTemplate: (t: IndustryTemplate) => void;
+  registerCustomTheme: (customTheme: ThemeConfig) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [template, setTemplate] = useState<IndustryTemplate>(
-    () => (localStorage.getItem('ecom-template') as IndustryTemplate) || 'fashion'
-  );
+export interface ThemeProviderProps {
+  children: ReactNode;
+  /** Optional custom theme passed directly by the developer */
+  customTheme?: ThemeConfig;
+}
 
-  const theme = themeConfigs[template];
+export const ThemeProvider = ({ children, customTheme }: ThemeProviderProps) => {
+  const [registry, setRegistry] = useState<Record<string, ThemeConfig>>(() => {
+    const base = { ...themeConfigs };
+    if (customTheme) {
+      base[customTheme.id] = customTheme;
+    }
+    return base;
+  });
+
+  const [template, setTemplateState] = useState<IndustryTemplate>(() => {
+    if (customTheme) return customTheme.id;
+    return (localStorage.getItem('ecom-template') as IndustryTemplate) || 'fashion';
+  });
+
+  const setTemplate = (t: IndustryTemplate) => {
+    setTemplateState(t);
+  };
+
+  // Dynamically register new themes at runtime
+  const registerCustomTheme = (theme: ThemeConfig) => {
+    setRegistry((prev) => ({ ...prev, [theme.id]: theme }));
+  };
+
+  const theme = registry[template] || customTheme || themeConfigs.fashion;
 
   useEffect(() => {
     localStorage.setItem('ecom-template', template);
@@ -50,7 +75,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, [template, theme]);
 
   return (
-    <ThemeContext.Provider value={{ template, theme, setTemplate }}>
+    <ThemeContext.Provider
+      value={{
+        template,
+        theme,
+        setTemplate,
+        registerCustomTheme,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
