@@ -1,0 +1,80 @@
+name: 🐛 Bug report
+description: Report something that is not working as documented
+title: "[Bug]: "
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a report. Please fill in as much as you can —
+        a reproduction is worth more than a long description.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+      placeholder: When I set `defaultTheme="bakery"`, the hero renders with the fashion palette...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: A minimal code snippet or a link to a reproduction repository.
+      placeholder: |
+        1. Scaffold with `npx create-plug-store demo`
+        2. Set `defaultTheme` to `bakery`
+        3. Run `npm run dev` and open the home page
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which package?
+      multiple: true
+      options:
+        - "@neverleans/plug-store-core"
+        - "@neverleans/plug-store-themes"
+        - create-plug-store
+        - Demo app
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Node version, package manager, browser and OS.
+      placeholder: Node 20.11, pnpm 10, Chrome 133, Windows 11
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant console output
+      description: Paste any errors. This is automatically formatted as code.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this has not been reported yet.
+          required: true
+        - label: I am using a supported Node version (18 or newer).
+          required: true

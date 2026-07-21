@@ -11,7 +11,7 @@
 
   <p>
     Create high-converting, stunning product catalogs and e-commerce stores in seconds.<br />
-    Includes 15+ built-in industry themes, Headless Data Providers, Turnkey Payment Gateways, and PWA Offline support.
+    Includes 50 built-in industry themes, Headless Data Providers, Turnkey Payment Gateways, and PWA Offline support.
   </p>
 
   <hr />
@@ -34,7 +34,7 @@ Answer 3 quick prompts (Store Name, Initial Theme, Currency) and your applicatio
 | Package | Version | Description |
 |---|---|---|
 | [`@neverleans/plug-store-core`](./packages/core) | `0.1.0` | Core UI components, turnkey `CatalogApp`, contexts, hooks, and PWA layer |
-| [`@neverleans/plug-store-themes`](./packages/themes) | `0.1.0` | 15+ curated industry design themes & `defineTheme` customizer utility |
+| [`@neverleans/plug-store-themes`](./packages/themes) | `0.1.0` | 50 curated industry design themes & `defineTheme` customizer utility |
 | [`create-plug-store`](./packages/create-plug-store) | `0.1.0` | Interactive CLI scaffolding tool |
 
 ---
@@ -168,6 +168,18 @@ function CartSummary() {
 PlugStore is built on an **Open-Core philosophy**:
 - The core framework, CLI tool, 50 built-in themes, Headless Data Providers, and PWA engine are and will always remain **100% Free & Open Source under the Apache-2.0 License**.
 - To support ongoing development, we are building **PlugStore Pro** — an optional marketplace offering lifetime access to premium animated UI blocks, 3D interactive product showcases, and luxury admin dashboard templates for agencies and high-growth stores.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome, and adding a theme is the easiest place to start — each one
+is a single self-contained object.
+
+- Read the [Contributing Guide](./CONTRIBUTING.md) for setup and conventions.
+- Browse [`good first issue`](https://github.com/neverleans/plug-store/labels/good%20first%20issue) to find something to pick up.
+- Be kind — we follow a [Code of Conduct](./CODE_OF_CONDUCT.md).
+- Found a vulnerability? Please follow our [Security Policy](./SECURITY.md) instead of opening a public issue.
 
 ---
 

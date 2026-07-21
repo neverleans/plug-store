@@ -1,0 +1,60 @@
+name: 💡 Feature request
+description: Suggest a component, theme, integration or improvement
+title: "[Feature]: "
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ideas that come from real storefronts are the most valuable ones — tell us about
+        the project that made you want this.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation you hit, not just the solution you have in mind.
+      placeholder: I build catalogs for bakeries and there is no way to show daily availability...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would the API or component look like if it existed?
+      placeholder: |
+        ```tsx
+        <CatalogApp config={{ availabilitySchedule: true }} />
+        ```
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area does this touch?
+      options:
+        - Core components
+        - Themes and design
+        - Checkout and payments
+        - Data providers
+        - CLI scaffolding
+        - PWA and offline
+        - SEO and analytics
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Workarounds you tried, or other libraries that solve this well.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to open a pull request for this.
