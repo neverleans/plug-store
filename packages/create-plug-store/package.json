@@ -1,0 +1,31 @@
+{
+  "name": "create-plug-store",
+  "version": "0.1.0",
+  "description": "Scaffold a new production-ready PlugStore catalog application in seconds",
+  "bin": {
+    "create-plug-store": "./bin/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "create-plug-store",
+    "plug-store",
+    "catalog",
+    "ecommerce",
+    "cli",
+    "scaffold"
+  ],
+  "author": "neverleans",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "kolorist": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.16.5",
+    "@types/prompts": "^2.4.9",
+    "typescript": "^5.8.3"
+  }
+}
