@@ -69,6 +69,63 @@ const allReviews: Record<IndustryTemplate, Review[]> = {
   stationery: stationeryReviews,
 };
 
+/**
+ * Fifty themes ship, but fifteen bespoke catalogs do. Each remaining niche borrows the
+ * closest existing catalog so its storefront is at least coherent — a bakery showing
+ * food rather than the evening gowns it fell back to before. Authoring dedicated
+ * catalogs for these is tracked as follow-up work.
+ */
+const CATALOG_FALLBACKS: Partial<Record<IndustryTemplate, IndustryTemplate>> = {
+  // Bebidas & gastronomia
+  winery: 'food',
+  brewery: 'food',
+  coffee: 'food',
+  bakery: 'food',
+  chocolates: 'food',
+  spices: 'market',
+  flowers: 'market',
+  // Tecnologia & entretenimento
+  gaming: 'electronics',
+  geek: 'electronics',
+  music: 'electronics',
+  security: 'electronics',
+  // Lazer & hobbies
+  boardgames: 'books',
+  toys: 'books',
+  // Esporte & aventura
+  cycling: 'sports',
+  outdoors: 'sports',
+  fishing: 'sports',
+  fitness: 'sports',
+  combat: 'sports',
+  // Casa, obra & jardim
+  lighting: 'homeware',
+  gardening: 'homeware',
+  party: 'homeware',
+  hardware: 'automotive',
+  office: 'stationery',
+  // Veículos
+  motorcycles: 'automotive',
+  // Saúde & cuidados
+  dental: 'wellness',
+  medical: 'wellness',
+  pharmacy: 'wellness',
+  perfume: 'beauty',
+  // Moda & acessórios
+  optics: 'fashion',
+  leather: 'fashion',
+  baby: 'fashion',
+  watchmakers: 'jewelry',
+  // Arte & curadoria
+  handcrafted: 'art',
+  spiritual: 'art',
+  vintage: 'art',
+};
+
+/** Resolve a theme to the catalog that backs it. */
+const catalogFor = (industry: IndustryTemplate): IndustryTemplate =>
+  allProducts[industry] ? industry : CATALOG_FALLBACKS[industry] || 'fashion';
+
 const IMPORTED_KEY = 'ecom-imported-products';
 
 const getImported = (industry: IndustryTemplate): Product[] => {
@@ -94,13 +151,13 @@ export const setImportedProducts = (industry: IndustryTemplate, products: Produc
 export const getImportedProducts = getImported;
 export const clearImportedProducts = (industry: IndustryTemplate) => setImportedProducts(industry, []);
 
-export const getProducts = (industry: IndustryTemplate) => [...getImported(industry), ...(allProducts[industry] || allProducts.fashion)];
-export const getCategories = (industry: IndustryTemplate) => allCategories[industry] || allCategories.fashion;
-export const getReviews = (industry: IndustryTemplate) => allReviews[industry] || allReviews.fashion;
+export const getProducts = (industry: IndustryTemplate) => [...getImported(industry), ...allProducts[catalogFor(industry)]];
+export const getCategories = (industry: IndustryTemplate) => allCategories[catalogFor(industry)];
+export const getReviews = (industry: IndustryTemplate) => allReviews[catalogFor(industry)];
 export const getFeaturedProducts = (industry: IndustryTemplate) => getProducts(industry).filter(p => p.featured);
 export const getProductById = (industry: IndustryTemplate, id: string) => getProducts(industry).find(p => p.id === id);
 export const getProductsByCategory = (industry: IndustryTemplate, category: string) => getProducts(industry).filter(p => p.category === category);
-export const getReviewsByProduct = (industry: IndustryTemplate, productId: string) => (allReviews[industry] || allReviews.fashion).filter(r => r.productId === productId);
+export const getReviewsByProduct = (industry: IndustryTemplate, productId: string) => allReviews[catalogFor(industry)].filter(r => r.productId === productId);
 export const searchProducts = (industry: IndustryTemplate, query: string) => {
   const q = query.toLowerCase();
   return getProducts(industry).filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.tags.some(t => t.toLowerCase().includes(q)));

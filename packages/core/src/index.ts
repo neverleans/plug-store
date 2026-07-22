@@ -129,6 +129,11 @@ export {
   clearImportedProducts,
 } from './data';
 
+// ─── Themes ───────────────────────────────────────────────────────────────────
+// The built-in theme registry lives here because the ThemeProvider consumes it.
+// @neverleans/plug-store-themes re-exports this as the single source of truth.
+export { themeConfigs } from './themes/configs';
+
 // ─── i18n ─────────────────────────────────────────────────────────────────────
 export { localizeCategory, localizeTagline, localizeTemplate, templateLabels } from './i18n/dynamic';
 export type { Language, Translations } from './i18n';
