@@ -93,6 +93,7 @@ const AdminPage = () => {
       companyName: '', tagline: '', contactEmail: '', contactPhone: '', address: '',
       footerText: '', shippingBanner: '', publicSlug: 'catalog',
       currency: 'USD', logoDataUrl: '', faviconDataUrl: '', whatsappPhone: '',
+      pixKey: '', pixMerchantCity: '',
       instagramUrl: '', tiktokUrl: '', facebookUrl: '', gaId: '', metaPixelId: '',
       coupons: DEFAULT_COUPONS, previewAsCustomer: false,
     });
@@ -314,6 +315,14 @@ const AdminPage = () => {
                 <div className="space-y-1.5">
                   <Label>{isPt ? 'WhatsApp (com DDI)' : 'WhatsApp (with country code)'}</Label>
                   <Input value={draft.whatsappPhone} onChange={(e) => setDraft({ ...draft, whatsappPhone: e.target.value })} placeholder="5511999998888" maxLength={20} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>{isPt ? 'Chave Pix' : 'Pix key'}</Label>
+                  <Input value={draft.pixKey} onChange={(e) => setDraft({ ...draft, pixKey: e.target.value })} placeholder={isPt ? 'CPF, e-mail, telefone ou chave aleatória' : 'CPF, e-mail, phone or random key'} maxLength={77} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>{isPt ? 'Cidade do recebedor (Pix)' : 'Merchant city (Pix)'}</Label>
+                  <Input value={draft.pixMerchantCity} onChange={(e) => setDraft({ ...draft, pixMerchantCity: e.target.value })} placeholder="Sao Paulo" maxLength={15} />
                 </div>
                 <div className="space-y-1.5 md:col-span-2">
                   <Label>{isPt ? 'Faixa promocional' : 'Top promo banner'}</Label>

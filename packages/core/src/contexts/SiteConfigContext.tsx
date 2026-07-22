@@ -23,6 +23,8 @@ export interface SiteConfig {
   logoDataUrl: string;      // base64
   faviconDataUrl: string;   // base64
   whatsappPhone: string;    // digits only, e.g. 5511998887777
+  pixKey: string;           // Pix key for static "Copia e Cola" codes
+  pixMerchantCity: string;  // city shown in the Pix payload, e.g. SAO PAULO
   instagramUrl: string;
   tiktokUrl: string;
   facebookUrl: string;
@@ -52,6 +54,8 @@ const DEFAULTS: SiteConfig = {
   logoDataUrl: '',
   faviconDataUrl: '',
   whatsappPhone: '',
+  pixKey: '',
+  pixMerchantCity: '',
   instagramUrl: '',
   tiktokUrl: '',
   facebookUrl: '',

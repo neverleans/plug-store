@@ -45,6 +45,10 @@ export interface CatalogConfig {
   faviconDataUrl?: string;
   /** WhatsApp phone number (digits only, e.g. 5511998887777) */
   whatsappPhone?: string;
+  /** Pix key used to generate static "Copia e Cola" checkout codes */
+  pixKey?: string;
+  /** City shown in the Pix payload (max 15 chars, e.g. "Sao Paulo") */
+  pixMerchantCity?: string;
   /** Instagram profile URL */
   instagramUrl?: string;
   /** TikTok profile URL */

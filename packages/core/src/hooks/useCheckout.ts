@@ -75,7 +75,11 @@ export const useCheckout = (options?: UseCheckoutOptions) => {
             adapter = whatsappGateway(config.whatsappPhone);
             break;
           case 'pix':
-            adapter = pixGateway();
+            adapter = pixGateway({
+              pixKey: config.pixKey,
+              merchantName: config.companyName,
+              merchantCity: config.pixMerchantCity,
+            });
             break;
           case 'stripe':
             adapter = stripeGateway('/api/checkout/stripe');

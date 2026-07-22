@@ -30,6 +30,9 @@ export {
   stripeGateway,
   mercadopagoGateway,
 } from './lib/checkoutAdapters';
+export type { PixGatewayOptions } from './lib/checkoutAdapters';
+export { buildPixPayload, pixCrc16 } from './lib/pix';
+export type { PixStaticParams } from './lib/pix';
 export { useCheckout } from './hooks/useCheckout';
 export type { UseCheckoutOptions } from './hooks/useCheckout';
 

@@ -39,6 +39,9 @@ export default function App() {
           currency: 'BRL',
           tagline: theme.tagline,
           whatsappPhone: '5511999999999',
+          // Demo Pix key so the free-tier static Pix checkout is fully clickable.
+          pixKey: 'contato@plugstore.dev',
+          pixMerchantCity: 'Sao Paulo',
         }}
       />
       <BackToGallery />

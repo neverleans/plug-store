@@ -1,4 +1,14 @@
 import { PaymentGatewayAdapter, CheckoutPayload, PaymentResult } from './checkoutTypes';
+import { buildPixPayload } from './pix';
+
+export interface PixGatewayOptions {
+  /** Merchant Pix key. Required to produce a scannable code. */
+  pixKey?: string;
+  /** Beneficiary name shown to the payer (max 25 chars). */
+  merchantName?: string;
+  /** Merchant city in the Pix payload (max 15 chars). */
+  merchantCity?: string;
+}
 
 /**
  * whatsappGateway
@@ -41,16 +51,42 @@ export const whatsappGateway = (whatsappPhone?: string): PaymentGatewayAdapter =
 
 /**
  * pixGateway
- * 
- * Simulates instant Pix QR Code & Copy-Paste Code generation for Brazilian e-commerce
+ *
+ * Generates a real static Pix "Copia e Cola" BR Code (EMV/BCB payload) for the
+ * order total. The resulting code is scannable in any Brazilian banking app and
+ * pays the merchant's key directly.
+ *
+ * This is the free, static tier: it creates a valid payment request but does not
+ * confirm settlement. Reconciling paid vs. unpaid — the dynamic Pix flow with a
+ * PSP webhook — is a separate concern; supply your own adapter via useCheckout's
+ * `adapters` option to handle it.
+ *
+ * Accepts either a bare Pix key (backwards compatible) or an options object.
  */
-export const pixGateway = (pixKey?: string): PaymentGatewayAdapter => {
+export const pixGateway = (
+  keyOrOptions?: string | PixGatewayOptions,
+): PaymentGatewayAdapter => {
+  const options: PixGatewayOptions =
+    typeof keyOrOptions === 'string' ? { pixKey: keyOrOptions } : keyOrOptions || {};
+
   return async (payload: CheckoutPayload): Promise<PaymentResult> => {
+    if (!options.pixKey) {
+      return {
+        success: false,
+        error: 'Chave Pix não configurada. Defina pixKey na configuração da loja.',
+      };
+    }
+
     const orderId = 'PIX-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-    const key = pixKey || '00020126580014br.gov.bcb.pix';
-    
-    // Copy-paste PIX mock BRCode
-    const pixCode = `${key}.order.${orderId}.total.${payload.total.toFixed(2)}`;
+
+    const pixCode = buildPixPayload({
+      pixKey: options.pixKey,
+      merchantName: options.merchantName || 'Recebedor',
+      merchantCity: options.merchantCity || 'Brasil',
+      amount: payload.total,
+      txid: orderId,
+    });
+
     const pixQrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`;
 
     return {
