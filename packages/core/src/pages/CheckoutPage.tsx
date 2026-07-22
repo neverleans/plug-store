@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, QrCode, Copy, CreditCard, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,13 +9,17 @@ import { useCart } from '@/contexts/CartContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAccount } from '@/contexts/AccountContext';
+import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import { ShippingInfo } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { panelClasses } from '@/lib/cardStyle';
 import { safeImage, onImgError } from '@/lib/productImage';
-import { useMoney } from '@/lib/currency';
+import { useMoney, CURRENCIES } from '@/lib/currency';
+import { buildPixPayload } from '@/lib/pix';
 import WhatsAppOrderButton from '@/components/common/WhatsAppOrderButton';
+
+type PaymentMethod = 'pix' | 'whatsapp' | 'card';
 
 
 const shippingSchema = z.object({
@@ -39,19 +43,57 @@ const paymentSchema = z.object({
 type Step = 1 | 2 | 3 | 4;
 
 const CheckoutPage = () => {
-  const { items, total, discount, clearCart } = useCart();
+  // Totals come straight from the cart, which is the single source of truth. The
+  // page used to recompute its own shipping with a different threshold and add it
+  // on top of a total that already included shipping, so the order summary never
+  // added up and the customer was charged twice for delivery.
+  const { items, subtotal, total, discount, shippingCost, clearCart } = useCart();
   const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { addOrder, saveAddress } = useAccount();
+  const { config } = useSiteConfig();
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>(1);
   const [shipping, setShipping] = useState<ShippingInfo | null>(null);
   const money = useMoney();
+  const isPt = language === 'pt';
 
   const panel = panelClasses(theme.cardStyle);
-  const subtotal = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
-  const shippingCost = subtotal > 100 ? 0 : 9.99;
-  const finalTotal = total + shippingCost;
+  const finalTotal = total;
+
+  // Pix is a BRL-only rail, and prices in this framework are a USD base that the
+  // money formatter converts for display. The Pix payload is fixed to currency
+  // 986, so its amount must be the BRL figure the customer actually sees — the
+  // raw total scaled by the same rate — not the raw USD number.
+  const pixAvailable = !!config.pixKey && config.currency === 'BRL';
+  const pixAmountBRL = finalTotal * CURRENCIES.BRL.rate;
+
+  // Default to whichever Brazilian method the store has configured; card is the
+  // demo fallback that always exists.
+  const [method, setMethod] = useState<PaymentMethod>(
+    pixAvailable ? 'pix' : config.whatsappPhone ? 'whatsapp' : 'card',
+  );
+  const [pixCode, setPixCode] = useState<string | null>(null);
+
+  const generatePix = () => {
+    if (!pixAvailable) return;
+    const ref = 'PIX' + Math.random().toString(36).slice(2, 8).toUpperCase();
+    setPixCode(
+      buildPixPayload({
+        pixKey: config.pixKey,
+        merchantName: config.companyName || 'Recebedor',
+        merchantCity: config.pixMerchantCity || 'Brasil',
+        amount: pixAmountBRL,
+        txid: ref,
+      }),
+    );
+  };
+
+  const copyPix = () => {
+    if (!pixCode) return;
+    navigator.clipboard?.writeText(pixCode);
+    toast.success(isPt ? 'Código Pix copiado' : 'Pix code copied');
+  };
 
 
   useEffect(() => {
@@ -135,20 +177,102 @@ const CheckoutPage = () => {
           )}
 
           {step === 2 && (
-            <form onSubmit={payForm.handleSubmit(onSubmitPayment)} className={`space-y-4 p-6 ${panel}`}>
-              <h2 className="mb-4 text-lg font-bold" style={{ fontFamily: theme.fonts.heading }}>{t.paymentInfo}</h2>
-              <p className="mb-4 rounded-md bg-muted p-3 text-sm text-muted-foreground">{t.demoCheckoutNote}</p>
-              <div><label className="mb-1 block text-sm font-medium">{t.cardNumber}</label><Input placeholder="4242 4242 4242 4242" {...payForm.register('cardNumber' as const)} /></div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div><label className="mb-1 block text-sm font-medium">{t.expiry}</label><Input placeholder="MM/YY" {...payForm.register('expiry' as const)} /></div>
-                <div><label className="mb-1 block text-sm font-medium">{t.cvc}</label><Input placeholder="123" {...payForm.register('cvc' as const)} /></div>
+            <div className={`space-y-4 p-6 ${panel}`}>
+              <h2 className="text-lg font-bold" style={{ fontFamily: theme.fonts.heading }}>{t.paymentInfo}</h2>
+
+              <div className="grid gap-2 sm:grid-cols-3">
+                {pixAvailable && (
+                  <button
+                    type="button"
+                    onClick={() => setMethod('pix')}
+                    className={`flex items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium transition ${method === 'pix' ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40'}`}
+                  >
+                    <QrCode className="h-4 w-4" /> Pix
+                  </button>
+                )}
+                {config.whatsappPhone && (
+                  <button
+                    type="button"
+                    onClick={() => setMethod('whatsapp')}
+                    className={`flex items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium transition ${method === 'whatsapp' ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40'}`}
+                  >
+                    <MessageCircle className="h-4 w-4" /> WhatsApp
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setMethod('card')}
+                  className={`flex items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium transition ${method === 'card' ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40'}`}
+                >
+                  <CreditCard className="h-4 w-4" /> {isPt ? 'Cartão (demo)' : 'Card (demo)'}
+                </button>
               </div>
-              <div><label className="mb-1 block text-sm font-medium">{t.nameOnCard}</label><Input {...payForm.register('nameOnCard' as const)} /></div>
-              <div className="flex gap-3">
-                <Button type="button" variant="outline" onClick={() => setStep(1)}>{t.back}</Button>
-                <Button type="submit" className="flex-1">{t.continueToPayment} →</Button>
-              </div>
-            </form>
+
+              {method === 'pix' && (
+                <div className="space-y-3">
+                  {!pixCode ? (
+                    <Button type="button" className="w-full" onClick={generatePix}>
+                      {isPt ? 'Gerar código Pix' : 'Generate Pix code'}
+                    </Button>
+                  ) : (
+                    <div className="space-y-3 rounded-lg border p-4 text-center">
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(pixCode)}`}
+                        alt="Pix QR Code"
+                        className="mx-auto h-48 w-48"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        {isPt ? 'Escaneie no app do seu banco ou copie o código' : 'Scan in your bank app or copy the code'}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <code className="flex-1 truncate rounded bg-muted px-3 py-2 text-left text-xs">{pixCode}</code>
+                        <Button type="button" variant="outline" size="sm" onClick={copyPix} className="shrink-0 gap-1">
+                          <Copy className="h-3.5 w-3.5" />
+                          {isPt ? 'Copiar' : 'Copy'}
+                        </Button>
+                      </div>
+                      <p className="text-sm font-medium">{isPt ? 'Valor' : 'Amount'}: {money(finalTotal)}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {method === 'whatsapp' && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    {isPt
+                      ? 'Envie o pedido pelo WhatsApp e combine o pagamento com a loja.'
+                      : 'Send your order via WhatsApp and arrange payment with the store.'}
+                  </p>
+                  <WhatsAppOrderButton shipping={shipping} shippingCost={shippingCost} finalTotal={finalTotal} />
+                </div>
+              )}
+
+              {method === 'card' && (
+                <form onSubmit={payForm.handleSubmit(onSubmitPayment)} className="space-y-4">
+                  <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">{t.demoCheckoutNote}</p>
+                  <div><label className="mb-1 block text-sm font-medium">{t.cardNumber}</label><Input placeholder="4242 4242 4242 4242" {...payForm.register('cardNumber' as const)} /></div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div><label className="mb-1 block text-sm font-medium">{t.expiry}</label><Input placeholder="MM/YY" {...payForm.register('expiry' as const)} /></div>
+                    <div><label className="mb-1 block text-sm font-medium">{t.cvc}</label><Input placeholder="123" {...payForm.register('cvc' as const)} /></div>
+                  </div>
+                  <div><label className="mb-1 block text-sm font-medium">{t.nameOnCard}</label><Input {...payForm.register('nameOnCard' as const)} /></div>
+                  <div className="flex gap-3">
+                    <Button type="button" variant="outline" onClick={() => setStep(1)}>{t.back}</Button>
+                    <Button type="submit" className="flex-1">{t.continueToPayment} →</Button>
+                  </div>
+                </form>
+              )}
+
+              {method !== 'card' && (
+                <div className="flex gap-3 pt-2">
+                  <Button type="button" variant="outline" onClick={() => setStep(1)}>{t.back}</Button>
+                  <Button type="button" className="flex-1" onClick={() => setStep(3)}>
+                    {isPt ? 'Revisar pedido' : 'Review order'}
+                  </Button>
+                </div>
+              )}
+            </div>
           )}
 
           {step === 3 && shipping && (
