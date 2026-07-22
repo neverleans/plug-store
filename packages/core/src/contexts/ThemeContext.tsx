@@ -11,13 +11,27 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const TEMPLATE_KEY = 'ecom-template';
+/**
+ * Records which configured default the stored template was derived from. Without it a
+ * stale stored value shadows defaultTheme forever, so changing defaultTheme in code
+ * appears to do nothing on every machine that has already loaded the app once.
+ */
+const TEMPLATE_ORIGIN_KEY = 'ecom-template-default';
+
 export interface ThemeProviderProps {
   children: ReactNode;
+  /** Theme to use when the visitor has not explicitly switched themes */
+  defaultTheme?: IndustryTemplate;
   /** Optional custom theme passed directly by the developer */
   customTheme?: ThemeConfig;
 }
 
-export const ThemeProvider = ({ children, customTheme }: ThemeProviderProps) => {
+export const ThemeProvider = ({
+  children,
+  defaultTheme = 'fashion',
+  customTheme,
+}: ThemeProviderProps) => {
   const [registry, setRegistry] = useState<Record<string, ThemeConfig>>(() => {
     const base = { ...themeConfigs };
     if (customTheme) {
@@ -28,7 +42,15 @@ export const ThemeProvider = ({ children, customTheme }: ThemeProviderProps) => 
 
   const [template, setTemplateState] = useState<IndustryTemplate>(() => {
     if (customTheme) return customTheme.id;
-    return (localStorage.getItem('ecom-template') as IndustryTemplate) || 'fashion';
+    if (typeof window === 'undefined') return defaultTheme;
+
+    const stored = localStorage.getItem(TEMPLATE_KEY) as IndustryTemplate | null;
+    const origin = localStorage.getItem(TEMPLATE_ORIGIN_KEY);
+
+    // Keep a visitor's own switch, but only while the app still ships the same
+    // default. Once defaultTheme changes, the new value wins.
+    if (stored && origin === defaultTheme) return stored;
+    return defaultTheme;
   });
 
   const setTemplate = (t: IndustryTemplate) => {
@@ -43,7 +65,8 @@ export const ThemeProvider = ({ children, customTheme }: ThemeProviderProps) => 
   const theme = registry[template] || customTheme || themeConfigs.fashion;
 
   useEffect(() => {
-    localStorage.setItem('ecom-template', template);
+    localStorage.setItem(TEMPLATE_KEY, template);
+    localStorage.setItem(TEMPLATE_ORIGIN_KEY, defaultTheme);
     const root = document.documentElement;
 
     // Enable crossfade transitions on token swap
@@ -72,7 +95,7 @@ export const ThemeProvider = ({ children, customTheme }: ThemeProviderProps) => 
       root.classList.remove('theme-transition');
     }, 600);
     return () => window.clearTimeout(timeout);
-  }, [template, theme]);
+  }, [template, theme, defaultTheme]);
 
   return (
     <ThemeContext.Provider

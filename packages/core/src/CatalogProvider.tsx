@@ -120,14 +120,6 @@ export const CatalogProvider = ({
     } catch {}
   }
 
-  const activeThemeId = customTheme ? customTheme.id : defaultTheme;
-
-  if (activeThemeId && typeof window !== 'undefined') {
-    if (!localStorage.getItem('ecom-template')) {
-      localStorage.setItem('ecom-template', activeThemeId);
-    }
-  }
-
   if (defaultLanguage && typeof window !== 'undefined') {
     if (!localStorage.getItem('language')) {
       localStorage.setItem('language', defaultLanguage);
@@ -140,7 +132,7 @@ export const CatalogProvider = ({
         <LanguageProvider>
           <ColorModeProvider>
             <SiteConfigProvider>
-              <ThemeProvider customTheme={customTheme}>
+              <ThemeProvider defaultTheme={defaultTheme as IndustryTemplate} customTheme={customTheme}>
                 <DataProviderWrapper dataProvider={dataProvider}>
                   <CartProvider>
                     <AuthProvider>

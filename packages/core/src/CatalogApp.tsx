@@ -11,7 +11,9 @@ import CompareBar from './components/common/CompareBar';
 import AnalyticsInjector from './components/common/AnalyticsInjector';
 import FaviconInjector from './components/common/FaviconInjector';
 import { useSiteConfig } from './contexts/SiteConfigContext';
-import { IndustryTemplate } from './types';
+import type { IndustryTemplate, ThemeConfig } from './types';
+import type { CatalogDataProvider } from './data/provider';
+import type { Language } from './i18n';
 
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
@@ -33,12 +35,22 @@ import NotFound from './pages/NotFound';
 export interface CatalogAppProps {
   /** Initial industry theme template */
   defaultTheme?: IndustryTemplate;
+  /** A custom brand theme created with defineTheme. Takes precedence over defaultTheme. */
+  customTheme?: ThemeConfig;
   /** Store configuration */
   config?: CatalogConfig;
-  /** Custom logo URL or base64 */
-  logoUrl?: string;
+  /** Initial UI language */
+  defaultLanguage?: Language;
+  /** Custom Headless Data Provider (REST, GraphQL, Supabase, etc.) */
+  dataProvider?: CatalogDataProvider;
   /** Disable admin route /admin if desired */
   disableAdmin?: boolean;
+  /**
+   * Base path when the store is served from a sub-directory rather than the domain
+   * root — for example "/loja" or a GitHub Pages project site. Without it, every
+   * route resolves against "/" and the app renders NotFound.
+   */
+  basename?: string;
 }
 
 const AnimatedRoutes = ({ disableAdmin }: { disableAdmin?: boolean }) => {
@@ -101,12 +113,22 @@ const Shell = ({ disableAdmin }: { disableAdmin?: boolean }) => {
  */
 export const CatalogApp: React.FC<CatalogAppProps> = ({
   defaultTheme = 'fashion',
+  customTheme,
   config,
+  defaultLanguage,
+  dataProvider,
   disableAdmin = false,
+  basename,
 }) => {
   return (
-    <CatalogProvider defaultTheme={defaultTheme} config={config}>
-      <BrowserRouter>
+    <CatalogProvider
+      defaultTheme={defaultTheme}
+      customTheme={customTheme}
+      config={config}
+      defaultLanguage={defaultLanguage}
+      dataProvider={dataProvider}
+    >
+      <BrowserRouter basename={basename}>
         <Shell disableAdmin={disableAdmin} />
       </BrowserRouter>
     </CatalogProvider>
