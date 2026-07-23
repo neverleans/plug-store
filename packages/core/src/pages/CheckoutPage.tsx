@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { panelClasses } from '@/lib/cardStyle';
 import { safeImage, onImgError } from '@/lib/productImage';
-import { useMoney, CURRENCIES } from '@/lib/currency';
+import { useMoney } from '@/lib/currency';
 import { buildPixPayload } from '@/lib/pix';
 import WhatsAppOrderButton from '@/components/common/WhatsAppOrderButton';
 
@@ -61,12 +61,9 @@ const CheckoutPage = () => {
   const panel = panelClasses(theme.cardStyle);
   const finalTotal = total;
 
-  // Pix is a BRL-only rail, and prices in this framework are a USD base that the
-  // money formatter converts for display. The Pix payload is fixed to currency
-  // 986, so its amount must be the BRL figure the customer actually sees — the
-  // raw total scaled by the same rate — not the raw USD number.
+  // Pix settles in BRL, so it is offered only for BRL stores. Prices are already
+  // stored in the store currency, so the total is exactly the amount to charge.
   const pixAvailable = !!config.pixKey && config.currency === 'BRL';
-  const pixAmountBRL = finalTotal * CURRENCIES.BRL.rate;
 
   // Default to whichever Brazilian method the store has configured; card is the
   // demo fallback that always exists.
@@ -83,7 +80,7 @@ const CheckoutPage = () => {
         pixKey: config.pixKey,
         merchantName: config.companyName || 'Recebedor',
         merchantCity: config.pixMerchantCity || 'Brasil',
-        amount: pixAmountBRL,
+        amount: finalTotal,
         txid: ref,
       }),
     );
