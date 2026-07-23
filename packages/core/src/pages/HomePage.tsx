@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import PageTransition from '@/components/common/PageTransition';
 import SEOHead from '@/components/common/SEOHead';
 import { safeImage, onImgError, safeCategoryImage, onCategoryImgError } from '@/lib/productImage';
-import { localizeCategory, localizeTagline } from '@/i18n/dynamic';
+import { localizeCategory, localizeTagline, localizeHeroSubtitle } from '@/i18n/dynamic';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
@@ -46,7 +46,7 @@ const HeroFullwidth = ({ theme, t, language }: { theme: any; t: any; language: a
           transition={{ duration: 1, delay: 0.2 }}
           className="mb-6 text-[11px] font-medium uppercase text-white/60"
         >
-          {t.newCollection} — 2025
+          {theme.name}
         </motion.p>
 
         {/* Main headline */}
@@ -79,7 +79,7 @@ const HeroFullwidth = ({ theme, t, language }: { theme: any; t: any; language: a
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-white/70 md:text-lg"
         >
-          {t.heroFashionDesc}
+          {localizeHeroSubtitle(theme.id, language)}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -193,12 +193,12 @@ const HeroSplit = ({ theme, t, language }: { theme: any; t: any; language: any }
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="lg:col-span-8">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-md">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-          {t.latestTech}
+          {theme.name}
         </div>
         <h1 className="mb-6 text-5xl font-bold leading-[1.05] text-white md:text-7xl lg:text-8xl" style={{ fontFamily: theme.fonts.heading, letterSpacing: '-0.02em' }}>
           {localizeTagline(theme.id, theme.tagline, language)}
         </h1>
-        <p className="mb-8 max-w-xl text-lg text-white/80">{t.heroElectronicsDesc}</p>
+        <p className="mb-8 max-w-xl text-lg text-white/80">{localizeHeroSubtitle(theme.id, language)}</p>
         <div className="flex flex-wrap gap-3">
           <Link to="/products"><Button size="lg" className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90">{t.explore} <ArrowRight className="h-5 w-5" /></Button></Link>
           <Link to="/products?category=deals"><Button size="lg" variant="outline" className="border-white/30 bg-white/5 text-white backdrop-blur-md hover:bg-white/15">{t.deals}</Button></Link>
@@ -219,9 +219,9 @@ const HeroCentered = ({ theme, t, language }: { theme: any; t: any; language: an
       filter="contrast(0.9) brightness(0.85) saturate(0.95)"
     />
     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="container relative z-10 mx-auto flex min-h-[80vh] flex-col items-center justify-center px-4 py-20 text-center">
-      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-white/80">— Farm to Table —</p>
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-white/80">— {theme.name} —</p>
       <h1 className="mb-6 max-w-3xl text-5xl font-bold leading-tight text-white md:text-7xl" style={{ fontFamily: theme.fonts.heading }}>{localizeTagline(theme.id, theme.tagline, language)}</h1>
-      <p className="mx-auto mb-10 max-w-xl text-lg text-white/85">{t.heroFoodDesc}</p>
+      <p className="mx-auto mb-10 max-w-xl text-lg text-white/85">{localizeHeroSubtitle(theme.id, language)}</p>
       <Link to="/products"><Button size="lg" className="gap-2 rounded-full bg-white px-10 text-base text-foreground hover:bg-white/90">{t.shopFresh} <ArrowRight className="h-5 w-5" /></Button></Link>
     </motion.div>
   </section>
@@ -244,7 +244,7 @@ const HeroOverlay = ({ theme, t, language }: { theme: any; t: any; language: any
           {localizeTagline(theme.id, theme.tagline, language)}
         </h1>
         <div className="mb-10 h-px w-16 bg-white/40" />
-        <p className="mb-10 max-w-md text-lg text-white/80">{t.heroFurnitureDesc}</p>
+        <p className="mb-10 max-w-md text-lg text-white/80">{localizeHeroSubtitle(theme.id, language)}</p>
         <Link to="/products"><Button size="lg" className="gap-2 rounded-none bg-white px-8 text-foreground hover:bg-white/90">{t.browseCollection} <ArrowRight className="h-5 w-5" /></Button></Link>
       </motion.div>
     </div>
@@ -262,7 +262,7 @@ const HeroMinimal = ({ theme, t, language }: { theme: any; t: any; language: any
       filter="contrast(0.85) brightness(0.95) saturate(1.05)"
     />
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="container relative z-10 mx-auto flex min-h-[80vh] flex-col items-center justify-center px-4 py-20 text-center">
-      <p className="mb-6 text-sm font-light uppercase tracking-[0.5em] text-white/80">{t.luxury} · Beauty</p>
+      <p className="mb-6 text-sm font-light uppercase tracking-[0.5em] text-white/80">{theme.name}</p>
       <h1 className="mb-8 max-w-3xl text-5xl font-light leading-[1.1] text-white md:text-7xl lg:text-8xl" style={{ fontFamily: theme.fonts.heading }}>
         {localizeTagline(theme.id, theme.tagline, language)}
       </h1>
@@ -292,12 +292,12 @@ const HeroEnergetic = ({ theme, t, language }: { theme: any; t: any; language: a
           transition={{ delay: 0.3 }}
           className="mb-4 inline-block bg-secondary px-3 py-1.5 text-xs font-black uppercase tracking-widest text-secondary-foreground"
         >
-          {t.unleash || 'Unleash'} · Drop 03
+          {theme.name}
         </motion.p>
         <h1 className="mb-6 text-6xl font-black uppercase leading-[0.85] text-white md:text-[8rem] lg:text-[10rem]" style={{ fontFamily: theme.fonts.heading, letterSpacing: '-0.03em' }}>
           {localizeTagline(theme.id, theme.tagline, language)}
         </h1>
-        <p className="mb-10 max-w-md text-lg text-white/90">{t.heroSportsDesc || 'Built for athletes who refuse to settle.'}</p>
+        <p className="mb-10 max-w-md text-lg text-white/90">{localizeHeroSubtitle(theme.id, language)}</p>
         <div className="flex flex-wrap gap-3">
           <Link to="/products"><Button size="lg" className="gap-2 rounded-none bg-white px-10 font-bold uppercase tracking-wider text-foreground hover:bg-white/90">{t.shopNow} <ArrowRight className="h-5 w-5" /></Button></Link>
           <Link to="/products?category=deals"><Button size="lg" variant="outline" className="rounded-none border-2 border-white bg-transparent px-10 font-bold uppercase tracking-wider text-white hover:bg-white/10">{t.deals}</Button></Link>
@@ -347,12 +347,12 @@ const HeroEditorial = ({ theme, t, language }: { theme: any; t: any; language: a
     />
     <div className="container relative z-10 mx-auto flex min-h-[85vh] items-center px-4 py-24">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }} className="max-w-2xl">
-        <p className="mb-6 text-xs font-medium uppercase tracking-[0.5em] text-white/60">— {t.editorial || "A Reader's Sanctuary"}</p>
+        <p className="mb-6 text-xs font-medium uppercase tracking-[0.5em] text-white/60">— {theme.name}</p>
         <h1 className="mb-8 text-5xl italic leading-[1.05] text-white md:text-7xl lg:text-8xl" style={{ fontFamily: theme.fonts.heading }}>
           {localizeTagline(theme.id, theme.tagline, language)}
         </h1>
         <div className="mb-10 max-w-md border-l-2 border-white/40 pl-5 text-lg italic text-white/80">
-          "{t.heroBooksDesc || 'Curated volumes for the curious mind.'}"
+          "{localizeHeroSubtitle(theme.id, language)}"
         </div>
         <Link to="/products"><Button size="lg" variant="outline" className="rounded-none border-white/60 bg-white/5 px-8 italic text-white backdrop-blur-sm hover:bg-white/15">{t.browseShelf || 'Browse the shelf'} <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
       </motion.div>
@@ -380,7 +380,7 @@ const HeroPlayful = ({ theme, t, language }: { theme: any; t: any; language: any
         <h1 className="mb-6 max-w-3xl text-5xl font-extrabold leading-tight text-white drop-shadow-lg md:text-7xl lg:text-8xl" style={{ fontFamily: theme.fonts.heading }}>
           {localizeTagline(theme.id, theme.tagline, language)}
         </h1>
-        <p className="mx-auto mb-10 max-w-lg text-lg text-white/95 drop-shadow">{t.heroPetsDesc || 'Treats, toys, and tail-wags for your best friend.'}</p>
+        <p className="mx-auto mb-10 max-w-lg text-lg text-white/95 drop-shadow">{localizeHeroSubtitle(theme.id, language)}</p>
         <Link to="/products"><Button size="lg" className="gap-2 rounded-full bg-white px-10 font-bold text-primary shadow-2xl transition-transform hover:scale-105 hover:bg-white/95">{t.shopNow} <ArrowRight className="h-5 w-5" /></Button></Link>
       </motion.div>
     </div>
@@ -403,12 +403,12 @@ const HeroIndustrial = ({ theme, t, language }: { theme: any; t: any; language: 
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl">
         <div className="mb-6 flex items-center gap-3">
           <div className="h-px w-12 bg-primary" />
-          <p className="text-xs font-bold uppercase tracking-[0.4em] text-primary">// {t.performance || 'Performance Series'}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.4em] text-primary">// {theme.name}</p>
         </div>
         <h1 className="mb-6 text-6xl font-bold uppercase leading-[0.95] text-foreground md:text-8xl lg:text-9xl" style={{ fontFamily: theme.fonts.heading, letterSpacing: '-0.01em' }}>
           {localizeTagline(theme.id, theme.tagline, language)}
         </h1>
-        <p className="mb-10 max-w-md text-lg text-foreground/80">{t.heroAutomotiveDesc || 'Track-grade components for serious drivers.'}</p>
+        <p className="mb-10 max-w-md text-lg text-foreground/80">{localizeHeroSubtitle(theme.id, language)}</p>
         <div className="flex flex-wrap gap-3">
           <Link to="/products"><Button size="lg" className="gap-2 rounded-none px-10 font-bold uppercase tracking-wider">{t.configure || 'Configure'} <ArrowRight className="h-5 w-5" /></Button></Link>
           <Link to="/about"><Button size="lg" variant="outline" className="rounded-none border-foreground/60 bg-background/10 px-10 font-bold uppercase tracking-wider backdrop-blur-md">{t.specs || 'Specs'}</Button></Link>
