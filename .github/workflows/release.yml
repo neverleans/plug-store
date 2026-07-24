@@ -4,53 +4,67 @@ on:
   push:
     tags:
       - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Run through publish without actually publishing'
-        type: boolean
-        default: true
 
 jobs:
-  publish:
+  publish-core:
+    name: Publish @neverleans-labs/plug-store-core
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # required for npm provenance
+      id-token: write # required for npm OIDC Trusted Publishing
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22'
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
-      - name: Build packages
+      - name: Build all packages
         run: pnpm build
 
-      - name: Run tests
-        run: pnpm test
+      - name: Publish core package
+        run: npm publish --access public --provenance
+        working-directory: packages/core
 
-      - name: Publish (dry run)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
-        run: pnpm -r publish --access public --no-git-checks --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  publish-cli:
+    name: Publish create-plug-store
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm OIDC Trusted Publishing
 
-      - name: Publish to npm
-        if: ${{ github.event_name == 'push' || !inputs.dry_run }}
-        run: pnpm -r publish --access public --no-git-checks --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build CLI
+        run: pnpm build --filter create-plug-store
+
+      - name: Publish CLI package
+        run: npm publish --access public --provenance
+        working-directory: packages/create-plug-store
