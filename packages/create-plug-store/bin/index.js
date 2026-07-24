@@ -138,8 +138,8 @@ async function init() {
             preview: 'vite preview',
         },
         dependencies: {
-            '@neverleans/plug-store-core': '^0.1.0',
-            '@neverleans/plug-store-themes': '^0.1.0',
+            '@neverleans-labs/plug-store-core': '^0.1.0',
+            '@neverleans-labs/plug-store-themes': '^0.1.0',
             react: '^18.3.1',
             'react-dom': '^18.3.1',
             'react-router-dom': '^6.30.1',
@@ -192,7 +192,7 @@ export default defineConfig({
         ? `        pixKey: "${pixKey}",\n        pixMerchantCity: "${pixMerchantCity || ''}",\n`
         : '';
     const appTsx = `import React from 'react';
-import { CatalogApp } from '@neverleans/plug-store-core';
+import { CatalogApp } from '@neverleans-labs/plug-store-core';
 
 export default function App() {
   return (
@@ -211,7 +211,7 @@ ${pixConfigLines}      }}
     const mainTsx = `import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import '@neverleans/plug-store-core/dist/index.css';
+import '@neverleans-labs/plug-store-core/dist/index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
