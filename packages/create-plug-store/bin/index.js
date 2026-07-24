@@ -96,6 +96,18 @@ async function init() {
                 message: 'Número do WhatsApp (opcional, ex: 5511999999999):',
                 initial: '',
             },
+            {
+                type: (_prev, values) => (values.currency === 'BRL' ? 'text' : null),
+                name: 'pixKey',
+                message: 'Chave Pix (opcional — CPF, e-mail, telefone ou chave aleatória):',
+                initial: '',
+            },
+            {
+                type: (_prev, values) => (values.pixKey ? 'text' : null),
+                name: 'pixMerchantCity',
+                message: 'Cidade do recebedor para o Pix (ex: Sao Paulo):',
+                initial: '',
+            },
         ], {
             onCancel: () => {
                 throw new Error(red('✖') + ' Operação cancelada');
@@ -106,7 +118,7 @@ async function init() {
         console.log(err.message);
         return;
     }
-    const { projectName, companyName, theme, currency, whatsapp } = result;
+    const { projectName, companyName, theme, currency, whatsapp, pixKey, pixMerchantCity } = result;
     const targetDir = path.join(process.cwd(), projectName);
     if (fs.existsSync(targetDir)) {
         console.log(yellow(`\n⚠️  A pasta "${projectName}" já existe. Escolha outro nome ou apague a pasta.`));
@@ -176,6 +188,9 @@ export default defineConfig({
     fs.writeFileSync(path.join(targetDir, 'index.html'), indexHtml);
     // 4. src directory & App.tsx
     fs.mkdirSync(path.join(targetDir, 'src'), { recursive: true });
+    const pixConfigLines = pixKey
+        ? `        pixKey: "${pixKey}",\n        pixMerchantCity: "${pixMerchantCity || ''}",\n`
+        : '';
     const appTsx = `import React from 'react';
 import { CatalogApp } from '@neverleans/plug-store-core';
 
@@ -187,7 +202,7 @@ export default function App() {
         companyName: "${companyName}",
         currency: "${currency}",
         whatsappPhone: "${whatsapp}",
-      }}
+${pixConfigLines}      }}
     />
   );
 }
