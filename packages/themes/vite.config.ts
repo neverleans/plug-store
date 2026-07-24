@@ -18,10 +18,10 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
-      external: ['@neverleans/plug-store-core'],
+      external: ['@neverleans-labs/plug-store-core'],
       output: {
         globals: {
-          '@neverleans/plug-store-core': 'PlugStoreCore',
+          '@neverleans-labs/plug-store-core': 'PlugStoreCore',
         },
       },
     },
