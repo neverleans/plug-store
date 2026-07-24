@@ -316,11 +316,10 @@ importers:
         version: 5.9.3
 
   packages/themes:
-    dependencies:
-      '@neverleans/plug-store-core':
-        specifier: workspace:^
-        version: link:../core
     devDependencies:
+      '@neverleans/plug-store-core':
+        specifier: workspace:*
+        version: link:../core
       '@types/node':
         specifier: ^22.16.5
         version: 22.20.1
