@@ -32,10 +32,10 @@ importers:
 
   apps/demo:
     dependencies:
-      '@neverleans/plug-store-core':
+      '@neverleans-labs/plug-store-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@neverleans/plug-store-themes':
+      '@neverleans-labs/plug-store-themes':
         specifier: workspace:*
         version: link:../../packages/themes
       react:
@@ -317,7 +317,7 @@ importers:
 
   packages/themes:
     devDependencies:
-      '@neverleans/plug-store-core':
+      '@neverleans-labs/plug-store-core':
         specifier: workspace:*
         version: link:../core
       '@types/node':
