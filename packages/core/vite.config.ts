@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
+import fs from 'fs';
 import dts from 'vite-plugin-dts';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   plugins: [
@@ -11,7 +14,26 @@ export default defineConfig({
       include: ['src'],
       rollupTypes: true,
     }),
+    // Vite 5 library mode ignores cssFileName and always emits 'style.css'.
+    // This plugin renames it to 'index.css' after the bundle is written so
+    // the output matches the exports map: "./dist/index.css": "./dist/index.css".
+    {
+      name: 'rename-style-to-index-css',
+      closeBundle() {
+        const outDir = path.resolve(__dirname, 'dist');
+        const src = path.join(outDir, 'style.css');
+        const dest = path.join(outDir, 'index.css');
+        if (fs.existsSync(src)) {
+          fs.renameSync(src, dest);
+        }
+      },
+    },
   ],
+  css: {
+    postcss: {
+      plugins: [tailwindcss(), autoprefixer()],
+    },
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),

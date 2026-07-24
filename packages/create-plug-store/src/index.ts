@@ -5,11 +5,90 @@ import path from 'path';
 import prompts from 'prompts';
 import { green, cyan, bold, red, yellow } from 'kolorist';
 
+// ─── CLI Flag Parsing ─────────────────────────────────────────────────────────
+// Supports non-interactive mode for CI/CD environments:
+//   npx create-plug-store my-catalog --theme fashion --currency BRL --yes
+//   npx create-plug-store my-catalog --theme electronics --whatsapp 5511999999999
+//   npx create-plug-store my-catalog --theme food --currency BRL --pix-key me@email.com --pix-city "Sao Paulo" --yes
+
+function parseArgs(): {
+  positional: string | undefined;
+  flags: Record<string, string | boolean>;
+} {
+  const args = process.argv.slice(2);
+  const flags: Record<string, string | boolean> = {};
+  let positional: string | undefined;
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg.startsWith('--')) {
+      const key = arg.slice(2);
+      const next = args[i + 1];
+      if (!next || next.startsWith('--')) {
+        flags[key] = true;
+      } else {
+        flags[key] = next;
+        i++;
+      }
+    } else if (!positional) {
+      positional = arg;
+    }
+  }
+
+  return { positional, flags };
+}
+
+// ─── Theme choices (kept in sync with prompts list) ───────────────────────────
+const THEME_VALUES = [
+  'fashion', 'electronics', 'food', 'furniture', 'beauty', 'sports', 'books',
+  'pets', 'automotive', 'art', 'jewelry', 'homeware', 'market', 'wellness',
+  'stationery', 'winery', 'brewery', 'coffee', 'bakery', 'spices', 'chocolates',
+  'gaming', 'geek', 'music', 'boardgames', 'toys', 'hardware', 'lighting',
+  'gardening', 'office', 'security', 'cycling', 'outdoors', 'fishing', 'fitness',
+  'combat', 'motorcycles', 'optics', 'dental', 'medical', 'pharmacy',
+  'watchmakers', 'perfume', 'handcrafted', 'party', 'flowers', 'leather',
+  'baby', 'spiritual', 'vintage',
+];
+
+const CURRENCY_VALUES = ['BRL', 'USD', 'EUR'];
+
 async function init() {
   console.log(`\n🚀 ${bold(cyan('PlugStore CLI'))} — Interactive Project Generator\n`);
 
-  const defaultProjectName = 'meu-catalogo';
+  const { positional, flags } = parseArgs();
+  const isYes = flags['yes'] === true || flags['y'] === true;
 
+  // Validate theme flag if provided
+  const themeFlag = typeof flags['theme'] === 'string' ? flags['theme'] : undefined;
+  if (themeFlag && !THEME_VALUES.includes(themeFlag)) {
+    console.log(red(`✖ Tema inválido: "${themeFlag}". Valores aceitos: ${THEME_VALUES.join(', ')}`));
+    process.exit(1);
+  }
+
+  // Validate currency flag if provided
+  const currencyFlag = typeof flags['currency'] === 'string' ? flags['currency'].toUpperCase() : undefined;
+  if (currencyFlag && !CURRENCY_VALUES.includes(currencyFlag)) {
+    console.log(red(`✖ Moeda inválida: "${currencyFlag}". Valores aceitos: ${CURRENCY_VALUES.join(', ')}`));
+    process.exit(1);
+  }
+
+  const defaultProjectName = positional || 'meu-catalogo';
+
+  // ── If --yes is set, skip all prompts and use defaults / flags ──────────────
+  if (isYes) {
+    const projectName = defaultProjectName;
+    const companyName = typeof flags['company'] === 'string' ? flags['company'] : 'Minha Loja Plug';
+    const theme = themeFlag ?? 'fashion';
+    const currency = currencyFlag ?? 'BRL';
+    const whatsapp = typeof flags['whatsapp'] === 'string' ? flags['whatsapp'] : '';
+    const pixKey = typeof flags['pix-key'] === 'string' ? flags['pix-key'] : '';
+    const pixMerchantCity = typeof flags['pix-city'] === 'string' ? flags['pix-city'] : '';
+
+    await scaffold({ projectName, companyName, theme, currency, whatsapp, pixKey, pixMerchantCity });
+    return;
+  }
+
+  // ── Interactive mode ────────────────────────────────────────────────────────
   let result: prompts.Answers<
     'projectName' | 'companyName' | 'theme' | 'currency' | 'whatsapp' | 'pixKey' | 'pixMerchantCity'
   >;
@@ -85,7 +164,7 @@ async function init() {
             { title: 'Astral & Cristais (Esotérico & Cristais)', value: 'spiritual' },
             { title: 'Retro Vinyl (Discos & Antiguidades)', value: 'vintage' },
           ],
-          initial: 0,
+          initial: themeFlag ? THEME_VALUES.indexOf(themeFlag) : 0,
         },
         {
           type: 'select',
@@ -96,25 +175,25 @@ async function init() {
             { title: 'USD ($ - Dólar Americano)', value: 'USD' },
             { title: 'EUR (€ - Euro)', value: 'EUR' },
           ],
-          initial: 0,
+          initial: currencyFlag ? CURRENCY_VALUES.indexOf(currencyFlag) : 0,
         },
         {
           type: 'text',
           name: 'whatsapp',
           message: 'Número do WhatsApp (opcional, ex: 5511999999999):',
-          initial: '',
+          initial: typeof flags['whatsapp'] === 'string' ? flags['whatsapp'] : '',
         },
         {
           type: (_prev, values) => (values.currency === 'BRL' ? 'text' : null),
           name: 'pixKey',
           message: 'Chave Pix (opcional — CPF, e-mail, telefone ou chave aleatória):',
-          initial: '',
+          initial: typeof flags['pix-key'] === 'string' ? flags['pix-key'] : '',
         },
         {
           type: (_prev, values) => (values.pixKey ? 'text' : null),
           name: 'pixMerchantCity',
           message: 'Cidade do recebedor para o Pix (ex: Sao Paulo):',
-          initial: '',
+          initial: typeof flags['pix-city'] === 'string' ? flags['pix-city'] : '',
         },
       ],
       {
@@ -128,13 +207,35 @@ async function init() {
     return;
   }
 
-  const { projectName, companyName, theme, currency, whatsapp, pixKey, pixMerchantCity } = result;
+  await scaffold(result);
+}
 
+// ─── Project Scaffolding ──────────────────────────────────────────────────────
+
+interface ScaffoldOptions {
+  projectName: string;
+  companyName: string;
+  theme: string;
+  currency: string;
+  whatsapp: string;
+  pixKey: string;
+  pixMerchantCity: string;
+}
+
+async function scaffold({
+  projectName,
+  companyName,
+  theme,
+  currency,
+  whatsapp,
+  pixKey,
+  pixMerchantCity,
+}: ScaffoldOptions) {
   const targetDir = path.join(process.cwd(), projectName);
 
   if (fs.existsSync(targetDir)) {
     console.log(yellow(`\n⚠️  A pasta "${projectName}" já existe. Escolha outro nome ou apague a pasta.`));
-    return;
+    process.exit(1);
   }
 
   console.log(`\n⏳ Criando projeto PlugStore em ${cyan(targetDir)}...\n`);
@@ -148,7 +249,7 @@ async function init() {
     type: 'module',
     scripts: {
       dev: 'vite',
-      build: 'vite build',
+      build: 'tsc && vite build',
       preview: 'vite preview',
     },
     dependencies: {
@@ -188,7 +289,118 @@ export default defineConfig({
 `;
   fs.writeFileSync(path.join(targetDir, 'vite.config.ts'), viteConfig);
 
-  // 3. index.html
+  // 3. tsconfig.json
+  const tsConfig = {
+    compilerOptions: {
+      target: 'ES2020',
+      useDefineForClassFields: true,
+      lib: ['ES2020', 'DOM', 'DOM.Iterable'],
+      module: 'ESNext',
+      skipLibCheck: true,
+      moduleResolution: 'bundler',
+      allowImportingTsExtensions: true,
+      resolveJsonModule: true,
+      isolatedModules: true,
+      noEmit: true,
+      jsx: 'react-jsx',
+      strict: true,
+      noUnusedLocals: true,
+      noUnusedParameters: true,
+      noFallthroughCasesInSwitch: true,
+      paths: {
+        '@/*': ['./src/*'],
+      },
+    },
+    include: ['src'],
+    references: [{ path: './tsconfig.node.json' }],
+  };
+  fs.writeFileSync(path.join(targetDir, 'tsconfig.json'), JSON.stringify(tsConfig, null, 2));
+
+  const tsConfigNode = {
+    compilerOptions: {
+      composite: true,
+      skipLibCheck: true,
+      module: 'ESNext',
+      moduleResolution: 'bundler',
+      allowSyntheticDefaultImports: true,
+      strict: true,
+    },
+    include: ['vite.config.ts'],
+  };
+  fs.writeFileSync(path.join(targetDir, 'tsconfig.node.json'), JSON.stringify(tsConfigNode, null, 2));
+
+  // 4. tailwind.config.js
+  // Points content at both the project source AND the compiled core package
+  // so Tailwind doesn't purge the utility classes used inside the library.
+  const tailwindConfig = `/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    // Include compiled core output so Tailwind does not purge library classes
+    './node_modules/@neverleans-labs/plug-store-core/dist/**/*.js',
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+    },
+  },
+  plugins: [],
+};
+`;
+  fs.writeFileSync(path.join(targetDir, 'tailwind.config.js'), tailwindConfig);
+
+  // 5. postcss.config.js
+  const postcssConfig = `export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+`;
+  fs.writeFileSync(path.join(targetDir, 'postcss.config.js'), postcssConfig);
+
+  // 6. index.html
   const indexHtml = `<!doctype html>
 <html lang="pt-BR">
   <head>
@@ -204,9 +416,42 @@ export default defineConfig({
 `;
   fs.writeFileSync(path.join(targetDir, 'index.html'), indexHtml);
 
-  // 4. src directory & App.tsx
+  // 7. .gitignore
+  const gitignore = `node_modules
+dist
+.env
+.env.local
+.DS_Store
+`;
+  fs.writeFileSync(path.join(targetDir, '.gitignore'), gitignore);
+
+  // 8. src directory
   fs.mkdirSync(path.join(targetDir, 'src'), { recursive: true });
 
+  // 9. src/index.css
+  // This is the consumer's own CSS file. It imports the Tailwind directives
+  // and the compiled library styles (dist/index.css) via the package export.
+  const indexCss = `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── PlugStore CSS Design Tokens ─────────────────────────────────────────────
+   These variables are already defined inside the imported library stylesheet
+   above. You can override individual tokens here to customise the base theme.
+   All color values must be HSL without the hsl() wrapper (e.g. "222 84% 5%").
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Example override — uncomment and edit to customise:
+:root {
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --radius: 0.5rem;
+}
+*/
+`;
+  fs.writeFileSync(path.join(targetDir, 'src', 'index.css'), indexCss);
+
+  // 10. src/App.tsx
   const pixConfigLines = pixKey
     ? `        pixKey: "${pixKey}",\n        pixMerchantCity: "${pixMerchantCity || ''}",\n`
     : '';
@@ -229,10 +474,14 @@ ${pixConfigLines}      }}
 `;
   fs.writeFileSync(path.join(targetDir, 'src', 'App.tsx'), appTsx);
 
+  // 11. src/main.tsx
+  // Import the local src/index.css (which pulls in the Tailwind directives).
+  // The dist/index.css from the core package is included via the package's
+  // sideEffects declaration — no manual import needed.
   const mainTsx = `import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import '@neverleans-labs/plug-store-core/dist/index.css';
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -243,7 +492,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   fs.writeFileSync(path.join(targetDir, 'src', 'main.tsx'), mainTsx);
 
   console.log(green(`\n✨ Projeto ${bold(companyName)} criado com sucesso!\n`));
-  console.log(`Para iniciar:` + green(`\n  cd ${projectName}\n  npm install\n  npm run dev\n`));
+  console.log(`  📁 Pasta:    ${cyan(projectName)}`);
+  console.log(`  🎨 Tema:     ${cyan(theme)}`);
+  console.log(`  💰 Moeda:    ${cyan(currency)}`);
+  if (whatsapp) console.log(`  💬 WhatsApp: ${cyan(whatsapp)}`);
+  if (pixKey)   console.log(`  💳 Chave Pix: ${cyan(pixKey)}`);
+  console.log(
+    `\nPara iniciar:` +
+    green(`\n  cd ${projectName}\n  npm install\n  npm run dev\n`)
+  );
 }
 
 init();

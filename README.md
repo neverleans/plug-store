@@ -84,6 +84,63 @@ export default function App() {
 }
 ```
 
+> **Note — Tailwind CSS Setup required.** PlugStore ships its own compiled CSS, but you still need Tailwind configured in your project so the library's utility classes are not purged. See the **Tailwind Setup** section below.
+
+### Tailwind Setup
+
+After installing the package, create (or update) a `tailwind.config.js` and `postcss.config.js` in your project root:
+
+```js
+// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    // Required: scan the compiled library output so its classes are not purged
+    './node_modules/@neverleans-labs/plug-store-core/dist/**/*.js',
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+        card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+```js
+// postcss.config.js
+export default {
+  plugins: { tailwindcss: {}, autoprefixer: {} },
+};
+```
+
+And in your entry file (`src/main.tsx` or `src/index.tsx`), import your own CSS **before** the app:
+
+```tsx
+import './index.css'; // your file with @tailwind base/components/utilities
+```
+
+Your `src/index.css` should contain:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+> **React 19 users:** If you get an `ERESOLVE` error during install, pin React 18 or use `npm install --legacy-peer-deps`. React 19 support is tracked in [#issues](https://github.com/neverleans/plug-store/issues).
+
 ---
 
 ### 2. Custom Brand Theme (`defineTheme`)
@@ -126,15 +183,35 @@ export default function App() {
 Connect PlugStore directly to your Node.js, Laravel, Django, Supabase, or REST API:
 
 ```tsx
-import { CatalogProvider, restDataProvider } from '@neverleans-labs/plug-store-core';
+import {
+  CatalogProvider,
+  restDataProvider,
+  useCatalogData,
+} from '@neverleans-labs/plug-store-core';
 
+// ── Inner component that consumes the data ──────────────────────────────────
+function StoreFront() {
+  const { products, categories, isLoading } = useCatalogData();
+
+  if (isLoading) return <p>Loading...</p>;
+
+  return (
+    <ul>
+      {products.map((product) => (
+        <li key={product.id}>{product.name}</li>
+      ))}
+    </ul>
+  );
+}
+
+// ── Root: wrap with CatalogProvider and point at your REST API ──────────────
 export default function App() {
   return (
     <CatalogProvider
       dataProvider={restDataProvider('https://api.my-store.com/v1')}
       config={{ companyName: 'My Store' }}
     >
-      <YourAppContent />
+      <StoreFront />
     </CatalogProvider>
   );
 }
@@ -151,9 +228,21 @@ and need to handle WhatsApp, Pix, Stripe, or Mercado Pago checkouts in 1 line of
 
 ```tsx
 import { useCheckout } from '@neverleans-labs/plug-store-core';
+import type { ShippingInfo } from '@neverleans-labs/plug-store-core';
 
 function CartSummary() {
   const { processCheckout, loading } = useCheckout();
+
+  // Example shipping info — in a real form this comes from user input
+  const shippingInfo: ShippingInfo = {
+    fullName: 'Maria Silva',
+    email: 'maria@example.com',
+    phone: '5511999999999',
+    address: 'Rua das Flores, 123',
+    city: 'São Paulo',
+    state: 'SP',
+    zipCode: '01310-100',
+  };
 
   const handleWhatsAppOrder = () => processCheckout(shippingInfo, 'whatsapp');
   const handlePixPayment = () => processCheckout(shippingInfo, 'pix');

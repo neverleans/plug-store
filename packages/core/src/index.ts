@@ -1,3 +1,7 @@
+// ─── Styles ───────────────────────────────────────────────────────────────────
+// Must be the first import so Vite (library mode) emits dist/index.css
+import './index.css';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type {
   IndustryTemplate,
