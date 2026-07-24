@@ -28,6 +28,8 @@ export default function App() {
         companyName: 'My Boutique',
         currency: 'BRL',
         whatsappPhone: '5511999999999',
+        pixKey: 'my-boutique@example.com', // enables a real, scannable Pix BR Code at checkout
+        pixMerchantCity: 'Sao Paulo',
       }}
     />
   );
@@ -36,12 +38,13 @@ export default function App() {
 
 ## What's inside
 
-- **`<CatalogApp />`** — the full turnkey storefront.
+- **`<CatalogApp />`** — the full turnkey storefront, checkout included: a payment-method
+  picker for WhatsApp, Pix and a demo card flow, no extra code.
 - **`<CatalogProvider />`** — bring your own layout, keep the state engine.
 - **Headless data providers** — `restDataProvider` and `customDataProvider` connect to
   any REST, Supabase, Firebase, Prisma or GraphQL backend.
-- **`useCheckout`** — WhatsApp pre-filled orders, Pix (copy-paste and QR), Stripe and
-  Mercado Pago.
+- **`useCheckout`** — the same checkout logic, headless: WhatsApp pre-filled orders, real
+  Pix BR Codes (copy-paste and QR, EMV/Banco Central spec), Stripe and Mercado Pago.
 - **PWA and offline catalog** — service worker caching with network-first fallbacks.
 - **SEO built in** — JSON-LD `Schema.org/Product`, meta tags and Twitter cards.
 - **Zero-config analytics** — automatic GA4 and Meta Pixel e-commerce events.

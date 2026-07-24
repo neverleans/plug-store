@@ -25,7 +25,7 @@ Create a brand new PlugStore application in under 10 seconds:
 npx create-plug-store meu-catalogo
 ```
 
-Answer 3 quick prompts (Store Name, Initial Theme, Currency) and your application is fully initialized and ready to run!
+Answer a few quick prompts — store name, starting theme, currency, WhatsApp number and, for BRL stores, a Pix key — and your application is fully initialized and ready to accept real orders.
 
 ---
 
@@ -41,10 +41,10 @@ Answer 3 quick prompts (Store Name, Initial Theme, Currency) and your applicatio
 
 ## 🔥 Key Features & Superpowers
 
-- 🎨 **50+ Turnkey Industry Themes**: Ready-to-use design systems for Fashion, Tech, Food, Furniture, Beauty, Sports, Books, Pets, Automotive, Art, Jewelry, Homeware, Market, Wellness, Stationery, Winery, Brewery, Coffee, Bakery, Spices, Chocolates, Gaming, Geek, Music, Boardgames, Toys, Hardware, Lighting, Gardening, Office, Security, Cycling, Outdoors, Fishing, Fitness, Combat, Motorcycles, Optics, Dental, Medical, Pharmacy, Watchmakers, Perfume, Handcrafted, Party, Flowers, Leather, Baby, Spiritual, and Vintage.
+- 🎨 **50 Turnkey Industry Themes**: Ready-to-use design systems for Fashion, Tech, Food, Furniture, Beauty, Sports, Books, Pets, Automotive, Art, Jewelry, Homeware, Market, Wellness, Stationery, Winery, Brewery, Coffee, Bakery, Spices, Chocolates, Gaming, Geek, Music, Boardgames, Toys, Hardware, Lighting, Gardening, Office, Security, Cycling, Outdoors, Fishing, Fitness, Combat, Motorcycles, Optics, Dental, Medical, Pharmacy, Watchmakers, Perfume, Handcrafted, Party, Flowers, Leather, Baby, Spiritual, and Vintage — each with its own copy, colors and typography, not a reskinned template.
 - 💅 **Custom Brand Themes (`defineTheme`)**: Easily configure your client's exact brand colors, typography, hero styles, and card aesthetics.
 - 🔌 **Headless CMS & Data Providers**: Connect seamlessly to any backend API (REST, Supabase, Firebase, Prisma, GraphQL) via `restDataProvider` or `customDataProvider`.
-- 💳 **Turnkey Payment Gateways (`useCheckout`)**: Native support for **WhatsApp pre-filled orders**, **Pix Copia e Cola & QR Code**, **Stripe Checkout**, and **Mercado Pago**.
+- 💳 **Turnkey Checkout, Built In**: The `<CatalogApp />` checkout screen ships with a payment-method picker for **WhatsApp**, **Pix**, and a demo card flow — no extra code. Pix generates a real, spec-compliant BR Code (EMV/Banco Central, with the mandated CRC-16 checksum) that scans in any Brazilian banking app, not a placeholder string. Prefer to build your own UI? The same logic is available headless via `useCheckout`, with adapters for **Stripe Checkout** and **Mercado Pago** too.
 - 📱 **PWA & Offline Catalog**: Full offline caching via Service Worker with automatic network-first fallbacks and instant native installation prompts.
 - 🚀 **SEO & OpenGraph Built-in**: Full JSON-LD (`Schema.org/Product`), Meta tags, and Twitter Cards out of the box.
 - 📊 **Zero-Config E-Commerce Analytics**: Automatic event tracking for Google Analytics 4 (GA4) and Meta Pixel.
@@ -76,6 +76,8 @@ export default function App() {
         companyName: 'My Boutique',
         currency: 'BRL',
         whatsappPhone: '5511999999999',
+        pixKey: 'my-boutique@example.com', // enables a real, scannable Pix BR Code at checkout
+        pixMerchantCity: 'Sao Paulo',
       }}
     />
   );
@@ -142,7 +144,10 @@ export default function App() {
 
 ### 4. Turnkey Checkout (`useCheckout`)
 
-Handle WhatsApp, Pix, Stripe, or Mercado Pago checkouts in 1 line of code:
+If you're using `<CatalogApp />`, its checkout page already renders a payment-method
+picker for WhatsApp, Pix and card — you don't need any of the code below. Reach for
+`useCheckout` when you're building your own checkout UI on top of `<CatalogProvider />`
+and need to handle WhatsApp, Pix, Stripe, or Mercado Pago checkouts in 1 line of code:
 
 ```tsx
 import { useCheckout } from '@neverleans/plug-store-core';
@@ -166,8 +171,8 @@ function CartSummary() {
 ## 🌟 PlugStore Open-Core & Ecosystem
 
 PlugStore is built on an **Open-Core philosophy**:
-- The core framework, CLI tool, 50 built-in themes, Headless Data Providers, and PWA engine are and will always remain **100% Free & Open Source under the Apache-2.0 License**.
-- To support ongoing development, we are building **PlugStore Pro** — an optional marketplace offering lifetime access to premium animated UI blocks, 3D interactive product showcases, and luxury admin dashboard templates for agencies and high-growth stores.
+- The core framework, CLI tool, 50 built-in themes, Headless Data Providers, checkout (including real Pix BR Codes), and PWA engine are and will always remain **100% Free & Open Source under the Apache-2.0 License**.
+- We're exploring an optional **PlugStore Pro** layer for agencies and stores that outgrow the free tier — think maintained integrations (NFe, live shipping quotes, marketplace sync) and operational tooling, not paywalled components. Nothing here is gated behind it today; everything described in this README ships free.
 
 ---
 
@@ -180,6 +185,7 @@ is a single self-contained object.
 - Browse [`good first issue`](https://github.com/neverleans/plug-store/labels/good%20first%20issue) to find something to pick up.
 - Be kind — we follow a [Code of Conduct](./CODE_OF_CONDUCT.md).
 - Found a vulnerability? Please follow our [Security Policy](./SECURITY.md) instead of opening a public issue.
+- See what changed recently in the [Changelog](./CHANGELOG.md).
 
 ---
 
@@ -207,11 +213,21 @@ pnpm install
 # Build core and themes packages
 pnpm build
 
-# Run demo application locally
-pnpm --filter=plug-store-demo-app dev
+# Run the demo app locally
+pnpm dev
 ```
 
-Visit `http://localhost:5173` to explore the live interactive demo app.
+Visit `http://localhost:5173` for an interactive gallery of all 50 themes — pick one and
+it opens as a full, browsable storefront (cart, search, wishlist, checkout), not a static
+screenshot.
+
+Other useful scripts, run from the repo root:
+
+```bash
+pnpm test           # run the test suites
+pnpm test:coverage  # core package, with a coverage report
+pnpm lint           # lint every package
+```
 
 ---
 

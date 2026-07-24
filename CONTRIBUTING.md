@@ -40,8 +40,8 @@ pnpm dev
 
 | Path | What it is |
 |---|---|
-| `packages/core` | `@neverleans/plug-store-core` — components, contexts, hooks, PWA layer |
-| `packages/themes` | `@neverleans/plug-store-themes` — the 50 presets and `defineTheme` |
+| `packages/core` | `@neverleans/plug-store-core` — components, contexts, hooks, PWA layer, and the 50 theme presets (the single source of truth) |
+| `packages/themes` | `@neverleans/plug-store-themes` — re-exports the presets from core and hosts `defineTheme` |
 | `packages/create-plug-store` | The `create-plug-store` scaffolding CLI |
 | `apps/demo` | The public demo and theme gallery |
 
@@ -59,14 +59,18 @@ pnpm lint            # lint every package
 ## Adding a theme
 
 Themes are plain objects, so a new one is a single self-contained addition to
-`packages/themes/src/index.ts`.
+`packages/core/src/themes/configs.ts` — that's the single source of truth; don't add it to
+`packages/themes` instead, which only re-exports the registry from core.
 
 1. Add your theme using the same shape as the existing entries.
 2. Colors are **HSL channel triplets without the `hsl()` wrapper** — `"210 100% 50%"` —
    because they are injected into CSS custom properties.
 3. Pick a `heroStyle` and `cardStyle` that already exist rather than adding new ones.
-4. Run `pnpm build` and check your theme in the demo app before opening the PR.
-5. Include a screenshot in the pull request description. It makes review much faster.
+4. Add a hero description for your theme in `localizeHeroSubtitle`
+   (`packages/core/src/i18n/dynamic.ts`), in both Portuguese and English — every theme has
+   its own, so the homepage never shows another niche's copy.
+5. Run `pnpm build` and check your theme in the demo app before opening the PR.
+6. Include a screenshot in the pull request description. It makes review much faster.
 
 ---
 

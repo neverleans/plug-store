@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Interactive theme gallery in the demo app: every one of the 50 themes opens as a full,
+  browsable storefront (cart, search, wishlist, checkout), plus a GitHub Pages deploy
+  workflow (`deploy-demo.yml`).
+- A real, spec-compliant static Pix "Copia e Cola" BR Code generator (`buildPixPayload`,
+  EMV/Banco Central format with the mandated CRC-16 checksum) — scans in any Brazilian
+  banking app.
+- `pixKey` and `pixMerchantCity` on `SiteConfig`/`CatalogConfig`, with inputs in the admin
+  panel and conditional prompts in `create-plug-store` for BRL stores.
+- The turnkey `CheckoutPage` now renders a payment-method picker (Pix, WhatsApp, demo
+  card) instead of only a fake credit-card form; Pix renders inline as a QR code plus a
+  copy-to-clipboard code.
+- Per-theme hero description and eyebrow label for all 50 themes (`localizeHeroSubtitle`
+  in `i18n/dynamic.ts`), in Portuguese and English.
+- `basename` prop on `<CatalogApp />` for storefronts served from a sub-directory (GitHub
+  Pages project sites, or any deployment not at the domain root).
 - Contributor documentation: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` and `SECURITY.md`.
 - GitHub issue forms for bug reports and feature requests, plus a pull request template.
 - `FUNDING.yml`, enabling the GitHub Sponsors button on the repository.
@@ -19,6 +34,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   dry-run mode for rehearsals.
 - Self-contained `vitest.config.ts` in `packages/core`, enabling jsdom, the
   `@testing-library/jest-dom` matchers and a `test:coverage` script.
+
+### Fixed
+
+- 35 of the 50 themes silently rendered as the `fashion` theme: the theme registry was
+  duplicated between `packages/core` and `packages/themes` and only 15 were kept in sync.
+  `packages/core` is now the single source of truth; `packages/themes` re-exports it.
+- `<CatalogApp />` accepted `customTheme`, `defaultLanguage` and `dataProvider` as props
+  but never forwarded any of them to `CatalogProvider`, so a `defineTheme` brand passed to
+  `<CatalogApp />` (as the README documented) silently did nothing.
+- A visitor's *first-ever* theme was permanently written to `localStorage` and treated as
+  sticky forever after — so changing `defaultTheme` in code had no visible effect for
+  anyone who had loaded the app before. The stored value is now tied to the configured
+  default and only wins while that default is unchanged.
+- `PublicCatalogPage` called `useState`/`useMemo` after an early `return`, crashing with
+  "Rendered fewer hooks than expected" when navigating from an invalid catalog slug to a
+  valid one.
+- Checkout double-counted shipping: the page recomputed its own shipping threshold on top
+  of a cart total that already included shipping, so the order summary never added up.
+- `formatMoney` treated every stored price as USD and multiplied it by a fixed exchange
+  rate (BRL × 5.2), so a real BRL store's prices displayed inflated by that rate. Amounts
+  are now formatted in the store's own currency via `Intl.NumberFormat`, with no
+  conversion.
+- Hero description and eyebrow copy were hardcoded per hero *layout*, not per theme, so
+  any theme sharing a layout with another rendered the wrong niche's words (a coffee shop
+  opened with "Tecnologia de ponta").
+- `pixGateway` produced a fabricated string that no banking app could read; it now emits
+  the real BR Code above and fails loudly instead of silently if no Pix key is configured.
 
 ### Changed
 
@@ -39,11 +81,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   code in the monorepo referenced.
 - Competing `bun.lock`, `bun.lockb` and `package-lock.json` lockfiles. The monorepo
   standardises on pnpm and the others are now gitignored.
-
-### Fixed
-
-- Theme count stated consistently as 50 across the README and package descriptions
-  (the packages table and npm description still said 15).
 
 ## [0.1.0]
 

@@ -12,8 +12,9 @@
 npx create-plug-store meu-catalogo
 ```
 
-Answer three prompts — store name, starting theme and currency — and you get a fully
-initialised React + Tailwind CSS storefront, ready to run.
+Answer a few prompts — store name, starting theme, currency, WhatsApp number and, for BRL
+stores, a Pix key — and you get a fully initialised React + Tailwind CSS storefront,
+ready to accept real orders.
 
 ```bash
 cd meu-catalogo
@@ -25,7 +26,8 @@ npm run dev
 
 - A wired-up `<CatalogApp />` using the theme you picked out of 50 industry presets.
 - Tailwind CSS, TypeScript and Vite preconfigured.
-- WhatsApp and Pix checkout ready to switch on.
+- A checkout that already offers WhatsApp and Pix — if you entered a Pix key, it generates
+  a real, scannable BR Code, not a placeholder.
 - PWA manifest and service worker for offline catalog browsing.
 
 ## Requirements
