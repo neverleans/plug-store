@@ -1,14 +1,14 @@
-# @neverleans/plug-store-core
+# @neverleans-labs/plug-store-core
 
 > Core engine of the [PlugStore Framework](https://github.com/neverleans/plug-store) — a turnkey headless catalog and e-commerce framework for React and Tailwind CSS.
 
-[![npm](https://img.shields.io/npm/v/@neverleans/plug-store-core.svg?color=brightgreen)](https://www.npmjs.com/package/@neverleans/plug-store-core)
+[![npm](https://img.shields.io/npm/v/@neverleans-labs/plug-store-core.svg?color=brightgreen)](https://www.npmjs.com/package/@neverleans-labs/plug-store-core)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/neverleans/plug-store/blob/master/LICENSE)
 
 ## Installation
 
 ```bash
-npm install @neverleans/plug-store-core @neverleans/plug-store-themes
+npm install @neverleans-labs/plug-store-core @neverleans-labs/plug-store-themes
 ```
 
 ## Quick start
@@ -17,8 +17,8 @@ Render a complete storefront — routing, header, footer, product grid, cart, wi
 and search — with a single component:
 
 ```tsx
-import { CatalogApp } from '@neverleans/plug-store-core';
-import '@neverleans/plug-store-core/dist/index.css';
+import { CatalogApp } from '@neverleans-labs/plug-store-core';
+import '@neverleans-labs/plug-store-core/dist/index.css';
 
 export default function App() {
   return (

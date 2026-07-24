@@ -1,15 +1,15 @@
-# @neverleans/plug-store-themes
+# @neverleans-labs/plug-store-themes
 
 > 50 ready-made industry design themes and the `defineTheme` customizer for the
 > [PlugStore Framework](https://github.com/neverleans/plug-store).
 
-[![npm](https://img.shields.io/npm/v/@neverleans/plug-store-themes.svg?color=orange)](https://www.npmjs.com/package/@neverleans/plug-store-themes)
+[![npm](https://img.shields.io/npm/v/@neverleans-labs/plug-store-themes.svg?color=orange)](https://www.npmjs.com/package/@neverleans-labs/plug-store-themes)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/neverleans/plug-store/blob/master/LICENSE)
 
 ## Installation
 
 ```bash
-npm install @neverleans/plug-store-themes @neverleans/plug-store-core
+npm install @neverleans-labs/plug-store-themes @neverleans-labs/plug-store-core
 ```
 
 ## Built-in themes
@@ -30,7 +30,7 @@ handcrafted, party, flowers, leather, baby, spiritual and vintage.
 Match a client's exact brand identity with `defineTheme`:
 
 ```ts
-import { defineTheme } from '@neverleans/plug-store-themes';
+import { defineTheme } from '@neverleans-labs/plug-store-themes';
 
 export const myBrand = defineTheme({
   id: 'my-brand',

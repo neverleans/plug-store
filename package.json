@@ -9,10 +9,10 @@
     "build": "turbo build",
     "test": "turbo test",
     "lint": "turbo lint",
-    "build:core": "turbo build --filter=@neverleans/plug-store-core",
-    "build:themes": "turbo build --filter=@neverleans/plug-store-themes",
+    "build:core": "turbo build --filter=@neverleans-labs/plug-store-core",
+    "build:themes": "turbo build --filter=@neverleans-labs/plug-store-themes",
     "dev:demo": "turbo dev --filter=./apps/demo",
-    "test:coverage": "pnpm --filter=@neverleans/plug-store-core test:coverage",
+    "test:coverage": "pnpm --filter=@neverleans-labs/plug-store-core test:coverage",
     "release": "pnpm build && pnpm -r publish --access public --no-git-checks"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import type { ThemeConfig } from '@neverleans/plug-store-core';
-import { themeConfigs } from '@neverleans/plug-store-themes';
+import type { ThemeConfig } from '@neverleans-labs/plug-store-core';
+import { themeConfigs } from '@neverleans-labs/plug-store-themes';
 
 const hsl = (channels: string) => `hsl(${channels})`;
 
@@ -166,7 +166,7 @@ export default function ThemeGallery() {
           </a>{' '}
           ·{' '}
           <a
-            href="https://www.npmjs.com/package/@neverleans/plug-store-core"
+            href="https://www.npmjs.com/package/@neverleans-labs/plug-store-core"
             className="font-medium text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-400"
           >
             npm

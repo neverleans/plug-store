@@ -1,6 +1,6 @@
-import { CatalogApp } from '@neverleans/plug-store-core';
-import type { IndustryTemplate } from '@neverleans/plug-store-core';
-import { themeConfigs } from '@neverleans/plug-store-themes';
+import { CatalogApp } from '@neverleans-labs/plug-store-core';
+import type { IndustryTemplate } from '@neverleans-labs/plug-store-core';
+import { themeConfigs } from '@neverleans-labs/plug-store-themes';
 import ThemeGallery from './ThemeGallery';
 
 const BASE = import.meta.env.BASE_URL;

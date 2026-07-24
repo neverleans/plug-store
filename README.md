@@ -4,8 +4,8 @@
   
   <p>
     <a href="https://github.com/neverleans/plug-store/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License"></a>
-    <a href="https://www.npmjs.com/package/@neverleans/plug-store-core"><img src="https://img.shields.io/npm/v/@neverleans/plug-store-core.svg?color=brightgreen" alt="NPM Core Version"></a>
-    <a href="https://www.npmjs.com/package/@neverleans/plug-store-themes"><img src="https://img.shields.io/npm/v/@neverleans/plug-store-themes.svg?color=orange" alt="NPM Themes Version"></a>
+    <a href="https://www.npmjs.com/package/@neverleans-labs/plug-store-core"><img src="https://img.shields.io/npm/v/@neverleans-labs/plug-store-core.svg?color=brightgreen" alt="NPM Core Version"></a>
+    <a href="https://www.npmjs.com/package/@neverleans-labs/plug-store-themes"><img src="https://img.shields.io/npm/v/@neverleans-labs/plug-store-themes.svg?color=orange" alt="NPM Themes Version"></a>
     <a href="https://github.com/neverleans/plug-store/actions"><img src="https://img.shields.io/github/actions/workflow/status/neverleans/plug-store/ci.yml?branch=master" alt="CI Status"></a>
   </p>
 
@@ -33,8 +33,8 @@ Answer a few quick prompts — store name, starting theme, currency, WhatsApp nu
 
 | Package | Version | Description |
 |---|---|---|
-| [`@neverleans/plug-store-core`](./packages/core) | `0.1.0` | Core UI components, turnkey `CatalogApp`, contexts, hooks, and PWA layer |
-| [`@neverleans/plug-store-themes`](./packages/themes) | `0.1.0` | 50 curated industry design themes & `defineTheme` customizer utility |
+| [`@neverleans-labs/plug-store-core`](./packages/core) | `0.1.0` | Core UI components, turnkey `CatalogApp`, contexts, hooks, and PWA layer |
+| [`@neverleans-labs/plug-store-themes`](./packages/themes) | `0.1.0` | 50 curated industry design themes & `defineTheme` customizer utility |
 | [`create-plug-store`](./packages/create-plug-store) | `0.1.0` | Interactive CLI scaffolding tool |
 
 ---
@@ -56,7 +56,7 @@ Answer a few quick prompts — store name, starting theme, currency, WhatsApp nu
 Install the packages in your existing React project:
 
 ```bash
-npm install @neverleans/plug-store-core @neverleans/plug-store-themes
+npm install @neverleans-labs/plug-store-core @neverleans-labs/plug-store-themes
 ```
 
 ### 1. Turnkey Full Application (`<CatalogApp />`)
@@ -65,8 +65,8 @@ The fastest way to render a complete catalog with routing, header, footer, produ
 
 ```tsx
 import React from 'react';
-import { CatalogApp } from '@neverleans/plug-store-core';
-import '@neverleans/plug-store-core/dist/index.css';
+import { CatalogApp } from '@neverleans-labs/plug-store-core';
+import '@neverleans-labs/plug-store-core/dist/index.css';
 
 export default function App() {
   return (
@@ -91,8 +91,8 @@ export default function App() {
 Customizing colors and fonts to match your client's exact brand identity:
 
 ```typescript
-import { defineTheme } from '@neverleans/plug-store-themes';
-import { CatalogApp } from '@neverleans/plug-store-core';
+import { defineTheme } from '@neverleans-labs/plug-store-themes';
+import { CatalogApp } from '@neverleans-labs/plug-store-core';
 
 const customClientTheme = defineTheme({
   id: 'my-brand',
@@ -126,7 +126,7 @@ export default function App() {
 Connect PlugStore directly to your Node.js, Laravel, Django, Supabase, or REST API:
 
 ```tsx
-import { CatalogProvider, restDataProvider } from '@neverleans/plug-store-core';
+import { CatalogProvider, restDataProvider } from '@neverleans-labs/plug-store-core';
 
 export default function App() {
   return (
@@ -150,7 +150,7 @@ picker for WhatsApp, Pix and card — you don't need any of the code below. Reac
 and need to handle WhatsApp, Pix, Stripe, or Mercado Pago checkouts in 1 line of code:
 
 ```tsx
-import { useCheckout } from '@neverleans/plug-store-core';
+import { useCheckout } from '@neverleans-labs/plug-store-core';
 
 function CartSummary() {
   const { processCheckout, loading } = useCheckout();
