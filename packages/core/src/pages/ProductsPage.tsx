@@ -4,7 +4,7 @@ import { Grid, List, SlidersHorizontal, ChevronLeft, ChevronRight, X } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getProducts, getCategories, searchProducts } from '@/data';
+import { useCategories, useProducts } from '@/hooks/useCatalogQuery';
 import ProductCard from '@/components/product/ProductCard';
 import ProductCardSkeleton from '@/components/product/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
@@ -51,10 +51,13 @@ const ProductsPage = () => {
     [setSearchParams]
   );
 
-  const categories = getCategories(template);
-  const allProducts = useMemo(
-    () => (searchQuery ? searchProducts(template, searchQuery) : getProducts(template)),
-    [template, searchQuery]
+  const { categories } = useCategories();
+  // Only the search term is pushed to the provider. Category, price, rating and
+  // tag filtering stays client-side because the facet counts below are computed
+  // over the unfiltered result set — narrowing the request would make every
+  // count read zero for the options the visitor has not picked.
+  const { products: allProducts, isLoading: productsLoading } = useProducts(
+    searchQuery ? { search: searchQuery } : undefined,
   );
 
   const maxPrice = useMemo(
@@ -331,7 +334,9 @@ const ProductsPage = () => {
         )}
 
         <AnimatePresence mode="wait" initial={false}>
-          {isPending && filtered.length > 0 ? (
+          {/* `productsLoading` covers the first fetch from the data provider;
+              `isPending` is the short transition shown when a filter changes. */}
+          {productsLoading || (isPending && filtered.length > 0) ? (
             <motion.div
               key="skeleton"
               initial={{ opacity: 0 }}

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { TooltipProvider } from './components/ui/tooltip';
@@ -73,11 +73,18 @@ export interface CatalogProviderProps {
   config?: CatalogConfig;
   /** Optional custom Headless Data Provider (REST, GraphQL, Supabase, etc.) */
   dataProvider?: CatalogDataProvider;
+  /**
+   * Bring your own react-query client. Only needed when the host app already
+   * has one and wants a single cache and devtools view; otherwise PlugStore
+   * creates its own.
+   */
+  queryClient?: QueryClient;
 }
 
-const defaultQueryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
-});
+const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
+  });
 
 /**
  * CatalogProvider
@@ -114,7 +121,15 @@ export const CatalogProvider = ({
   defaultLanguage,
   config,
   dataProvider,
+  queryClient,
 }: CatalogProviderProps) => {
+  // One client per provider instance, not one per module. A module-level
+  // singleton leaks cached catalog data between independently mounted stores —
+  // and between test cases, where the second mount would silently read the
+  // first one's products.
+  const [ownQueryClient] = useState(createQueryClient);
+  const activeQueryClient = queryClient ?? ownQueryClient;
+
   // Merge config into localStorage defaults before providers mount
   if (config && typeof window !== 'undefined') {
     try {
@@ -131,7 +146,7 @@ export const CatalogProvider = ({
   }
 
   return (
-    <QueryClientProvider client={defaultQueryClient}>
+    <QueryClientProvider client={activeQueryClient}>
       <HelmetProvider>
         <LanguageProvider>
           <ColorModeProvider>

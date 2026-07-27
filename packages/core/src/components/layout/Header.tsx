@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, User, Search, Menu, X, LogOut, Globe, LayoutDashboard } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -7,7 +7,7 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getCategories, searchProducts } from '@/data';
+import { useCategories, useProducts } from '@/hooks/useCatalogQuery';
 import { Button } from '@/components/ui/button';
 import MiniCart from '@/components/cart/MiniCart';
 import DarkModeToggle from '@/components/common/DarkModeToggle';
@@ -16,7 +16,7 @@ import { localizeCategory } from '@/i18n/dynamic';
 import PWAOfflineBanner from '@/components/common/PWAOfflineBanner';
 
 const Header = () => {
-  const { theme, template } = useTheme();
+  const { theme } = useTheme();
   const { config } = useSiteConfig();
   const brandName = config.companyName || theme.name;
   const shippingBanner = config.shippingBanner;
@@ -26,28 +26,28 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const categories = getCategories(template);
+  const { categories } = useCategories();
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (searchQuery.trim().length >= 2) {
-      const results = searchProducts(template, searchQuery.trim());
-      setSuggestions(results.slice(0, 5).map(p => p.name));
-    } else {
-      setSuggestions([]);
-    }
-  }, [searchQuery, template]);
+  // Suggestions come from the active data provider, so a store backed by a real
+  // API searches that API. Below two characters the query is skipped entirely
+  // rather than asking a backend to match on a single letter.
+  const trimmedQuery = searchQuery.trim();
+  const searchTerm = trimmedQuery.length >= 2 ? trimmedQuery : undefined;
+  const { products: searchResults } = useProducts(
+    searchTerm ? { search: searchTerm, limit: 5 } : undefined,
+  );
+  const suggestions = searchTerm ? searchResults.slice(0, 5).map((p) => p.name) : [];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
+      // Suggestions are derived from the query, so clearing it clears them.
       setSearchQuery('');
-      setSuggestions([]);
     }
   };
 
@@ -55,7 +55,6 @@ const Header = () => {
     navigate(`/products?search=${encodeURIComponent(name)}`);
     setSearchOpen(false);
     setSearchQuery('');
-    setSuggestions([]);
   };
 
   return (

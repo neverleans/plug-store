@@ -4,7 +4,7 @@ import { Search, Mail, Phone, MapPin } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
-import { getProducts, getCategories } from '@/data';
+import { useCategories, useProducts } from '@/hooks/useCatalogQuery';
 import ProductCard from '@/components/product/ProductCard';
 import PageTransition from '@/components/common/PageTransition';
 import SEOHead from '@/components/common/SEOHead';
@@ -22,8 +22,8 @@ const PublicCatalogPage = () => {
 
   const brand = config.companyName || theme.name;
   const tagline = config.tagline || localizeTagline(template, theme.tagline, language);
-  const products = getProducts(template);
-  const categories = getCategories(template);
+  const { products } = useProducts();
+  const { categories } = useCategories();
 
   const [query, setQuery] = useState('');
   const [activeCat, setActiveCat] = useState<string | 'all'>('all');

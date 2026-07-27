@@ -3,7 +3,7 @@ import { ArrowRight, Truck, Shield, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getFeaturedProducts, getCategories } from '@/data';
+import { useCategories, useProducts } from '@/hooks/useCatalogQuery';
 import ProductCard from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
 import PageTransition from '@/components/common/PageTransition';
@@ -453,8 +453,8 @@ const HeroGallery = ({ theme, t, language }: { theme: any; t: any; language: any
 const HomePage = () => {
   const { theme, template } = useTheme();
   const { t, language } = useLanguage();
-  const featured = getFeaturedProducts(template);
-  const categories = getCategories(template);
+  const { products: featured } = useProducts({ featured: true });
+  const { categories } = useCategories();
 
   const renderHero = () => {
     switch (theme.heroStyle) {

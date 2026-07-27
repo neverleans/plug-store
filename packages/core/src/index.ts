@@ -44,6 +44,20 @@ export type { UseCheckoutOptions } from './hooks/useCheckout';
 export type { CatalogDataProvider, DataProviderQueryParams } from './data/provider';
 export { dummyDataProvider, restDataProvider, customDataProvider } from './data/adapters';
 export { DataProviderWrapper, useCatalogData } from './contexts/DataContext';
+// Read hooks over the active provider — this is what every built-in page uses,
+// so a custom dataProvider drives the whole storefront and not just orders.
+export {
+  useProducts,
+  useCategories,
+  useProduct,
+  useProductReviews,
+} from './hooks/useCatalogQuery';
+export type {
+  UseProductsResult,
+  UseCategoriesResult,
+  UseProductResult,
+  UseProductReviewsResult,
+} from './hooks/useCatalogQuery';
 
 // ─── Core Providers ──────────────────────────────────────────────────────────
 export { CatalogProvider } from './CatalogProvider';

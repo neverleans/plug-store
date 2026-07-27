@@ -3,14 +3,14 @@ import { Instagram, Facebook, MessageCircle, Music2 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
-import { getCategories } from '@/data';
+import { useCategories } from '@/hooks/useCatalogQuery';
 import { localizeCategory, localizeTagline } from '@/i18n/dynamic';
 
 const Footer = () => {
   const { theme, template } = useTheme();
   const { t, language } = useLanguage();
   const { config } = useSiteConfig();
-  const categories = getCategories(template);
+  const { categories } = useCategories();
   const brandName = config.companyName || theme.name;
   const tagline = config.tagline || localizeTagline(template, theme.tagline, language);
 

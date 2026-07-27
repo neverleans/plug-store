@@ -9,7 +9,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useRecentlyViewed } from '@/contexts/RecentlyViewedContext';
 import { useAccount } from '@/contexts/AccountContext';
-import { getProductById, getReviewsByProduct, getProductsByCategory, getProducts } from '@/data';
+import { useProduct, useProductReviews, useProducts } from '@/hooks/useCatalogQuery';
 import ProductCard from '@/components/product/ProductCard';
 import RecentlyViewedRow from '@/components/product/RecentlyViewedRow';
 import { Button } from '@/components/ui/button';
@@ -35,8 +35,15 @@ const ProductDetailPage = () => {
   const { isNotifying, toggleNotify } = useAccount();
   const money = useMoney();
 
-  const product = getProductById(template, id || '');
-  const baseReviews = product ? getReviewsByProduct(template, product.id) : [];
+  const { product, isLoading: productLoading } = useProduct(id);
+  const { reviews: baseReviews } = useProductReviews(product?.id);
+  // Same-category products power both the "related" row and the bundle offer.
+  // Held back until the product resolves, so the provider is not asked for an
+  // unfiltered list first and the right category a moment later.
+  const { products: categoryProducts } = useProducts(
+    product ? { category: product.category } : undefined,
+    { enabled: Boolean(product) },
+  );
 
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -62,6 +69,16 @@ const ProductDetailPage = () => {
     return dist;
   }, [reviews]);
 
+  // Reading the product is asynchronous now, so "not found" must wait for the
+  // request to settle — otherwise every visit flashes the error state first.
+  if (productLoading) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center" aria-busy="true">
+        <div className="mx-auto h-8 w-56 animate-pulse rounded bg-muted" />
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
@@ -73,9 +90,9 @@ const ProductDetailPage = () => {
 
   const filteredReviews = filterStars > 0 ? reviews.filter((r) => Math.floor(r.rating) === filterStars) : reviews;
 
-  const related = getProductsByCategory(template, product.category).filter(p => p.id !== product.id).slice(0, 4);
-  const allProducts = getProducts(template);
-  const boughtTogether = allProducts.filter((p) => p.id !== product.id && p.category === product.category).slice(0, 2);
+  const sameCategory = categoryProducts.filter((p) => p.id !== product.id);
+  const related = sameCategory.slice(0, 4);
+  const boughtTogether = sameCategory.slice(0, 2);
   const boughtBundleTotal = product.price + boughtTogether.reduce((s, p) => s + p.price, 0);
 
   const submitReview = (e: React.FormEvent) => {
