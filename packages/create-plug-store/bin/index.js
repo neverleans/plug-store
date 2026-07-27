@@ -1,13 +1,25 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import prompts from 'prompts';
-import { green, cyan, bold, red, yellow } from 'kolorist';
+import { green, cyan, bold, red, yellow, dim } from 'kolorist';
+import { THEMES, THEME_VALUES, CURRENCY_VALUES } from './themes.js';
+import { MESSAGES, resolveLang } from './messages.js';
+// ─── Version pinning ──────────────────────────────────────────────────────────
+// The scaffolded project must depend on the packages that were released
+// alongside *this* CLI. All three are versioned in lockstep (scripts/version.mjs),
+// so the CLI's own version is the correct range for core and themes — a
+// hardcoded range here would silently rot one release after it was written.
+const CLI_DIR = path.dirname(fileURLToPath(import.meta.url));
+const CLI_VERSION = JSON.parse(fs.readFileSync(path.join(CLI_DIR, '..', 'package.json'), 'utf8')).version;
+const PLUGSTORE_RANGE = `^${CLI_VERSION}`;
 // ─── CLI Flag Parsing ─────────────────────────────────────────────────────────
 // Supports non-interactive mode for CI/CD environments:
 //   npx create-plug-store my-catalog --theme fashion --currency BRL --yes
 //   npx create-plug-store my-catalog --theme electronics --whatsapp 5511999999999
 //   npx create-plug-store my-catalog --theme food --currency BRL --pix-key me@email.com --pix-city "Sao Paulo" --yes
+//   npx create-plug-store my-catalog --lang en
 function parseArgs() {
     const args = process.argv.slice(2);
     const flags = {};
@@ -31,39 +43,37 @@ function parseArgs() {
     }
     return { positional, flags };
 }
-// ─── Theme choices (kept in sync with prompts list) ───────────────────────────
-const THEME_VALUES = [
-    'fashion', 'electronics', 'food', 'furniture', 'beauty', 'sports', 'books',
-    'pets', 'automotive', 'art', 'jewelry', 'homeware', 'market', 'wellness',
-    'stationery', 'winery', 'brewery', 'coffee', 'bakery', 'spices', 'chocolates',
-    'gaming', 'geek', 'music', 'boardgames', 'toys', 'hardware', 'lighting',
-    'gardening', 'office', 'security', 'cycling', 'outdoors', 'fishing', 'fitness',
-    'combat', 'motorcycles', 'optics', 'dental', 'medical', 'pharmacy',
-    'watchmakers', 'perfume', 'handcrafted', 'party', 'flowers', 'leather',
-    'baby', 'spiritual', 'vintage',
-];
-const CURRENCY_VALUES = ['BRL', 'USD', 'EUR'];
+/** Resolved once in init() and threaded through to scaffold(). */
+let m = MESSAGES.pt;
+let lang = 'pt';
 async function init() {
-    console.log(`\n🚀 ${bold(cyan('PlugStore CLI'))} — Interactive Project Generator\n`);
     const { positional, flags } = parseArgs();
+    const resolvedLang = resolveLang(flags['lang']);
+    if (resolvedLang === null) {
+        console.log(red(MESSAGES.en.invalidLang(String(flags['lang']))));
+        process.exit(1);
+    }
+    lang = resolvedLang;
+    m = MESSAGES[lang];
+    console.log(`\n🚀 ${bold(cyan('PlugStore CLI'))} — ${m.tagline}\n`);
     const isYes = flags['yes'] === true || flags['y'] === true;
     // Validate theme flag if provided
     const themeFlag = typeof flags['theme'] === 'string' ? flags['theme'] : undefined;
     if (themeFlag && !THEME_VALUES.includes(themeFlag)) {
-        console.log(red(`✖ Tema inválido: "${themeFlag}". Valores aceitos: ${THEME_VALUES.join(', ')}`));
+        console.log(red(m.invalidTheme(themeFlag, THEME_VALUES.join(', '))));
         process.exit(1);
     }
     // Validate currency flag if provided
     const currencyFlag = typeof flags['currency'] === 'string' ? flags['currency'].toUpperCase() : undefined;
     if (currencyFlag && !CURRENCY_VALUES.includes(currencyFlag)) {
-        console.log(red(`✖ Moeda inválida: "${currencyFlag}". Valores aceitos: ${CURRENCY_VALUES.join(', ')}`));
+        console.log(red(m.invalidCurrency(currencyFlag, CURRENCY_VALUES.join(', '))));
         process.exit(1);
     }
-    const defaultProjectName = positional || 'meu-catalogo';
+    const defaultProjectName = positional || (lang === 'pt' ? 'meu-catalogo' : 'my-catalog');
     // ── If --yes is set, skip all prompts and use defaults / flags ──────────────
     if (isYes) {
         const projectName = defaultProjectName;
-        const companyName = typeof flags['company'] === 'string' ? flags['company'] : 'Minha Loja Plug';
+        const companyName = typeof flags['company'] === 'string' ? flags['company'] : m.defaultCompanyName;
         const theme = themeFlag ?? 'fashion';
         const currency = currencyFlag ?? 'BRL';
         const whatsapp = typeof flags['whatsapp'] === 'string' ? flags['whatsapp'] : '';
@@ -79,105 +89,54 @@ async function init() {
             {
                 type: 'text',
                 name: 'projectName',
-                message: 'Nome da pasta do projeto:',
+                message: m.askProjectName,
                 initial: defaultProjectName,
             },
             {
                 type: 'text',
                 name: 'companyName',
-                message: 'Nome da Loja / Empresa:',
-                initial: 'Minha Loja Plug',
+                message: m.askCompanyName,
+                initial: m.defaultCompanyName,
             },
             {
                 type: 'select',
                 name: 'theme',
-                message: 'Escolha o Nicho / Tema inicial:',
-                choices: [
-                    { title: 'LUXE (Moda & Vestuário)', value: 'fashion' },
-                    { title: 'TechVault (Eletrônicos & Tech)', value: 'electronics' },
-                    { title: 'FreshMarket (Alimentos & Mercado)', value: 'food' },
-                    { title: 'Artisan Home (Móveis & Decoração)', value: 'furniture' },
-                    { title: 'Bloom (Beleza & Cosméticos)', value: 'beauty' },
-                    { title: 'VELOCITY (Esportes & Fitness)', value: 'sports' },
-                    { title: 'Folio & Quill (Livraria & Papelaria)', value: 'books' },
-                    { title: 'Pawsome (Pet Shop)', value: 'pets' },
-                    { title: 'APEX MOTORS (Automotivo)', value: 'automotive' },
-                    { title: 'Atelier (Arte & Design)', value: 'art' },
-                    { title: 'Maison Solenne (Joias & Luxo)', value: 'jewelry' },
-                    { title: 'Maison & Table (Utilidades domésticas)', value: 'homeware' },
-                    { title: 'Maison Marché (Mercado Geral)', value: 'market' },
-                    { title: 'Maison Calme (Bem-estar & Spa)', value: 'wellness' },
-                    { title: 'Papier & Encre (Papelaria Fina)', value: 'stationery' },
-                    { title: 'Château Reserve (Vinhos & Espumantes)', value: 'winery' },
-                    { title: 'Craft & Hop (Cervejas Artesanais)', value: 'brewery' },
-                    { title: 'Roast & Beans (Cafés Especiais)', value: 'coffee' },
-                    { title: 'Patisserie Sucre (Doces & Confeitaria)', value: 'bakery' },
-                    { title: 'Aroma & Especiarias (Temperos & Ervas)', value: 'spices' },
-                    { title: 'Cacao Noir (Chocolates Gourmet)', value: 'chocolates' },
-                    { title: 'CyberZone Gaming (Games & Periféricos)', value: 'gaming' },
-                    { title: 'Geekverse (Cultura Pop & Action Figures)', value: 'geek' },
-                    { title: 'Symphony (Instrumentos Musicais)', value: 'music' },
-                    { title: 'Taverna dos Jogos (Board Games & RPG)', value: 'boardgames' },
-                    { title: 'Mundo do Brinquedo (Brinquedos Educativos)', value: 'toys' },
-                    { title: 'Titan Ferramentas (Construção & Indústria)', value: 'hardware' },
-                    { title: 'Lumina (Lustres & Iluminação Design)', value: 'lighting' },
-                    { title: 'Verde Vida (Jardinagem & Plantas)', value: 'gardening' },
-                    { title: 'ErgoWork (Escritório & Corporativo)', value: 'office' },
-                    { title: 'Shield (Segurança & Câmeras IP)', value: 'security' },
-                    { title: 'AeroBike (Ciclismo & MTB)', value: 'cycling' },
-                    { title: 'Summit Adventure (Camping & Trilha)', value: 'outdoors' },
-                    { title: 'Nautilus (Pesca & Náutica)', value: 'fishing' },
-                    { title: 'IronNutri (Suplementos & Whey)', value: 'fitness' },
-                    { title: 'Octagon Fight (Artes Marciais & Boxe)', value: 'combat' },
-                    { title: 'Rider Motors (Motos & Capacetes)', value: 'motorcycles' },
-                    { title: 'Visione (Óptica & Armações)', value: 'optics' },
-                    { title: 'Odonto Care (Higiene Bucal & Odonto)', value: 'dental' },
-                    { title: 'MedEquip (Médico & Ortopedia)', value: 'medical' },
-                    { title: 'PharmaPlus (Farmácia & Vitaminas)', value: 'pharmacy' },
-                    { title: 'Horlogerie Royale (Relógios de Luxo)', value: 'watchmakers' },
-                    { title: 'Elixir Parfums (Perfumes Importados)', value: 'perfume' },
-                    { title: 'Feito à Mão (Artesanato & Velas)', value: 'handcrafted' },
-                    { title: 'Festa & Alegria (Artigos de Festa)', value: 'party' },
-                    { title: 'Jardim das Flores (Floricultura & Buquês)', value: 'flowers' },
-                    { title: 'Couro & Tradição (Bolsas & Calçados)', value: 'leather' },
-                    { title: 'Nuvem de Bebê (Enxoval & Maternidade)', value: 'baby' },
-                    { title: 'Astral & Cristais (Esotérico & Cristais)', value: 'spiritual' },
-                    { title: 'Retro Vinyl (Discos & Antiguidades)', value: 'vintage' },
-                ],
+                message: m.askTheme,
+                // Titles are built from the shared THEMES catalog so the select list
+                // can never drift from the --theme flag's accepted values.
+                choices: THEMES.map((t) => ({ title: `${t.brand} (${t[lang]})`, value: t.value })),
                 initial: themeFlag ? THEME_VALUES.indexOf(themeFlag) : 0,
             },
             {
                 type: 'select',
                 name: 'currency',
-                message: 'Moeda principal:',
-                choices: [
-                    { title: 'BRL (R$ - Real Brasileiro)', value: 'BRL' },
-                    { title: 'USD ($ - Dólar Americano)', value: 'USD' },
-                    { title: 'EUR (€ - Euro)', value: 'EUR' },
-                ],
-                initial: currencyFlag ? CURRENCY_VALUES.indexOf(currencyFlag) : 0,
+                message: m.askCurrency,
+                choices: CURRENCY_VALUES.map((c) => ({ title: m.currencyChoices[c], value: c })),
+                initial: currencyFlag
+                    ? CURRENCY_VALUES.indexOf(currencyFlag)
+                    : 0,
             },
             {
                 type: 'text',
                 name: 'whatsapp',
-                message: 'Número do WhatsApp (opcional, ex: 5511999999999):',
+                message: m.askWhatsapp,
                 initial: typeof flags['whatsapp'] === 'string' ? flags['whatsapp'] : '',
             },
             {
                 type: (_prev, values) => (values.currency === 'BRL' ? 'text' : null),
                 name: 'pixKey',
-                message: 'Chave Pix (opcional — CPF, e-mail, telefone ou chave aleatória):',
+                message: m.askPixKey,
                 initial: typeof flags['pix-key'] === 'string' ? flags['pix-key'] : '',
             },
             {
                 type: (_prev, values) => (values.pixKey ? 'text' : null),
                 name: 'pixMerchantCity',
-                message: 'Cidade do recebedor para o Pix (ex: Sao Paulo):',
+                message: m.askPixCity,
                 initial: typeof flags['pix-city'] === 'string' ? flags['pix-city'] : '',
             },
         ], {
             onCancel: () => {
-                throw new Error(red('✖') + ' Operação cancelada');
+                throw new Error(red('✖') + ' ' + m.cancelled);
             },
         });
     }
@@ -190,10 +149,10 @@ async function init() {
 async function scaffold({ projectName, companyName, theme, currency, whatsapp, pixKey, pixMerchantCity, }) {
     const targetDir = path.join(process.cwd(), projectName);
     if (fs.existsSync(targetDir)) {
-        console.log(yellow(`\n⚠️  A pasta "${projectName}" já existe. Escolha outro nome ou apague a pasta.`));
+        console.log(yellow(`\n${m.dirExists(projectName)}`));
         process.exit(1);
     }
-    console.log(`\n⏳ Criando projeto PlugStore em ${cyan(targetDir)}...\n`);
+    console.log(`\n${m.creating(cyan(targetDir))}\n`);
     fs.mkdirSync(targetDir, { recursive: true });
     // 1. package.json
     const packageJson = {
@@ -207,8 +166,8 @@ async function scaffold({ projectName, companyName, theme, currency, whatsapp, p
             preview: 'vite preview',
         },
         dependencies: {
-            '@neverleans-labs/plug-store-core': '^0.1.0',
-            '@neverleans-labs/plug-store-themes': '^0.1.0',
+            '@neverleans-labs/plug-store-core': PLUGSTORE_RANGE,
+            '@neverleans-labs/plug-store-themes': PLUGSTORE_RANGE,
             react: '^18.3.1',
             'react-dom': '^18.3.1',
             'react-router-dom': '^6.30.1',
@@ -373,15 +332,17 @@ dist
     // 8. src directory
     fs.mkdirSync(path.join(targetDir, 'src'), { recursive: true });
     // 9. src/index.css
-    // This is the consumer's own CSS file. It imports the Tailwind directives
-    // and the compiled library styles (dist/index.css) via the package export.
+    // The project's own stylesheet: Tailwind directives plus any token overrides.
+    // The library stylesheet itself is imported from src/main.tsx, ahead of this
+    // file, so anything written here wins.
     const indexCss = `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ─── PlugStore CSS Design Tokens ─────────────────────────────────────────────
-   These variables are already defined inside the imported library stylesheet
-   above. You can override individual tokens here to customise the base theme.
+   Every token is defined in @neverleans-labs/plug-store-core/dist/index.css,
+   which src/main.tsx imports before this file. Redefine any of them here to
+   customise the base theme.
    All color values must be HSL without the hsl() wrapper (e.g. "222 84% 5%").
    ─────────────────────────────────────────────────────────────────────────── */
 
@@ -398,8 +359,10 @@ dist
     const pixConfigLines = pixKey
         ? `        pixKey: "${pixKey}",\n        pixMerchantCity: "${pixMerchantCity || ''}",\n`
         : '';
-    const appTsx = `import React from 'react';
-import { CatalogApp } from '@neverleans-labs/plug-store-core';
+    // No `import React` here: the template sets jsx: "react-jsx" (automatic
+    // runtime) together with noUnusedLocals, so an unused React import makes
+    // `npm run build` fail with TS6133 on a freshly generated project.
+    const appTsx = `import { CatalogApp } from '@neverleans-labs/plug-store-core';
 
 export default function App() {
   return (
@@ -416,12 +379,17 @@ ${pixConfigLines}      }}
 `;
     fs.writeFileSync(path.join(targetDir, 'src', 'App.tsx'), appTsx);
     // 11. src/main.tsx
-    // Import the local src/index.css (which pulls in the Tailwind directives).
-    // The dist/index.css from the core package is included via the package's
-    // sideEffects declaration — no manual import needed.
+    // The core package is built in Vite library mode, which emits dist/index.css
+    // as a standalone file — dist/index.js does NOT import it. `sideEffects` only
+    // stops a bundler from tree-shaking that CSS once something imports it; it
+    // does not create the import. So the consumer has to pull it in explicitly,
+    // or the app renders with none of the PlugStore design tokens.
+    // Order matters: library styles first, the project's own index.css second, so
+    // that any token the developer overrides there wins.
     const mainTsx = `import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import '@neverleans-labs/plug-store-core/dist/index.css';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -431,15 +399,24 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 `;
     fs.writeFileSync(path.join(targetDir, 'src', 'main.tsx'), mainTsx);
-    console.log(green(`\n✨ Projeto ${bold(companyName)} criado com sucesso!\n`));
-    console.log(`  📁 Pasta:    ${cyan(projectName)}`);
-    console.log(`  🎨 Tema:     ${cyan(theme)}`);
-    console.log(`  💰 Moeda:    ${cyan(currency)}`);
+    console.log(green(`\n✨ ${m.created(bold(companyName))}\n`));
+    // Labels differ in length between languages, so the value column is aligned
+    // at runtime instead of with hardcoded spaces.
+    const rows = [
+        [m.labelFolder, projectName],
+        [m.labelTheme, theme],
+        [m.labelCurrency, currency],
+    ];
     if (whatsapp)
-        console.log(`  💬 WhatsApp: ${cyan(whatsapp)}`);
+        rows.push([m.labelWhatsapp, whatsapp]);
     if (pixKey)
-        console.log(`  💳 Chave Pix: ${cyan(pixKey)}`);
-    console.log(`\nPara iniciar:` +
+        rows.push([m.labelPix, pixKey]);
+    const width = Math.max(...rows.map(([label]) => label.length));
+    for (const [label, value] of rows) {
+        console.log(`  ${label.padEnd(width)}  ${cyan(value)}`);
+    }
+    console.log(`\n${m.nextSteps}` +
         green(`\n  cd ${projectName}\n  npm install\n  npm run dev\n`));
+    console.log(dim(`${m.docsHint}\n`));
 }
 init();

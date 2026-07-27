@@ -43,3 +43,41 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+  # Everything above runs inside the pnpm workspace, where symlinks resolve
+  # imports a real `npm install` would not. This job leaves the workspace
+  # entirely: it packs tarballs, scaffolds a project with the CLI, installs with
+  # npm and builds — the same path a user takes. Both packaging bugs that
+  # reached users (themes missing core, and the scaffolded app never importing
+  # dist/index.css) were invisible to the job above and caught by this one.
+  e2e-consumer:
+    name: Consumer build (${{ matrix.os }}, React ${{ matrix.react }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        react: ['18', '19']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Build and inspect a real consumer project
+        run: node scripts/e2e-consumer.mjs --react ${{ matrix.react }}

@@ -1,6 +1,6 @@
 {
   "name": "@neverleans-labs/plug-store-themes",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "50 built-in industry design themes and the defineTheme customizer for @neverleans/plug-store-core",
   "author": "neverleans",
   "license": "Apache-2.0",
@@ -35,7 +35,9 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "dev": "vite build --watch",

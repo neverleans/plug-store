@@ -13,6 +13,8 @@
     "build:themes": "turbo build --filter=@neverleans-labs/plug-store-themes",
     "dev:demo": "turbo dev --filter=./apps/demo",
     "test:coverage": "pnpm --filter=@neverleans-labs/plug-store-core test:coverage",
+    "version:set": "node scripts/version.mjs",
+    "e2e": "node scripts/e2e-consumer.mjs",
     "release": "pnpm build && pnpm -r publish --access public --no-git-checks"
   },
   "devDependencies": {

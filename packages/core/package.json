@@ -1,6 +1,6 @@
 {
   "name": "@neverleans-labs/plug-store-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A flexible, multi-theme catalog and e-commerce framework for React",
   "author": "neverleans",
   "license": "Apache-2.0",
@@ -40,8 +40,12 @@
     },
     "./dist/index.css": "./dist/index.css"
   },
-  "files": ["dist"],
-  "sideEffects": ["./dist/index.css"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "./dist/index.css"
+  ],
   "scripts": {
     "dev": "vite build --watch",
     "build": "tsc --noEmit && vite build",

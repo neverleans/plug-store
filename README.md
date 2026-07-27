@@ -31,11 +31,13 @@ Answer a few quick prompts — store name, starting theme, currency, WhatsApp nu
 
 ## 📦 Packages in Monorepo
 
+All three are released together, always on the same version number.
+
 | Package | Version | Description |
 |---|---|---|
-| [`@neverleans-labs/plug-store-core`](./packages/core) | `0.1.0` | Core UI components, turnkey `CatalogApp`, contexts, hooks, and PWA layer |
-| [`@neverleans-labs/plug-store-themes`](./packages/themes) | `0.1.0` | 50 curated industry design themes & `defineTheme` customizer utility |
-| [`create-plug-store`](./packages/create-plug-store) | `0.1.0` | Interactive CLI scaffolding tool |
+| [`@neverleans-labs/plug-store-core`](./packages/core) | [![npm](https://img.shields.io/npm/v/@neverleans-labs/plug-store-core.svg?label=%20)](https://www.npmjs.com/package/@neverleans-labs/plug-store-core) | Core UI components, turnkey `CatalogApp`, contexts, hooks, and PWA layer |
+| [`@neverleans-labs/plug-store-themes`](./packages/themes) | [![npm](https://img.shields.io/npm/v/@neverleans-labs/plug-store-themes.svg?label=%20)](https://www.npmjs.com/package/@neverleans-labs/plug-store-themes) | 50 curated industry design themes & `defineTheme` customizer utility |
+| [`create-plug-store`](./packages/create-plug-store) | [![npm](https://img.shields.io/npm/v/create-plug-store.svg?label=%20)](https://www.npmjs.com/package/create-plug-store) | Interactive CLI scaffolding tool |
 
 ---
 
@@ -139,7 +141,9 @@ Your `src/index.css` should contain:
 @tailwind utilities;
 ```
 
-> **React 19 users:** If you get an `ERESOLVE` error during install, pin React 18 or use `npm install --legacy-peer-deps`. React 19 support is tracked in [#issues](https://github.com/neverleans/plug-store/issues).
+> **React 18 and React 19 are both supported.** Every release is verified by
+> building a real scaffolded project against both majors, on Linux and Windows
+> (see the `e2e-consumer` job in [`ci.yml`](./.github/workflows/ci.yml)).
 
 ---
 

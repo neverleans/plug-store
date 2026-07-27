@@ -1,0 +1,76 @@
+/**
+ * The 50 built-in themes offered by the CLI.
+ *
+ * Single source of truth: the `--theme` flag validator and the interactive
+ * select list are both derived from this array. They used to be two hand-kept
+ * lists with a "keep in sync" comment between them, which is a drift waiting
+ * to happen every time a theme is added.
+ *
+ * `brand` is the storefront name baked into the theme and is intentionally not
+ * translated — LUXE is LUXE in every language. Only the sector hint is.
+ */
+export interface ThemeChoice {
+  value: string;
+  brand: string;
+  /** Sector hint, Portuguese */
+  pt: string;
+  /** Sector hint, English */
+  en: string;
+}
+
+export const THEMES: ThemeChoice[] = [
+  { value: 'fashion',     brand: 'LUXE',               pt: 'Moda & Vestuário',            en: 'Fashion & Apparel' },
+  { value: 'electronics', brand: 'TechVault',          pt: 'Eletrônicos & Tech',          en: 'Electronics & Tech' },
+  { value: 'food',        brand: 'FreshMarket',        pt: 'Alimentos & Mercado',         en: 'Food & Grocery' },
+  { value: 'furniture',   brand: 'Artisan Home',       pt: 'Móveis & Decoração',          en: 'Furniture & Decor' },
+  { value: 'beauty',      brand: 'Bloom',              pt: 'Beleza & Cosméticos',         en: 'Beauty & Cosmetics' },
+  { value: 'sports',      brand: 'VELOCITY',           pt: 'Esportes & Fitness',          en: 'Sports & Fitness' },
+  { value: 'books',       brand: 'Folio & Quill',      pt: 'Livraria & Papelaria',        en: 'Bookstore & Stationery' },
+  { value: 'pets',        brand: 'Pawsome',            pt: 'Pet Shop',                    en: 'Pet Shop' },
+  { value: 'automotive',  brand: 'APEX MOTORS',        pt: 'Automotivo',                  en: 'Automotive' },
+  { value: 'art',         brand: 'Atelier',            pt: 'Arte & Design',               en: 'Art & Design' },
+  { value: 'jewelry',     brand: 'Maison Solenne',     pt: 'Joias & Luxo',                en: 'Jewelry & Luxury' },
+  { value: 'homeware',    brand: 'Maison & Table',     pt: 'Utilidades domésticas',       en: 'Homeware' },
+  { value: 'market',      brand: 'Maison Marché',      pt: 'Mercado Geral',               en: 'General Market' },
+  { value: 'wellness',    brand: 'Maison Calme',       pt: 'Bem-estar & Spa',             en: 'Wellness & Spa' },
+  { value: 'stationery',  brand: 'Papier & Encre',     pt: 'Papelaria Fina',              en: 'Fine Stationery' },
+  { value: 'winery',      brand: 'Château Reserve',    pt: 'Vinhos & Espumantes',         en: 'Wine & Sparkling' },
+  { value: 'brewery',     brand: 'Craft & Hop',        pt: 'Cervejas Artesanais',         en: 'Craft Beer' },
+  { value: 'coffee',      brand: 'Roast & Beans',      pt: 'Cafés Especiais',             en: 'Specialty Coffee' },
+  { value: 'bakery',      brand: 'Patisserie Sucre',   pt: 'Doces & Confeitaria',         en: 'Bakery & Confectionery' },
+  { value: 'spices',      brand: 'Aroma & Especiarias', pt: 'Temperos & Ervas',           en: 'Spices & Herbs' },
+  { value: 'chocolates',  brand: 'Cacao Noir',         pt: 'Chocolates Gourmet',          en: 'Gourmet Chocolate' },
+  { value: 'gaming',      brand: 'CyberZone Gaming',   pt: 'Games & Periféricos',         en: 'Games & Peripherals' },
+  { value: 'geek',        brand: 'Geekverse',          pt: 'Cultura Pop & Action Figures', en: 'Pop Culture & Figures' },
+  { value: 'music',       brand: 'Symphony',           pt: 'Instrumentos Musicais',       en: 'Musical Instruments' },
+  { value: 'boardgames',  brand: 'Taverna dos Jogos',  pt: 'Board Games & RPG',           en: 'Board Games & RPG' },
+  { value: 'toys',        brand: 'Mundo do Brinquedo', pt: 'Brinquedos Educativos',       en: 'Educational Toys' },
+  { value: 'hardware',    brand: 'Titan Ferramentas',  pt: 'Construção & Indústria',      en: 'Tools & Industry' },
+  { value: 'lighting',    brand: 'Lumina',             pt: 'Lustres & Iluminação Design', en: 'Lighting & Design' },
+  { value: 'gardening',   brand: 'Verde Vida',         pt: 'Jardinagem & Plantas',        en: 'Gardening & Plants' },
+  { value: 'office',      brand: 'ErgoWork',           pt: 'Escritório & Corporativo',    en: 'Office & Corporate' },
+  { value: 'security',    brand: 'Shield',             pt: 'Segurança & Câmeras IP',      en: 'Security & IP Cameras' },
+  { value: 'cycling',     brand: 'AeroBike',           pt: 'Ciclismo & MTB',              en: 'Cycling & MTB' },
+  { value: 'outdoors',    brand: 'Summit Adventure',   pt: 'Camping & Trilha',            en: 'Camping & Hiking' },
+  { value: 'fishing',     brand: 'Nautilus',           pt: 'Pesca & Náutica',             en: 'Fishing & Boating' },
+  { value: 'fitness',     brand: 'IronNutri',          pt: 'Suplementos & Whey',          en: 'Supplements & Whey' },
+  { value: 'combat',      brand: 'Octagon Fight',      pt: 'Artes Marciais & Boxe',       en: 'Martial Arts & Boxing' },
+  { value: 'motorcycles', brand: 'Rider Motors',       pt: 'Motos & Capacetes',           en: 'Motorcycles & Helmets' },
+  { value: 'optics',      brand: 'Visione',            pt: 'Óptica & Armações',           en: 'Optics & Eyewear' },
+  { value: 'dental',      brand: 'Odonto Care',        pt: 'Higiene Bucal & Odonto',      en: 'Oral Care & Dental' },
+  { value: 'medical',     brand: 'MedEquip',           pt: 'Médico & Ortopedia',          en: 'Medical & Orthopedic' },
+  { value: 'pharmacy',    brand: 'PharmaPlus',         pt: 'Farmácia & Vitaminas',        en: 'Pharmacy & Vitamins' },
+  { value: 'watchmakers', brand: 'Horlogerie Royale',  pt: 'Relógios de Luxo',            en: 'Luxury Watches' },
+  { value: 'perfume',     brand: 'Elixir Parfums',     pt: 'Perfumes Importados',         en: 'Imported Perfumes' },
+  { value: 'handcrafted', brand: 'Feito à Mão',        pt: 'Artesanato & Velas',          en: 'Handcraft & Candles' },
+  { value: 'party',       brand: 'Festa & Alegria',    pt: 'Artigos de Festa',            en: 'Party Supplies' },
+  { value: 'flowers',     brand: 'Jardim das Flores',  pt: 'Floricultura & Buquês',       en: 'Florist & Bouquets' },
+  { value: 'leather',     brand: 'Couro & Tradição',   pt: 'Bolsas & Calçados',           en: 'Bags & Footwear' },
+  { value: 'baby',        brand: 'Nuvem de Bebê',      pt: 'Enxoval & Maternidade',       en: 'Baby & Maternity' },
+  { value: 'spiritual',   brand: 'Astral & Cristais',  pt: 'Esotérico & Cristais',        en: 'Esoteric & Crystals' },
+  { value: 'vintage',     brand: 'Retro Vinyl',        pt: 'Discos & Antiguidades',       en: 'Records & Antiques' },
+];
+
+export const THEME_VALUES: string[] = THEMES.map((t) => t.value);
+
+export const CURRENCY_VALUES = ['BRL', 'USD', 'EUR'] as const;
