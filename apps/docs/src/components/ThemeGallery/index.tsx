@@ -66,10 +66,13 @@ function Gallery() {
   const [query, setQuery] = useState('');
   const demoBase = useBaseUrl('/demo/');
 
+  // themeConfigs is a Record keyed by theme id, not an array.
+  const allThemes = useMemo(() => Object.values(themeConfigs), []);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return themeConfigs;
-    return themeConfigs.filter(
+    if (!q) return allThemes;
+    return allThemes.filter(
       (theme) =>
         theme.id.toLowerCase().includes(q) ||
         theme.name.toLowerCase().includes(q) ||
@@ -77,7 +80,7 @@ function Gallery() {
         theme.heroStyle.toLowerCase().includes(q) ||
         theme.cardStyle.toLowerCase().includes(q),
     );
-  }, [query]);
+  }, [allThemes, query]);
 
   return (
     <div>
@@ -91,7 +94,7 @@ function Gallery() {
           aria-label="Filter themes"
         />
         <span className={styles.count}>
-          {filtered.length} of {themeConfigs.length}
+          {filtered.length} of {allThemes.length}
         </span>
       </div>
 

@@ -166,7 +166,8 @@ scratch:
 ```ts
 import { themeConfigs, defineTheme } from '@neverleans-labs/plug-store-themes';
 
-const base = themeConfigs.find((theme) => theme.id === 'beauty')!;
+// themeConfigs is a record keyed by theme id.
+const base = themeConfigs.beauty;
 
 export const bloom = defineTheme({
   ...base,

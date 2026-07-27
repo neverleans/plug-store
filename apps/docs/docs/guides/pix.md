@@ -6,6 +6,8 @@ sidebar_position: 5
 description: How PlugStore builds a real, spec-compliant static Pix BR Code — the EMV payload, the CRC-16 checksum, the field limits, and what static Pix cannot do.
 ---
 
+import PixPlayground from '@site/src/components/PixPlayground';
+
 # Pix payments
 
 <div className="ps-outcome">
@@ -64,6 +66,14 @@ The checksum is **CRC-16/CCITT-FALSE** — polynomial `0x1021`, initial value
 `0xFFFF`, no input or output reflection — computed over the whole payload
 *including* the `6304` tag of the CRC field itself. Getting that wrong is what
 makes a code scan as invalid, so it is covered by unit tests.
+
+## Try it
+
+This runs `buildPixPayload` from the published package — the same function the
+checkout calls — and then re-derives the checksum the way a banking app does.
+Edit any field and watch the payload change.
+
+<PixPlayground />
 
 ## Field limits
 

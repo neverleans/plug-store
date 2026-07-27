@@ -127,11 +127,12 @@ An optional `heroImage` overrides the hero background image path.
 
 Spread one of the shipped themes and change only what the client needs:
 
-```tsx
-import { themeConfigs } from '@neverleans-labs/plug-store-themes';
-import { defineTheme } from '@neverleans-labs/plug-store-themes';
+`themeConfigs` is a record keyed by theme id, so look one up by key:
 
-const base = themeConfigs.find((t) => t.id === 'coffee')!;
+```tsx
+import { themeConfigs, defineTheme } from '@neverleans-labs/plug-store-themes';
+
+const base = themeConfigs.coffee;
 
 const myRoastery = defineTheme({
   ...base,

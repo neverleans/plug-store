@@ -1,0 +1,83 @@
+name: Deploy docs and demo to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+# Allow one concurrent deployment, and let a running one finish rather than
+# leaving the Pages site half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Docusaurus reads each file's last commit date for "last updated".
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      # The docs site is the front door; the demo is a separate Vite SPA linked
+      # from it. Both are built here and stitched into one artifact below.
+      - name: Build packages, docs and demo
+        run: pnpm build
+        env:
+          # Project sites live at https://<user>.github.io/<repo>/, and the demo
+          # sits one level deeper so the docs can own the root.
+          VITE_BASE: /${{ github.event.repository.name }}/demo/
+
+      - name: Assemble the Pages artifact
+        run: |
+          # Docs at the root.
+          cp -r apps/docs/build ./_site
+          # Demo under /demo/.
+          mkdir -p ./_site/demo
+          cp -r apps/demo/dist/* ./_site/demo/
+          # GitHub Pages has no rewrite rules, so a deep link such as
+          # /demo/products would 404. Serving the same shell as 404.html hands
+          # control to the demo's router. Docusaurus emits its own 404 page for
+          # the docs, which this must not overwrite.
+          cp apps/demo/dist/index.html ./_site/demo/404.html
+          # Stop Jekyll from swallowing files whose names start with an
+          # underscore, which both Docusaurus and Vite produce.
+          touch ./_site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

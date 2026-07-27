@@ -134,7 +134,7 @@ Every one of these reads from a context. Rendering any of them outside
 | `isLowStock` | `(product: Product) => boolean` |
 | `panelClasses` | card style class helper |
 | `localizeCategory` / `localizeTagline` / `localizeTemplate` / `templateLabels` | [i18n](../guides/i18n-currency.md) |
-| `themeConfigs` | the 50 built-in `ThemeConfig` objects |
+| `themeConfigs` | `Record<string, ThemeConfig>` — the 50 built-in themes, keyed by id. Use `Object.values()` to iterate |
 
 ## The themes package
 

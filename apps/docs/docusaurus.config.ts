@@ -21,7 +21,6 @@ const config: Config = {
 
   // A dead link in the docs is a broken promise to a reader, so fail the build.
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
 
   i18n: {
     defaultLocale: 'en',
@@ -34,6 +33,11 @@ const config: Config = {
 
   markdown: {
     mermaid: true,
+    hooks: {
+      // Same reasoning as onBrokenLinks: a link that resolves to nothing should
+      // stop the build, not reach a reader.
+      onBrokenMarkdownLinks: 'throw',
+    },
   },
   themes: [
     '@docusaurus/theme-mermaid',

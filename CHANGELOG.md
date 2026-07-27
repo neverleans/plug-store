@@ -9,6 +9,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Documentation site** at <https://neverleans.github.io/plug-store/>, built with
+  Docusaurus: getting started, ten guides, four recipes, a full API and type reference,
+  a live theme gallery reading the published registry, and an interactive Pix payload
+  inspector that runs the real generator. The demo moved to `/demo/`.
+- **`useProducts`, `useCategories`, `useProduct`, `useProductReviews`** — read hooks over
+  the active data provider, with caching, loading and error state.
+- `queryClient` prop on `CatalogProvider`, for apps that already use react-query and want
+  one shared cache.
+- `--lang` flag on `create-plug-store` (`pt` or `en`, defaulting to the machine locale).
+- `e2e-consumer` CI job: packs real tarballs, scaffolds a project with the CLI, installs
+  with npm and builds it, on Linux and Windows against React 18 and 19.
+
+### Fixed
+
+- **`dataProvider` had no effect on what the storefront displayed.** Every page imported
+  the bundled demo dataset directly, so a store wired to a real backend still rendered
+  demo products; the provider was only consulted when saving an order. All pages, the
+  header search and the footer categories now read through the provider.
+- **Projects created by the CLI rendered without any design tokens.** The generated app
+  never imported `@neverleans-labs/plug-store-core/dist/index.css`, which Vite library
+  mode emits as a standalone file that `dist/index.js` does not reference.
+- **Projects created by the CLI failed `npm run build`.** The generated `App.tsx`
+  imported React while the template enables `jsx: react-jsx` and `noUnusedLocals`,
+  producing TS6133 on a freshly scaffolded project.
+- `CatalogProvider` shared a module-level react-query client, so two independently
+  mounted stores leaked cached catalog data to each other.
+- `@neverleans-labs/plug-store-themes` had drifted to `0.1.0` while core was on `0.1.1`,
+  letting npm resolve a pair that was never built together. All three packages are now
+  versioned in lockstep by `scripts/version.mjs`.
+- The CLI greeted in English and then asked every question in Portuguese.
+
+### Changed
+
+- README trimmed to a quick start that points at the documentation site; the package
+  version table is now npm badges rather than hardcoded numbers.
+- The React 19 install warning is gone — every release is verified against React 18 and
+  19 by the `e2e-consumer` job, and neither needs `--legacy-peer-deps`.
+
+## Earlier unreleased work
+
+### Added
+
 - Interactive theme gallery in the demo app: every one of the 50 themes opens as a full,
   browsable storefront (cart, search, wishlist, checkout), plus a GitHub Pages deploy
   workflow (`deploy-demo.yml`).

@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "docs",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter=plug-store-docs", "start", "--port", "3100"],
+      "port": 3100
+    },
+    {
       "name": "demo",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter=plug-store-demo-app", "dev"],

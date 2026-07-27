@@ -131,6 +131,15 @@ export default function ThemeGallery() {
           <pre className="mx-auto mt-6 w-fit max-w-full overflow-x-auto rounded-lg bg-slate-900 px-4 py-3 text-left text-xs text-slate-100 dark:bg-slate-800">
             <code>{'<CatalogApp defaultTheme="bakery" />'}</code>
           </pre>
+
+          {/* The demo is deployed under /demo/ of the docs site, so "../" lands
+              on the documentation root in production and on "/" locally. */}
+          <a
+            href="../"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500"
+          >
+            Ler a documentação →
+          </a>
         </div>
       </header>
 

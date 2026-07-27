@@ -219,6 +219,9 @@ interface ThemeConfig {
 
 // The 50 built-in ids, widened with `| string` so a custom id is allowed.
 type IndustryTemplate = 'fashion' | 'electronics' | /* … */ | string;
+
+// The built-in registry is keyed by id, not an array:
+declare const themeConfigs: Record<string, ThemeConfig>;
 ```
 
 ## Configuration
