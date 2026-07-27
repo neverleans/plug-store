@@ -8,6 +8,12 @@
       "port": 3100
     },
     {
+      "name": "docs-build",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter=plug-store-docs", "serve", "--port", "3102"],
+      "port": 3102
+    },
+    {
       "name": "demo",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter=plug-store-demo-app", "dev"],

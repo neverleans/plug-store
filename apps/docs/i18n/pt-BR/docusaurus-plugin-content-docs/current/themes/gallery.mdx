@@ -1,0 +1,35 @@
+---
+id: gallery
+title: Galeria de temas
+sidebar_label: Os 50 temas
+sidebar_position: 1
+description: Todos os temas do PlugStore com prévia ao vivo, id, estilo de hero e estilo de card. Clique em qualquer tema para abri-lo como uma loja completa.
+---
+
+import ThemeGallery from '@site/src/components/ThemeGallery';
+
+# Galeria de temas
+
+Todo tema abaixo é real: cada prévia é pintada com os tokens de cor e as fontes
+do próprio tema, lidos do pacote publicado. Clique em um para abri-lo como uma
+loja completa e navegável no demo.
+
+Use o id com `defaultTheme`:
+
+```tsx
+<CatalogApp defaultTheme="coffee" />
+```
+
+<ThemeGallery />
+
+## Lendo os rótulos
+
+As duas palavras sob cada prévia são o `heroStyle` e o `cardStyle` — o
+tratamento do hero da home e o tratamento do card de produto. Filtre por
+qualquer um dos dois para achar temas que compartilham um layout, o que ajuda
+quando você quer uma estrutura específica com outra paleta.
+
+Os dois são definidos de forma independente quando você cria o seu tema. Veja
+[Temas](../guides/themes.md) para a lista completa de tokens, e
+[Criar o tema da marca do cliente](../recipes/brand-theme.md) para um exemplo
+completo.

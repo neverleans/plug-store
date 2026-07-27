@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "Atual",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Start here": {
+    "message": "Comece por aqui",
+    "description": "The label for category 'Start here' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Getting started": {
+    "message": "Primeiros passos",
+    "description": "The label for category 'Getting started' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Guides": {
+    "message": "Guias",
+    "description": "The label for category 'Guides' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Recipes": {
+    "message": "Receitas",
+    "description": "The label for category 'Recipes' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Themes": {
+    "message": "Temas",
+    "description": "The label for category 'Themes' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Reference": {
+    "message": "Referência",
+    "description": "The label for category 'Reference' in sidebar 'docs'"
+  }
+}

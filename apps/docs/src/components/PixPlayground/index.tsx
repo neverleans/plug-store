@@ -1,22 +1,27 @@
 import { useMemo, useState } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import { translate } from '@docusaurus/Translate';
 import { buildPixPayload, pixCrc16 } from '@neverleans-labs/plug-store-core';
 import styles from './styles.module.css';
 
-/** Human names for the EMV/BCB field ids PlugStore emits. */
-const FIELD_NAMES: Record<string, string> = {
-  '00': 'Payload format indicator',
-  '01': 'Point of initiation',
-  '26': 'Merchant account (Pix)',
-  '52': 'Merchant category code',
-  '53': 'Transaction currency',
-  '54': 'Transaction amount',
-  '58': 'Country code',
-  '59': 'Beneficiary name',
-  '60': 'Beneficiary city',
-  '62': 'Additional data',
-  '63': 'CRC-16',
-};
+/**
+ * Human names for the EMV/BCB field ids PlugStore emits. Built lazily so the
+ * labels follow the page locale — the prose table right above this component is
+ * translated, and a half-English table beside it reads like a bug.
+ */
+const fieldNames = (): Record<string, string> => ({
+  '00': translate({ id: 'pix.tlv.00', message: 'Payload format indicator' }),
+  '01': translate({ id: 'pix.tlv.01', message: 'Point of initiation' }),
+  '26': translate({ id: 'pix.tlv.26', message: 'Merchant account (Pix)' }),
+  '52': translate({ id: 'pix.tlv.52', message: 'Merchant category code' }),
+  '53': translate({ id: 'pix.tlv.53', message: 'Transaction currency' }),
+  '54': translate({ id: 'pix.tlv.54', message: 'Transaction amount' }),
+  '58': translate({ id: 'pix.tlv.58', message: 'Country code' }),
+  '59': translate({ id: 'pix.tlv.59', message: 'Beneficiary name' }),
+  '60': translate({ id: 'pix.tlv.60', message: 'Beneficiary city' }),
+  '62': translate({ id: 'pix.tlv.62', message: 'Additional data' }),
+  '63': translate({ id: 'pix.tlv.63', message: 'CRC-16' }),
+});
 
 interface Field {
   id: string;
@@ -31,6 +36,8 @@ interface Field {
  * still shows the fields before it rather than rendering nothing.
  */
 function parseTlv(payload: string): Field[] {
+  const names = fieldNames();
+  const unknown = translate({ id: 'pix.tlv.unknown', message: 'Unknown field' });
   const fields: Field[] = [];
   let i = 0;
 
@@ -41,7 +48,7 @@ function parseTlv(payload: string): Field[] {
     if (Number.isNaN(length)) break;
 
     const value = payload.slice(i + 4, i + 4 + length);
-    fields.push({ id, length: lengthDigits, value, name: FIELD_NAMES[id] ?? 'Unknown field' });
+    fields.push({ id, length: lengthDigits, value, name: names[id] ?? unknown });
     i += 4 + length;
   }
 
@@ -57,7 +64,12 @@ function Playground() {
 
   const result = useMemo(() => {
     if (!pixKey.trim()) {
-      return { error: 'A Pix key is required — buildPixPayload throws without one.' as const };
+      return {
+        error: translate({
+          id: 'pix.error.noKey',
+          message: 'A Pix key is required — buildPixPayload throws without one.',
+        }),
+      };
     }
 
     try {
@@ -81,7 +93,12 @@ function Playground() {
         crcValid: pixCrc16(body) === declared,
       };
     } catch (err) {
-      return { error: err instanceof Error ? err.message : 'Could not build the payload' };
+      return {
+        error:
+          err instanceof Error
+            ? err.message
+            : translate({ id: 'pix.error.generic', message: 'Could not build the payload' }),
+      };
     }
   }, [pixKey, merchantName, merchantCity, amount]);
 
@@ -97,24 +114,24 @@ function Playground() {
     <div className={styles.wrap}>
       <div className={styles.inputs}>
         <label className={styles.field}>
-          <span>Pix key</span>
+          <span>{translate({ id: 'pix.field.key', message: 'Pix key' })}</span>
           <input value={pixKey} onChange={(e) => setPixKey(e.target.value)} />
         </label>
         <label className={styles.field}>
-          <span>Beneficiary name</span>
+          <span>{translate({ id: 'pix.field.name', message: 'Beneficiary name' })}</span>
           <input value={merchantName} onChange={(e) => setMerchantName(e.target.value)} />
         </label>
         <label className={styles.field}>
-          <span>City</span>
+          <span>{translate({ id: 'pix.field.city', message: 'City' })}</span>
           <input value={merchantCity} onChange={(e) => setMerchantCity(e.target.value)} />
         </label>
         <label className={styles.field}>
-          <span>Amount (BRL)</span>
+          <span>{translate({ id: 'pix.field.amount', message: 'Amount (BRL)' })}</span>
           <input
             inputMode="decimal"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="empty = payer decides"
+            placeholder={translate({ id: 'pix.field.amountHint', message: 'empty = payer decides' })}
           />
         </label>
       </div>
@@ -125,10 +142,10 @@ function Playground() {
         <>
           <div className={styles.payloadBar}>
             <span className={result.crcValid ? styles.badgeOk : styles.badgeBad}>
-              {result.crcValid ? 'CRC-16 valid' : 'CRC-16 mismatch'}
+              {result.crcValid ? translate({ id: 'pix.crc.valid', message: 'CRC-16 valid' }) : translate({ id: 'pix.crc.invalid', message: 'CRC-16 mismatch' })}
             </span>
             <button type="button" className={styles.copy} onClick={copy}>
-              {copied ? 'Copied' : 'Copy BR Code'}
+              {copied ? translate({ id: 'pix.copy.done', message: 'Copied' }) : translate({ id: 'pix.copy.action', message: 'Copy BR Code' })}
             </button>
           </div>
 
@@ -139,10 +156,10 @@ function Playground() {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Id</th>
-                <th>Len</th>
-                <th>Field</th>
-                <th>Value</th>
+                <th>{translate({ id: 'pix.table.id', message: 'Id' })}</th>
+                <th>{translate({ id: 'pix.table.len', message: 'Len' })}</th>
+                <th>{translate({ id: 'pix.table.field', message: 'Field' })}</th>
+                <th>{translate({ id: 'pix.table.value', message: 'Value' })}</th>
               </tr>
             </thead>
             <tbody>
@@ -158,9 +175,11 @@ function Playground() {
           </table>
 
           <p className={styles.note}>
-            Notice the accents and lower case disappear from the name and city, and that
-            anything longer than the spec's limit is truncated — 25 characters for the
-            name, 15 for the city.
+            {translate({
+              id: 'pix.note',
+              message:
+                "Notice the accents and lower case disappear from the name and city, and that anything longer than the spec's limit is truncated — 25 characters for the name, 15 for the city.",
+            })}
           </p>
         </>
       )}
@@ -174,5 +193,11 @@ function Playground() {
  * pulls in the core bundle.
  */
 export default function PixPlayground() {
-  return <BrowserOnly fallback={<p>Loading the Pix generator…</p>}>{() => <Playground />}</BrowserOnly>;
+  return (
+    <BrowserOnly
+      fallback={<p>{translate({ id: 'pix.loading', message: 'Loading the Pix generator…' })}</p>}
+    >
+      {() => <Playground />}
+    </BrowserOnly>
+  );
 }

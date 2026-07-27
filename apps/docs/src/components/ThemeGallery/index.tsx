@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import { translate } from '@docusaurus/Translate';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { themeConfigs } from '@neverleans-labs/plug-store-themes';
 import type { ThemeConfig } from '@neverleans-labs/plug-store-core';
@@ -55,7 +56,7 @@ function Preview({ theme }: { theme: ThemeConfig }) {
           className={styles.previewButton}
           style={{ backgroundColor: hsl(c.primary), color: hsl(c.primaryForeground) }}
         >
-          Buy
+          {translate({ id: 'gallery.preview.buy', message: 'Buy' })}
         </div>
       </div>
     </div>
@@ -90,11 +91,11 @@ function Gallery() {
           className={styles.search}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Filter by name, id, hero style or card style…"
-          aria-label="Filter themes"
+          placeholder={translate({ id: 'gallery.filter', message: 'Filter by name, id, hero style or card style…' })}
+          aria-label={translate({ id: 'gallery.filterAria', message: 'Filter themes' })}
         />
         <span className={styles.count}>
-          {filtered.length} of {allThemes.length}
+          {translate({ id: 'gallery.count', message: '{shown} of {total}' }, { shown: filtered.length, total: allThemes.length })}
         </span>
       </div>
 
@@ -106,7 +107,10 @@ function Gallery() {
             href={`${demoBase}?theme=${theme.id}`}
             target="_blank"
             rel="noreferrer"
-            title={`Open ${theme.name} as a full storefront`}
+            title={translate(
+              { id: 'gallery.card.title', message: 'Open {name} as a full storefront' },
+              { name: theme.name },
+            )}
           >
             <Preview theme={theme} />
             <div className={styles.meta}>
@@ -119,7 +123,7 @@ function Gallery() {
         ))}
       </div>
 
-      {filtered.length === 0 && <p className={styles.empty}>No theme matches “{query}”.</p>}
+      {filtered.length === 0 && <p className={styles.empty}>{translate({ id: 'gallery.empty', message: 'No theme matches “{query}”.' }, { query })}</p>}
     </div>
   );
 }
@@ -130,5 +134,9 @@ function Gallery() {
  * into Node for no benefit, since the page is interactive anyway.
  */
 export default function ThemeGallery() {
-  return <BrowserOnly fallback={<p>Loading themes…</p>}>{() => <Gallery />}</BrowserOnly>;
+  return (
+    <BrowserOnly fallback={<p>{translate({ id: 'gallery.loading', message: 'Loading themes…' })}</p>}>
+      {() => <Gallery />}
+    </BrowserOnly>
+  );
 }

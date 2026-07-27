@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "PlugStore",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "PlugStore",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "Documentação",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.API": {
+    "message": "API",
+    "description": "Navbar item with label API"
+  },
+  "item.label.Themes": {
+    "message": "Temas",
+    "description": "Navbar item with label Themes"
+  },
+  "item.label.Live demo": {
+    "message": "Ver ao vivo",
+    "description": "Navbar item with label Live demo"
+  }
+}
