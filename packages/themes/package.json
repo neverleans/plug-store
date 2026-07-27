@@ -45,7 +45,7 @@
     "lint": "eslint src"
   },
   "peerDependencies": {
-    "@neverleans-labs/plug-store-core": "workspace:^"
+    "@neverleans-labs/plug-store-core": "^0.1.2"
   },
   "devDependencies": {
     "@neverleans-labs/plug-store-core": "workspace:*",

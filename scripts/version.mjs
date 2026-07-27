@@ -5,11 +5,16 @@
  *   node scripts/version.mjs 0.1.2
  *
  * The three packages are versioned in lockstep on purpose. They were not, once:
- * core shipped 0.1.1 while themes stayed behind on 0.1.0, so `npm i` could
- * resolve a themes/core pair that was never built or tested together. pnpm
- * rewrites the `workspace:^` peer at publish time, so keeping the versions
- * identical is what makes that rewritten range point somewhere real — and it
- * lets a single tag describe the whole release.
+ * core shipped 0.1.0, 0.1.1 and 0.1.2 while themes never left 0.1.0, because
+ * release.yml had no job for it. The CLI pins both library packages at its own
+ * version, so that gap made `npm create plug-store` fail with E404 on install.
+ * One tag, one version, three packages — and a verify job that asks the registry.
+ *
+ * Ranges that consumers resolve are written as literals, never `workspace:`.
+ * An earlier version of this script left the peer as `workspace:^` on the theory
+ * that pnpm rewrites it at publish time. It does — but release.yml publishes with
+ * npm, which does not, and npm refuses to even pack a manifest containing it.
+ * `workspace:*` survives only in devDependencies, which no consumer resolves.
  */
 
 import fs from 'node:fs';
@@ -45,13 +50,15 @@ for (const pkgDir of PACKAGES) {
 
   manifest.version = version;
 
-  // Bump internal ranges wherever they appear, but never touch `workspace:*`
-  // devDependencies — those are how pnpm links the local build during dev.
+  // dependencies and peerDependencies are what a consumer's installer resolves,
+  // so they always become a literal range — including when they were written as
+  // `workspace:`. devDependencies are left alone: `workspace:*` is how pnpm links
+  // the sibling build during development and no consumer ever looks at them.
   for (const field of ['dependencies', 'peerDependencies']) {
     const deps = manifest[field];
     if (!deps) continue;
     for (const name of INTERNAL_DEPS) {
-      if (deps[name] && !deps[name].startsWith('workspace:')) {
+      if (deps[name]) {
         deps[name] = `^${version}`;
       }
     }
