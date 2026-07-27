@@ -1,0 +1,191 @@
+/**
+ * PlugStore documentation theme.
+ *
+ * Infima (Docusaurus' CSS framework) is driven by variables, so the whole look
+ * is set here rather than by overriding component styles. Everything below is
+ * defined for both color modes — the docs are read in both.
+ */
+
+:root {
+  /* Electric violet: the "plug" in PlugStore, and distinct enough that the site
+     never reads as an untouched Docusaurus install. */
+  --ifm-color-primary: #6d3bf5;
+  --ifm-color-primary-dark: #5a21f3;
+  --ifm-color-primary-darker: #5416ec;
+  --ifm-color-primary-darkest: #4512c3;
+  --ifm-color-primary-light: #8058f7;
+  --ifm-color-primary-lighter: #8c68f8;
+  --ifm-color-primary-lightest: #b39cfb;
+
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #fbfaff;
+  --ifm-font-family-base: ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ifm-font-family-monospace: ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
+
+  --ifm-heading-font-weight: 700;
+  --ifm-h1-font-size: 2.5rem;
+  --ifm-code-font-size: 90%;
+  --ifm-navbar-height: 4rem;
+  --ifm-global-radius: 0.6rem;
+
+  --docusaurus-highlighted-code-line-bg: rgba(109, 59, 245, 0.12);
+
+  /* Local tokens used by the custom components on this site. */
+  --ps-surface: #ffffff;
+  --ps-surface-muted: #f6f4ff;
+  --ps-border: #e6e1f5;
+  --ps-text-muted: #5b5670;
+  --ps-shadow: 0 1px 2px rgba(20, 12, 48, 0.05), 0 8px 24px rgba(20, 12, 48, 0.06);
+  --ps-gradient: linear-gradient(135deg, #6d3bf5 0%, #a855f7 55%, #ec4899 100%);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #a58bff;
+  --ifm-color-primary-dark: #8c6bff;
+  --ifm-color-primary-darker: #7f5bff;
+  --ifm-color-primary-darkest: #5a2bff;
+  --ifm-color-primary-light: #beabff;
+  --ifm-color-primary-lighter: #cbbbff;
+  --ifm-color-primary-lightest: #eee8ff;
+
+  --ifm-background-color: #0e0b1a;
+  --ifm-background-surface-color: #15112a;
+
+  --docusaurus-highlighted-code-line-bg: rgba(165, 139, 255, 0.18);
+
+  --ps-surface: #15112a;
+  --ps-surface-muted: #1b1633;
+  --ps-border: #2c2450;
+  --ps-text-muted: #a49ec4;
+  --ps-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+}
+
+.markdown h2 {
+  margin-top: 2.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ps-border);
+}
+
+.markdown h2:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* ── Navbar ─────────────────────────────────────────────────────────────── */
+
+.navbar {
+  border-bottom: 1px solid var(--ps-border);
+  box-shadow: none;
+}
+
+/* The demo is the strongest thing this project has to show, so its link is a
+   button rather than one more word in a row of words. */
+.navbar-demo-link {
+  border-radius: 999px;
+  padding: 0.35rem 0.95rem;
+  color: #fff !important;
+  background: var(--ps-gradient);
+  font-weight: 600;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.navbar-demo-link:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  text-decoration: none;
+}
+
+.navbar-github-link::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: currentColor;
+  /* Inline mask keeps the icon self-contained: no network request, and it
+     inherits the text color so it works in both themes. */
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3'/%3E%3C/svg%3E")
+    no-repeat center / contain;
+}
+
+/* ── Content surfaces ───────────────────────────────────────────────────── */
+
+.card,
+.theme-doc-markdown table {
+  border-radius: var(--ifm-global-radius);
+}
+
+.markdown table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.theme-admonition {
+  border-radius: var(--ifm-global-radius);
+}
+
+/* "By the end of this page" blocks open most guides. */
+.ps-outcome {
+  border: 1px solid var(--ps-border);
+  border-left: 3px solid var(--ifm-color-primary);
+  background: var(--ps-surface-muted);
+  border-radius: var(--ifm-global-radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.ps-outcome > :last-child {
+  margin-bottom: 0;
+}
+
+.ps-outcome-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* ── Shared card grid, used by the homepage and the theme gallery ───────── */
+
+.ps-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.ps-card {
+  border: 1px solid var(--ps-border);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ps-surface);
+  overflow: hidden;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.ps-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ps-shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-card,
+  .navbar-demo-link {
+    transition: none;
+  }
+
+  .ps-card:hover,
+  .navbar-demo-link:hover {
+    transform: none;
+  }
+}

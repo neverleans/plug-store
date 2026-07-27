@@ -1,0 +1,32 @@
+{
+  "id": "architecture",
+  "title": "How it works",
+  "description": "How CatalogApp, CatalogProvider, the contexts and the data provider fit together, and where to plug your own code in.",
+  "source": "@site/docs/architecture.md",
+  "sourceDirName": ".",
+  "slug": "/architecture",
+  "permalink": "/plug-store/docs/architecture",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/neverleans/plug-store/tree/master/apps/docs/docs/architecture.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "id": "architecture",
+    "title": "How it works",
+    "sidebar_label": "How it works",
+    "sidebar_position": 2,
+    "description": "How CatalogApp, CatalogProvider, the contexts and the data provider fit together, and where to plug your own code in."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "What is PlugStore?",
+    "permalink": "/plug-store/docs/intro"
+  },
+  "next": {
+    "title": "Create a project",
+    "permalink": "/plug-store/docs/getting-started/cli"
+  }
+}

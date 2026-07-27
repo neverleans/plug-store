@@ -1,0 +1,148 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/plug-store/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/plug-store/docs",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "architecture",
+              "path": "/plug-store/docs/architecture",
+              "sidebar": "docs"
+            },
+            {
+              "id": "getting-started/cli",
+              "path": "/plug-store/docs/getting-started/cli",
+              "sidebar": "docs"
+            },
+            {
+              "id": "getting-started/deploy",
+              "path": "/plug-store/docs/getting-started/deploy",
+              "sidebar": "docs"
+            },
+            {
+              "id": "getting-started/manual-install",
+              "path": "/plug-store/docs/getting-started/manual-install",
+              "sidebar": "docs"
+            },
+            {
+              "id": "getting-started/tailwind",
+              "path": "/plug-store/docs/getting-started/tailwind",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/admin",
+              "path": "/plug-store/docs/guides/admin",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/cart-wishlist",
+              "path": "/plug-store/docs/guides/cart-wishlist",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/checkout",
+              "path": "/plug-store/docs/guides/checkout",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/configuration",
+              "path": "/plug-store/docs/guides/configuration",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/data",
+              "path": "/plug-store/docs/guides/data",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/i18n-currency",
+              "path": "/plug-store/docs/guides/i18n-currency",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/pix",
+              "path": "/plug-store/docs/guides/pix",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/pwa",
+              "path": "/plug-store/docs/guides/pwa",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/seo-analytics",
+              "path": "/plug-store/docs/guides/seo-analytics",
+              "sidebar": "docs"
+            },
+            {
+              "id": "guides/themes",
+              "path": "/plug-store/docs/guides/themes",
+              "sidebar": "docs"
+            },
+            {
+              "id": "intro",
+              "path": "/plug-store/docs/intro",
+              "sidebar": "docs"
+            },
+            {
+              "id": "recipes/brand-theme",
+              "path": "/plug-store/docs/recipes/brand-theme",
+              "sidebar": "docs"
+            },
+            {
+              "id": "recipes/custom-checkout",
+              "path": "/plug-store/docs/recipes/custom-checkout",
+              "sidebar": "docs"
+            },
+            {
+              "id": "recipes/rest-api",
+              "path": "/plug-store/docs/recipes/rest-api",
+              "sidebar": "docs"
+            },
+            {
+              "id": "recipes/supabase",
+              "path": "/plug-store/docs/recipes/supabase",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/cli",
+              "path": "/plug-store/docs/reference/cli",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/exports",
+              "path": "/plug-store/docs/reference/exports",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/types",
+              "path": "/plug-store/docs/reference/types",
+              "sidebar": "docs"
+            },
+            {
+              "id": "themes/gallery",
+              "path": "/plug-store/docs/themes/gallery",
+              "sidebar": "docs"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docs": {
+              "link": {
+                "path": "/plug-store/docs/intro",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

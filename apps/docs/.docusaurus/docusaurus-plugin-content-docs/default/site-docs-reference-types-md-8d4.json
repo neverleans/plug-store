@@ -1,0 +1,32 @@
+{
+  "id": "reference/types",
+  "title": "Types",
+  "description": "Every exported TypeScript type in PlugStore — Product, Category, CartItem, ShippingInfo, Order, ThemeConfig, CatalogConfig and the checkout types.",
+  "source": "@site/docs/reference/types.md",
+  "sourceDirName": "reference",
+  "slug": "/reference/types",
+  "permalink": "/plug-store/docs/reference/types",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/neverleans/plug-store/tree/master/apps/docs/docs/reference/types.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "id": "types",
+    "title": "Types",
+    "sidebar_label": "Types",
+    "sidebar_position": 2,
+    "description": "Every exported TypeScript type in PlugStore — Product, Category, CartItem, ShippingInfo, Order, ThemeConfig, CatalogConfig and the checkout types."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "All exports",
+    "permalink": "/plug-store/docs/reference/exports"
+  },
+  "next": {
+    "title": "CLI",
+    "permalink": "/plug-store/docs/reference/cli"
+  }
+}

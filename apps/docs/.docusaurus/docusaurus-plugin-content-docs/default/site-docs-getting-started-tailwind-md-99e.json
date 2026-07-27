@@ -1,0 +1,32 @@
+{
+  "id": "getting-started/tailwind",
+  "title": "Tailwind setup",
+  "description": "The Tailwind configuration PlugStore requires, why the content array must include the compiled package, and how to fix a store that renders unstyled.",
+  "source": "@site/docs/getting-started/tailwind.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/tailwind",
+  "permalink": "/plug-store/docs/getting-started/tailwind",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/neverleans/plug-store/tree/master/apps/docs/docs/getting-started/tailwind.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "id": "tailwind",
+    "title": "Tailwind setup",
+    "sidebar_label": "Tailwind setup",
+    "sidebar_position": 3,
+    "description": "The Tailwind configuration PlugStore requires, why the content array must include the compiled package, and how to fix a store that renders unstyled."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Add to an existing app",
+    "permalink": "/plug-store/docs/getting-started/manual-install"
+  },
+  "next": {
+    "title": "Deploy",
+    "permalink": "/plug-store/docs/getting-started/deploy"
+  }
+}

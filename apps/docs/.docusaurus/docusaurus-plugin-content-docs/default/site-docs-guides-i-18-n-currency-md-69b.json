@@ -1,0 +1,32 @@
+{
+  "id": "guides/i18n-currency",
+  "title": "Language and currency",
+  "description": "Switching the interface between Portuguese and English, formatting money for BRL, USD and EUR, and why PlugStore never converts prices.",
+  "source": "@site/docs/guides/i18n-currency.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/i18n-currency",
+  "permalink": "/plug-store/docs/guides/i18n-currency",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/neverleans/plug-store/tree/master/apps/docs/docs/guides/i18n-currency.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "id": "i18n-currency",
+    "title": "Language and currency",
+    "sidebar_label": "Language & currency",
+    "sidebar_position": 7,
+    "description": "Switching the interface between Portuguese and English, formatting money for BRL, USD and EUR, and why PlugStore never converts prices."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Cart & wishlist",
+    "permalink": "/plug-store/docs/guides/cart-wishlist"
+  },
+  "next": {
+    "title": "PWA & offline",
+    "permalink": "/plug-store/docs/guides/pwa"
+  }
+}

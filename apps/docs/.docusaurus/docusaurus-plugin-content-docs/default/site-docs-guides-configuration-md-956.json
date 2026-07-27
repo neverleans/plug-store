@@ -1,0 +1,32 @@
+{
+  "id": "guides/configuration",
+  "title": "Store configuration",
+  "description": "Every option in CatalogConfig — store identity, currency, WhatsApp, Pix, social links and analytics — and how runtime configuration overrides it.",
+  "source": "@site/docs/guides/configuration.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/configuration",
+  "permalink": "/plug-store/docs/guides/configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/neverleans/plug-store/tree/master/apps/docs/docs/guides/configuration.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "id": "configuration",
+    "title": "Store configuration",
+    "sidebar_label": "Configuration",
+    "sidebar_position": 1,
+    "description": "Every option in CatalogConfig — store identity, currency, WhatsApp, Pix, social links and analytics — and how runtime configuration overrides it."
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Deploy",
+    "permalink": "/plug-store/docs/getting-started/deploy"
+  },
+  "next": {
+    "title": "Themes",
+    "permalink": "/plug-store/docs/guides/themes"
+  }
+}
