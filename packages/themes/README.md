@@ -1,7 +1,9 @@
 # @neverleans-labs/plug-store-themes
 
 > 50 ready-made industry design themes and the `defineTheme` customizer for the
-> [PlugStore Framework](https://github.com/neverleans/plug-store).
+> [PlugStore Framework](https://neverleans.github.io/plug-store/).
+
+**[Browse all 50 themes, live](https://neverleans.github.io/plug-store/docs/themes/gallery) · [Documentation](https://neverleans.github.io/plug-store/) · [Em português](https://neverleans.github.io/plug-store/pt-BR/)**
 
 [![npm](https://img.shields.io/npm/v/@neverleans-labs/plug-store-themes.svg?color=orange)](https://www.npmjs.com/package/@neverleans-labs/plug-store-themes)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/neverleans/plug-store/blob/master/LICENSE)
@@ -54,7 +56,17 @@ export const myBrand = defineTheme({
 ```
 
 Colors are HSL channel triplets (no `hsl()` wrapper) so they slot straight into CSS
-custom properties.
+custom properties. `themeConfigs` is a `Record<string, ThemeConfig>` keyed by id — use
+`Object.values(themeConfigs)` to iterate it.
+
+## Documentation
+
+- [Themes guide](https://neverleans.github.io/plug-store/docs/guides/themes) — every
+  token, the ten hero styles and the ten card styles
+- [Build a client's brand theme](https://neverleans.github.io/plug-store/docs/recipes/brand-theme)
+  — a worked example from a logo to a shipped store
+- [Theme gallery](https://neverleans.github.io/plug-store/docs/themes/gallery) — all 50,
+  rendered with their own tokens
 
 ## License
 
