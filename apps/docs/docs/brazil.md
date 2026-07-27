@@ -66,7 +66,7 @@ in production, on a customer's phone:
 
 Both are pinned by tests — the CRC against the canonical check vector, the
 folding against an accented name that exceeds the cap. Eleven of the suite's
-thirty-four tests are about Pix alone, which tells you where the risk is
+forty-three tests cover the Pix payload alone, which tells you where the risk is
 concentrated.
 
 Try it against your own key on the [Pix guide](./guides/pix.md) — the generator
@@ -86,10 +86,10 @@ line item with quantity and price, discount, shipping and total.
 📍 *Endereço:* Rua das Flores 210, São Paulo - SP
 
 📦 *Itens do Pedido:*
-• 2x *Pão de forma integral* (R$ 12.90)
+• 2x *Pão de forma integral* (R$ 12,90)
 
-🚚 *Frete:* R$ 8.00
-💰 *TOTAL:* R$ 33.80
+🚚 *Frete:* R$ 8,00
+💰 *TOTAL:* R$ 33,80
 ```
 
 Be clear about what this is: a `wa.me` deep link, which needs no approval and no

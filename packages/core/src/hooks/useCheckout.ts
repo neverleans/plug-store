@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { useSiteConfig } from '../contexts/SiteConfigContext';
 import { useCatalogData } from '../contexts/DataContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { trackEvent } from './useCatalogAnalytics';
 import { ShippingInfo } from '../types';
 import {
@@ -28,6 +29,7 @@ export const useCheckout = (options?: UseCheckoutOptions) => {
   const { items, subtotal, discount, shippingCost, total, clearCart } = useCart();
   const { config } = useSiteConfig();
   const dataProvider = useCatalogData();
+  const { language, t } = useLanguage();
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
@@ -70,32 +72,43 @@ export const useCheckout = (options?: UseCheckoutOptions) => {
       if (options?.adapters?.[paymentMethod]) {
         adapter = options.adapters[paymentMethod]!;
       } else {
+        // The store's own currency and language, not the payload's: every
+        // amount in these messages is priced by the store, so it has to be
+        // written the way the store writes money.
+        const whatsapp = () =>
+          whatsappGateway({
+            phone: config.whatsappPhone,
+            currency: config.currency,
+            language,
+          });
+
         switch (paymentMethod) {
           case 'whatsapp':
-            adapter = whatsappGateway(config.whatsappPhone);
+            adapter = whatsapp();
             break;
           case 'pix':
             adapter = pixGateway({
               pixKey: config.pixKey,
               merchantName: config.companyName,
               merchantCity: config.pixMerchantCity,
+              language,
             });
             break;
           case 'stripe':
-            adapter = stripeGateway('/api/checkout/stripe');
+            adapter = stripeGateway('/api/checkout/stripe', { language });
             break;
           case 'mercadopago':
-            adapter = mercadopagoGateway('/api/checkout/mercadopago');
+            adapter = mercadopagoGateway('/api/checkout/mercadopago', { language });
             break;
           default:
-            adapter = whatsappGateway(config.whatsappPhone);
+            adapter = whatsapp();
         }
       }
 
       const res = await adapter(payload);
 
       if (!res.success) {
-        throw new Error(res.error || 'Falha no checkout');
+        throw new Error(res.error || t.checkoutFailed);
       }
 
       // Record order via active Headless DataProvider if supported
@@ -135,7 +148,7 @@ export const useCheckout = (options?: UseCheckoutOptions) => {
       clearCart();
       return res;
     } catch (err: any) {
-      const errMsg = err.message || 'Erro inesperado no checkout';
+      const errMsg = err.message || t.checkoutUnexpectedError;
       setError(errMsg);
       const failedResult: PaymentResult = { success: false, error: errMsg };
       setResult(failedResult);

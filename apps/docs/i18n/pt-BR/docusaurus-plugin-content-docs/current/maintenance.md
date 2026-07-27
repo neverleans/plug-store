@@ -95,14 +95,14 @@ node scripts/e2e-consumer.mjs --react 19
 |---|---|
 | Lint | Workspace inteiro |
 | Build | Node 18, 20 e 22 — os pacotes precisam continuar compilando no 18 porque é o que o README da CLI promete |
-| Testes | 34 testes em 7 arquivos |
+| Testes | 43 testes em 8 arquivos |
 | Build da documentação | Link quebrado **derruba o build**, então nenhuma página daqui aponta para o vazio |
 | Build de consumidor | As quatro combinações acima |
 
-Sendo honesto sobre a contagem: 34 é pouco, e não está distribuído por igual.
-Onze cobrem o payload do Pix e sete cobrem a ligação do data provider, porque são
-os dois lugares onde uma falha silenciosa custa dinheiro de verdade. Renderização
-de componente tem cobertura rala.
+Sendo honesto sobre a contagem: 43 é pouco, e não está distribuído por igual.
+Onze cobrem o payload do Pix, nove a mensagem de pedido do WhatsApp e sete a
+ligação do data provider, porque são os lugares onde uma falha silenciosa custa
+dinheiro sem levantar erro. Renderização de componente tem cobertura rala.
 
 ## O que *não* é coberto
 

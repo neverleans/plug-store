@@ -116,6 +116,19 @@ export const en = {
   placeOrder: 'Place Order',
   qty: 'Qty',
 
+  // Checkout gateways. The WhatsApp message is sent by the customer to the
+  // store, so it is written in the store's language, not the customer's browser
+  // locale.
+  waNewOrder: 'New Order',
+  waCustomer: 'Customer',
+  waOrderItems: 'Order Items',
+  waNoPhone: 'WhatsApp number is not configured.',
+  waNoPixKey: 'Pix key is not configured. Set pixKey in the store configuration.',
+  stripeFailed: 'Could not process the payment through Stripe',
+  mercadopagoFailed: 'Could not create the Mercado Pago preference',
+  checkoutFailed: 'Checkout failed',
+  checkoutUnexpectedError: 'Unexpected error during checkout',
+
   // Order confirmation
   orderConfirmed: 'Order Confirmed!',
   thankYouPurchase: 'Thank you for your purchase.',

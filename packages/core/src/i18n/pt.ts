@@ -116,6 +116,19 @@ export const pt = {
   placeOrder: 'Finalizar Pedido',
   qty: 'Qtd',
 
+  // Gateways de checkout. A mensagem de WhatsApp é enviada pelo cliente para a
+  // loja, então ela é escrita no idioma da loja, não no locale do navegador de
+  // quem compra.
+  waNewOrder: 'Novo Pedido',
+  waCustomer: 'Cliente',
+  waOrderItems: 'Itens do Pedido',
+  waNoPhone: 'Telefone do WhatsApp não configurado.',
+  waNoPixKey: 'Chave Pix não configurada. Defina pixKey na configuração da loja.',
+  stripeFailed: 'Falha ao processar pagamento via Stripe',
+  mercadopagoFailed: 'Falha ao gerar preference no Mercado Pago',
+  checkoutFailed: 'Falha no checkout',
+  checkoutUnexpectedError: 'Erro inesperado no checkout',
+
   // Order confirmation
   orderConfirmed: 'Pedido Confirmado!',
   thankYouPurchase: 'Obrigado pela sua compra.',

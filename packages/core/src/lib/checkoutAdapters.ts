@@ -1,5 +1,17 @@
 import { PaymentGatewayAdapter, CheckoutPayload, PaymentResult } from './checkoutTypes';
 import { buildPixPayload } from './pix';
+import { formatMoney } from './currency';
+import type { CurrencyCode } from '../contexts/SiteConfigContext';
+import { pt } from '../i18n/pt';
+import { en } from '../i18n/en';
+import type { Language } from '../i18n';
+
+/**
+ * Strings for the messages an adapter generates. Adapters are exported for
+ * headless use, so they resolve their own copy from a language code instead of
+ * requiring a React context to be threaded in.
+ */
+const strings = (language: Language = 'pt') => (language === 'en' ? en : pt);
 
 export interface PixGatewayOptions {
   /** Merchant Pix key. Required to produce a scannable code. */
@@ -8,39 +20,65 @@ export interface PixGatewayOptions {
   merchantName?: string;
   /** Merchant city in the Pix payload (max 15 chars). */
   merchantCity?: string;
+  /** Language of the error message when the key is missing. Defaults to `pt`. */
+  language?: Language;
+}
+
+export interface WhatsappGatewayOptions {
+  /** Store's WhatsApp number. Non-digits are stripped. */
+  phone?: string;
+  /**
+   * Store currency, so amounts are formatted the way the store prices them.
+   * Defaults to `BRL` — the currency this adapter exists for.
+   */
+  currency?: CurrencyCode;
+  /** Language of the generated order message. Defaults to `pt`. */
+  language?: Language;
 }
 
 /**
  * whatsappGateway
- * 
- * Generates direct pre-filled WhatsApp checkout message URL
+ *
+ * Turns the order into a pre-filled wa.me message the customer sends to the
+ * store. Amounts go through formatMoney rather than toFixed, because a
+ * Brazilian store writing "R$ 12.90" to its own customers is wrong in the one
+ * string this adapter exists to produce.
+ *
+ * Accepts either a bare phone number (backwards compatible) or an options object.
  */
-export const whatsappGateway = (whatsappPhone?: string): PaymentGatewayAdapter => {
+export const whatsappGateway = (
+  phoneOrOptions?: string | WhatsappGatewayOptions,
+): PaymentGatewayAdapter => {
+  const options: WhatsappGatewayOptions =
+    typeof phoneOrOptions === 'string' ? { phone: phoneOrOptions } : phoneOrOptions || {};
+  const t = strings(options.language);
+  const money = (amount: number) => formatMoney(amount, options.currency ?? 'BRL');
+
   return async (payload: CheckoutPayload): Promise<PaymentResult> => {
-    const phone = whatsappPhone || '';
+    const phone = (options.phone || '').replace(/\D/g, '');
     if (!phone) {
-      return { success: false, error: 'Telefone do WhatsApp não configurado.' };
+      return { success: false, error: t.waNoPhone };
     }
 
     const orderId = 'ORD-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-    let text = `👋 *Novo Pedido #${orderId}*\n\n`;
-    text += `👤 *Cliente:* ${payload.shippingInfo.firstName} ${payload.shippingInfo.lastName}\n`;
-    text += `📍 *Endereço:* ${payload.shippingInfo.address}, ${payload.shippingInfo.city} - ${payload.shippingInfo.state}\n\n`;
-    text += `📦 *Itens do Pedido:*\n`;
+    let text = `👋 *${t.waNewOrder} #${orderId}*\n\n`;
+    text += `👤 *${t.waCustomer}:* ${payload.shippingInfo.firstName} ${payload.shippingInfo.lastName}\n`;
+    text += `📍 *${t.address}:* ${payload.shippingInfo.address}, ${payload.shippingInfo.city} - ${payload.shippingInfo.state}\n\n`;
+    text += `📦 *${t.waOrderItems}:*\n`;
 
     payload.items.forEach((item) => {
-      text += `• ${item.quantity}x *${item.product.name}* (R$ ${item.product.price.toFixed(2)})\n`;
+      text += `• ${item.quantity}x *${item.product.name}* (${money(item.product.price)})\n`;
     });
 
     if (payload.discount > 0) {
-      text += `\n🏷️ *Desconto:* R$ ${payload.discount.toFixed(2)}`;
+      text += `\n🏷️ *${t.discount}:* ${money(payload.discount)}`;
     }
     if (payload.shippingCost > 0) {
-      text += `\n🚚 *Frete:* R$ ${payload.shippingCost.toFixed(2)}`;
+      text += `\n🚚 *${t.shipping}:* ${money(payload.shippingCost)}`;
     }
-    text += `\n💰 *TOTAL:* R$ ${payload.total.toFixed(2)}`;
+    text += `\n💰 *${t.total.toUpperCase()}:* ${money(payload.total)}`;
 
-    const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
     return {
       success: true,
       orderId,
@@ -71,10 +109,7 @@ export const pixGateway = (
 
   return async (payload: CheckoutPayload): Promise<PaymentResult> => {
     if (!options.pixKey) {
-      return {
-        success: false,
-        error: 'Chave Pix não configurada. Defina pixKey na configuração da loja.',
-      };
+      return { success: false, error: strings(options.language).waNoPixKey };
     }
 
     const orderId = 'PIX-' + Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -105,7 +140,7 @@ export const pixGateway = (
  */
 export const stripeGateway = (
   checkoutEndpointUrl: string,
-  options?: { headers?: Record<string, string> }
+  options?: { headers?: Record<string, string>; language?: Language }
 ): PaymentGatewayAdapter => {
   return async (payload: CheckoutPayload): Promise<PaymentResult> => {
     try {
@@ -131,7 +166,7 @@ export const stripeGateway = (
     } catch (err: any) {
       return {
         success: false,
-        error: err.message || 'Falha ao processar pagamento via Stripe',
+        error: err.message || strings(options?.language).stripeFailed,
       };
     }
   };
@@ -144,7 +179,7 @@ export const stripeGateway = (
  */
 export const mercadopagoGateway = (
   preferenceEndpointUrl: string,
-  options?: { headers?: Record<string, string> }
+  options?: { headers?: Record<string, string>; language?: Language }
 ): PaymentGatewayAdapter => {
   return async (payload: CheckoutPayload): Promise<PaymentResult> => {
     try {
@@ -170,7 +205,7 @@ export const mercadopagoGateway = (
     } catch (err: any) {
       return {
         success: false,
-        error: err.message || 'Falha ao gerar preference no Mercado Pago',
+        error: err.message || strings(options?.language).mercadopagoFailed,
       };
     }
   };

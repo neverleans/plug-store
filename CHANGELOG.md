@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The WhatsApp order message wrote BRL with a dot.** Every amount went through
+  `toFixed(2)`, so a Brazilian store sent its own customers "R$ 12.90" instead of
+  "R$ 12,90" — in the one string the WhatsApp flow exists to produce. `R$` was also
+  hardcoded, so a store priced in USD or EUR still said `R$`. Amounts now go through
+  `formatMoney`, and `useCheckout` passes the store's configured currency.
+- **The generated order message and every gateway error were hardcoded Portuguese**,
+  including for stores running in English. Both now follow the store language, and
+  `whatsappGateway` accepts an options object (`{ phone, currency, language }`) alongside
+  the bare phone string it has always taken. `pixGateway`, `stripeGateway` and
+  `mercadopagoGateway` take `language` too.
+
 ### Added
 
 - **"Built for Brazil"** documentation page, in both locales. The docs demonstrated the

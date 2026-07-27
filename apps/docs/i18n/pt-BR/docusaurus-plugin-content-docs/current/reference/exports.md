@@ -64,7 +64,7 @@ ignorado quando você fornece o seu provider: `getProducts`, `getCategories`,
 | Export | Assinatura | Guia |
 |---|---|---|
 | `useCheckout` | `(options?: UseCheckoutOptions) => { processCheckout, loading, result, error }` | [Checkout](../guides/checkout.md) |
-| `whatsappGateway` | `(phone?: string) => PaymentGatewayAdapter` | [Checkout](../guides/checkout.md) |
+| `whatsappGateway` | `(phoneOrOptions?: string | WhatsappGatewayOptions) => PaymentGatewayAdapter` | [Checkout](../guides/checkout.md) |
 | `pixGateway` | `(keyOrOptions?: string \| PixGatewayOptions) => PaymentGatewayAdapter` | [Pix](../guides/pix.md) |
 | `stripeGateway` | `(endpoint: string, options?) => PaymentGatewayAdapter` | [Checkout](../guides/checkout.md) |
 | `mercadopagoGateway` | `(endpoint: string, options?) => PaymentGatewayAdapter` | [Checkout](../guides/checkout.md) |

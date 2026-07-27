@@ -115,11 +115,23 @@ Um adaptador é uma única função:
 type PaymentGatewayAdapter = (payload: CheckoutPayload) => Promise<PaymentResult>;
 ```
 
-### `whatsappGateway(telefone)`
+### `whatsappGateway(telefoneOuOpcoes)`
 
 Monta um link `https://wa.me/…` com o pedido formatado como mensagem: nome do
 cliente, endereço, cada item, desconto, frete e total. Falha com um erro claro
 quando não há telefone configurado.
+
+```ts
+whatsappGateway({
+  phone: '5511999999999',
+  currency: 'BRL',   // os valores são formatados nesta moeda
+  language: 'pt',    // a mensagem é escrita neste idioma
+});
+```
+
+`whatsappGateway('5511999999999')` continua funcionando, assumindo BRL e
+português. O `useCheckout` passa a moeda e o idioma da própria loja, então uma
+loja em BRL escreve `R$ 12,90` e uma em USD escreve `$12.90`.
 
 ### `pixGateway(chaveOuOpcoes)`
 

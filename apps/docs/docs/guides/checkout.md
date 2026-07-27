@@ -115,11 +115,23 @@ An adapter is a single function:
 type PaymentGatewayAdapter = (payload: CheckoutPayload) => Promise<PaymentResult>;
 ```
 
-### `whatsappGateway(phone)`
+### `whatsappGateway(phoneOrOptions)`
 
 Builds a `https://wa.me/…` link with the order formatted as a message: customer
 name, address, each line item, discount, shipping and total. Fails with a clear
 error when no phone is configured.
+
+```ts
+whatsappGateway({
+  phone: '5511999999999',
+  currency: 'BRL',   // amounts are formatted for this currency
+  language: 'pt',    // the message is written in this language
+});
+```
+
+`whatsappGateway('5511999999999')` still works and defaults to BRL and
+Portuguese. `useCheckout` passes the store's own currency and language, so a BRL
+store writes `R$ 12,90` and a USD store writes `$12.90`.
 
 ### `pixGateway(keyOrOptions)`
 

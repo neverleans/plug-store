@@ -94,14 +94,14 @@ node scripts/e2e-consumer.mjs --react 19
 |---|---|
 | Lint | Whole workspace |
 | Build | Node 18, 20 and 22 — the packages must keep building on 18 because the CLI's README promises it |
-| Tests | 34 tests across 7 files |
+| Tests | 43 tests across 8 files |
 | Docs build | A broken link **fails the build**, so no page here can point at nothing |
 | Consumer build | The four combinations above |
 
-Be honest about the test count: 34 is small, and it is not spread evenly. Eleven
-of them cover the Pix payload and seven cover data-provider wiring, because
-those are the two places where a silent failure costs real money. Component
-rendering is thinly covered.
+Be honest about the test count: 43 is small, and it is not spread evenly. Eleven
+cover the Pix payload, nine the WhatsApp order message and seven the
+data-provider wiring, because those are the places where a silent failure costs
+real money without raising an error. Component rendering is thinly covered.
 
 ## What is *not* covered
 

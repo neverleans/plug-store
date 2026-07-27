@@ -64,8 +64,9 @@ lido, em produção, no celular do cliente:
 | **Dobra para ASCII** | Nome e cidade do recebedor precisam virar ASCII imprimível, em caixa alta, truncados em 25 e 15 caracteres | `São João` quebra o prefixo de tamanho e corrompe todo campo depois dele |
 
 Os dois estão presos por teste — o CRC contra o vetor canônico de verificação, a
-dobra contra um nome acentuado que estoura o limite. Onze dos trinta e quatro
-testes da suíte são só de Pix, o que já diz onde o risco está concentrado.
+dobra contra um nome acentuado que estoura o limite. Onze dos quarenta e três
+testes da suíte cobrem só o payload do Pix, o que já diz onde o risco está
+concentrado.
 
 Teste com a sua própria chave na [página de Pix](./guides/pix.md) — o gerador
 roda dentro da página.
@@ -84,10 +85,10 @@ com quantidade e preço, desconto, frete e total.
 📍 *Endereço:* Rua das Flores 210, São Paulo - SP
 
 📦 *Itens do Pedido:*
-• 2x *Pão de forma integral* (R$ 12.90)
+• 2x *Pão de forma integral* (R$ 12,90)
 
-🚚 *Frete:* R$ 8.00
-💰 *TOTAL:* R$ 33.80
+🚚 *Frete:* R$ 8,00
+💰 *TOTAL:* R$ 33,80
 ```
 
 Deixando claro o que isso é: um link `wa.me`, que não precisa de aprovação nem de
