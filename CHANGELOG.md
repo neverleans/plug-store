@@ -36,9 +36,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   producing TS6133 on a freshly scaffolded project.
 - `CatalogProvider` shared a module-level react-query client, so two independently
   mounted stores leaked cached catalog data to each other.
-- `@neverleans-labs/plug-store-themes` had drifted to `0.1.0` while core was on `0.1.1`,
-  letting npm resolve a pair that was never built together. All three packages are now
-  versioned in lockstep by `scripts/version.mjs`.
+- **`@neverleans-labs/plug-store-themes` was never published by the release workflow.**
+  It had no job in `release.yml`, so it stayed on `0.1.0` through three core releases
+  while the run still reported success — nothing asked the registry what it had. Since
+  the CLI pins both library packages at its own version, that gap made `npm create
+  plug-store` fail with `E404` on install. There is now a `publish-themes` job, publishes
+  are idempotent so a tag can be re-run to fill in what is missing, and a
+  `verify-release` job asserts all three report the tagged version and that the range the
+  CLI writes actually resolves.
+- `plug-store-themes` declared its peer on core as `workspace:^`. pnpm rewrites that at
+  publish time; npm — which is what the workflow uses — neither rewrites it nor will pack
+  a manifest containing it. Consumer-facing ranges are literal now, maintained by
+  `scripts/version.mjs`.
+- The CI matrix failed on Node 18 from the moment the documentation site landed, because
+  the root build pulled in Docusaurus, which requires Node 20. The packages still build
+  and test on Node 18 — the CLI promises that — and only the site is skipped there.
 - The CLI greeted in English and then asked every question in Portuguese.
 - `dummyDataProvider.createOrder` built its order around a `ShippingInfo` shape that no
   longer exists. TypeScript never flagged it because the value sat in the right operand
