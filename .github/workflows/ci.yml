@@ -38,8 +38,16 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # The published packages must keep building on Node 18 — that is what the
+      # CLI's README promises its users. The documentation site is a dev tool and
+      # Docusaurus 3.10 requires Node >= 20, so it is excluded here rather than
+      # dropping Node 18 from the matrix and weakening the real guarantee.
       - name: Build packages
-        run: pnpm build
+        run: pnpm build --filter='!plug-store-docs'
+
+      - name: Build the documentation site
+        if: matrix.node-version != 18
+        run: pnpm build --filter=plug-store-docs
 
       - name: Run tests
         run: pnpm test
