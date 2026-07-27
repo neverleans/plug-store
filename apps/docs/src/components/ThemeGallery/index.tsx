@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 import { translate } from '@docusaurus/Translate';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { themeConfigs } from '@neverleans-labs/plug-store-themes';
@@ -63,7 +62,16 @@ function Preview({ theme }: { theme: ThemeConfig }) {
   );
 }
 
-function Gallery() {
+/**
+ * Reads the theme registry straight from the published package.
+ *
+ * Deliberately not wrapped in <BrowserOnly>: the registry is plain data that
+ * imports fine under Node, and rendering all 50 previews server-side is the
+ * whole value of this page. Behind BrowserOnly the served HTML said "Loading
+ * themes…" and nothing else — the strongest proof the project has, absent from
+ * the document that anything without JS actually reads.
+ */
+export default function ThemeGallery() {
   const [query, setQuery] = useState('');
   const demoBase = useBaseUrl('/demo/');
 
@@ -128,15 +136,3 @@ function Gallery() {
   );
 }
 
-/**
- * The gallery reads the theme registry from the published package, which is
- * browser-oriented — rendering it during the static build would pull that code
- * into Node for no benefit, since the page is interactive anyway.
- */
-export default function ThemeGallery() {
-  return (
-    <BrowserOnly fallback={<p>{translate({ id: 'gallery.loading', message: 'Loading themes…' })}</p>}>
-      {() => <Gallery />}
-    </BrowserOnly>
-  );
-}

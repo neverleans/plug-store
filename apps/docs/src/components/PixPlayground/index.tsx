@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 import { translate } from '@docusaurus/Translate';
 import { buildPixPayload, pixCrc16 } from '@neverleans-labs/plug-store-core';
 import styles from './styles.module.css';
@@ -55,7 +54,18 @@ function parseTlv(payload: string): Field[] {
   return fields;
 }
 
-function Playground() {
+/**
+ * Runs the real generator from the published package, not a reimplementation,
+ * so what the page shows is what a store would produce.
+ *
+ * Deliberately not wrapped in <BrowserOnly>. The generator is a pure function
+ * that imports fine under Node, and the whole point of this page is to be the
+ * proof that PlugStore emits a real BR Code — a proof that lives only in
+ * client-side JS is invisible to anything reading the served HTML, which today
+ * includes most of the tooling people use to discover libraries. The initial
+ * render is deterministic, so hydration takes over without a mismatch.
+ */
+export default function PixPlayground() {
   const [pixKey, setPixKey] = useState('bloom@example.com');
   const [merchantName, setMerchantName] = useState('Bloom Cosméticos');
   const [merchantCity, setMerchantCity] = useState('São Paulo');
@@ -187,17 +197,3 @@ function Playground() {
   );
 }
 
-/**
- * Runs the real generator from the published package, not a reimplementation,
- * so what the page shows is what a store would produce. Browser-only because it
- * pulls in the core bundle.
- */
-export default function PixPlayground() {
-  return (
-    <BrowserOnly
-      fallback={<p>{translate({ id: 'pix.loading', message: 'Loading the Pix generator…' })}</p>}
-    >
-      {() => <Playground />}
-    </BrowserOnly>
-  );
-}
