@@ -5,14 +5,15 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.2] - 2026-07-27
 
 ### Added
 
 - **Documentation site** at <https://neverleans.github.io/plug-store/>, built with
   Docusaurus: getting started, ten guides, four recipes, a full API and type reference,
   a live theme gallery reading the published registry, and an interactive Pix payload
-  inspector that runs the real generator. The demo moved to `/demo/`.
+  inspector that runs the real generator. The demo moved to `/demo/`. Available in
+  English and Portuguese, including the two interactive components.
 - **`useProducts`, `useCategories`, `useProduct`, `useProductReviews`** — read hooks over
   the active data provider, with caching, loading and error state.
 - `queryClient` prop on `CatalogProvider`, for apps that already use react-query and want
@@ -39,11 +40,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   letting npm resolve a pair that was never built together. All three packages are now
   versioned in lockstep by `scripts/version.mjs`.
 - The CLI greeted in English and then asked every question in Portuguese.
+- `dummyDataProvider.createOrder` built its order around a `ShippingInfo` shape that no
+  longer exists. TypeScript never flagged it because the value sat in the right operand
+  of a `||` whose left operand can never be falsy, so the branch was both unreachable and
+  unchecked.
+- `@neverleans-labs/plug-store-core` documented a React 18 peer requirement that had
+  already been widened to `^18 || ^19`.
 
 ### Changed
 
 - README trimmed to a quick start that points at the documentation site; the package
-  version table is now npm badges rather than hardcoded numbers.
+  version table is now npm badges rather than hardcoded numbers. Each package README now
+  links to the documentation pages that cover it.
 - The React 19 install warning is gone — every release is verified against React 18 and
   19 by the `e2e-consumer` job, and neither needs `--legacy-peer-deps`.
 

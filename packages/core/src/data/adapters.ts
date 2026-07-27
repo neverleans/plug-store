@@ -44,13 +44,16 @@ export const dummyDataProvider = (industry: IndustryTemplate = 'fashion'): Catal
   },
 
   async createOrder(orderData) {
+    // items, shipping and total are all required on the parameter type, so the
+    // defensive fallbacks that used to sit here were unreachable — and because
+    // TypeScript never checks the right operand of `||` when the left can't be
+    // falsy, the shipping fallback kept a ShippingInfo shape that no longer
+    // exists without the compiler ever noticing.
     const order: Order = {
+      ...orderData,
       id: 'ORD-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
       date: new Date().toISOString(),
       status: 'confirmed',
-      items: orderData.items || [],
-      shipping: orderData.shipping || { fullName: '', email: '', phone: '', address: '', city: '', state: '', zipCode: '' },
-      total: orderData.total || 0,
     };
     return order;
   },
