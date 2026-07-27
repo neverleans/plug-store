@@ -3,9 +3,9 @@ contact_links:
   - name: 🎨 Contribute a theme
     url: https://github.com/neverleans/plug-store/blob/master/CONTRIBUTING.md#adding-a-theme
     about: Adding a new industry theme is the easiest way to start contributing.
-  - name: 💬 Questions and ideas
-    url: https://github.com/neverleans/plug-store/discussions
-    about: Ask how to do something, or share a store you built with PlugStore.
+  - name: 📚 Read the documentation
+    url: https://neverleans.github.io/plug-store/
+    about: Guides, recipes and the full API reference, in English and Portuguese.
   - name: 🔒 Report a security vulnerability
     url: https://github.com/neverleans/plug-store/security/advisories/new
     about: Please report security issues privately, never as a public issue.

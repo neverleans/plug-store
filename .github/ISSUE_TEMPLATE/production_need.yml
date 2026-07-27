@@ -1,0 +1,68 @@
+name: 🏭 Production gap
+description: Tell us which operational gap is blocking a store you are shipping
+title: "[Production]: "
+labels: ["production-gap", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        PlugStore stops where money, tax and carriers begin — the docs say so on purpose.
+        This form is how we find out **which** of those walls people actually hit, and how
+        often. It is not a support queue and there is nothing to buy; we are mapping the
+        problem before building anything.
+
+  - type: dropdown
+    id: gap
+    attributes:
+      label: Which wall did you hit?
+      options:
+        - Payment confirmation (nothing tells the store the Pix landed)
+        - Per-order reconciliation with the bank
+        - Fiscal documents (NFe)
+        - Real shipping quotes (Correios, Melhor Envio)
+        - Marketplace sync (Mercado Livre, Shopee)
+        - WhatsApp Business API (beyond a wa.me link)
+        - Managing many client stores at once
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: situation
+    attributes:
+      label: What is the store?
+      description: >
+        Industry, roughly how many products, and whether it is live. Concrete beats
+        general — "a bakery, 40 products, taking orders since March" tells us more than
+        "an e-commerce project".
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: What do you do about it today?
+      description: >
+        Manual check of the bank app, a script, another service, or the store owner just
+        living with it. The workaround is the most useful part of this form.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: Who are you in this?
+      options:
+        - Developer building for a client
+        - Freelancer or agency shipping several stores
+        - Store owner with some technical skill
+        - Evaluating PlugStore, not shipping yet
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: conversation
+    attributes:
+      label: Follow-up
+      options:
+        - label: I would talk for 20 minutes about this. Leave a way to reach you below.

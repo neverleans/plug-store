@@ -196,6 +196,12 @@ slot cuja semântica combina: um provedor baseado em redirect cabe em `stripe`.
 - **Cotação de frete.** O custo de frete vem da lógica do carrinho, não de uma
   API de transportadora.
 
+Cada um desses é deliberado — todos exigem um servidor, um contrato ou um regime
+tributário, e chutar isso dentro de uma biblioteca client-side é como lojas
+perdem dinheiro em silêncio. Se um deles está travando uma loja que você está
+entregando,
+[diga qual](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
+
 ## Próximos passos
 
 - [Pix em detalhe](./pix.md)

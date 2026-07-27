@@ -99,6 +99,11 @@ Existe um estudo de camada comercial separada para agências — integrações
 mantidas e ferramentas de operação, não componentes atrás de paywall. Nada
 descrito nesta documentação depende dela.
 
+Se uma das paredes acima é o que separa você de uma loja no ar,
+[diga qual](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
+Estamos mapeando em quais as pessoas realmente esbarram antes de construir
+qualquer coisa.
+
 ## Próximos passos
 
 - [Crie sua primeira loja](./getting-started/cli.md) com a CLI.

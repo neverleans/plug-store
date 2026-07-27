@@ -97,6 +97,10 @@ A separate commercial layer for agencies is being explored — maintained
 integrations and operational tooling, not paywalled components. Nothing
 described in these docs depends on it.
 
+If one of the walls above is what stands between you and a live store,
+[say which one](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
+We are mapping which ones people actually hit before building anything.
+
 ## Next
 
 - [Create your first store](./getting-started/cli.md) with the CLI.

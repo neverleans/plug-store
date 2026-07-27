@@ -150,6 +150,10 @@ Automatic confirmation means *dynamic Pix*: a PSP account, a webhook endpoint on
 your server, and a signature check. When you have that, wire it in as a
 [custom adapter](./checkout.md#custom-adapters) — PlugStore stays out of the way.
 
+If checking the bank by hand is what a store you built does today,
+[tell us](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
+The workaround is the part we most want to hear.
+
 ## Next
 
 - [Checkout and adapters](./checkout.md)

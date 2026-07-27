@@ -196,6 +196,11 @@ whose semantics match: a redirect-based provider fits `stripe`.
 - **Shipping quotes.** The shipping cost comes from cart logic, not a carrier
   API.
 
+Each of these is deliberate — they need a server, a contract or a tax regime, and
+guessing at them in a client-side library is how stores lose money quietly. If one
+of them is blocking a store you are shipping,
+[tell us which](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
+
 ## Next
 
 - [Pix in detail](./pix.md)

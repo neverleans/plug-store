@@ -151,6 +151,10 @@ webhook no seu servidor e verificação de assinatura. Quando você tiver isso,
 pluga como [adaptador customizado](./checkout.md#custom-adapters) — o PlugStore
 sai do caminho.
 
+Se conferir o banco na mão é o que uma loja sua faz hoje,
+[conte pra gente](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
+O contorno que você usa é justamente a parte que mais queremos ouvir.
+
 ## Próximos passos
 
 - [Checkout e adaptadores](./checkout.md)
