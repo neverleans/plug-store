@@ -55,6 +55,10 @@ const config: Config = {
     ],
   ],
 
+  // Emits llms.txt and llms-full.txt per locale. See the plugin for why this is
+  // generated rather than written by hand.
+  plugins: ['./plugins/llms-txt.ts'],
+
   presets: [
     [
       'classic',
@@ -115,6 +119,8 @@ const config: Config = {
             { label: 'GitHub', href: 'https://github.com/neverleans/plug-store' },
             { label: 'Changelog', href: 'https://github.com/neverleans/plug-store/blob/master/CHANGELOG.md' },
             { label: 'Contributing', href: 'https://github.com/neverleans/plug-store/blob/master/CONTRIBUTING.md' },
+            // Generated at build time by ./plugins/llms-txt.ts.
+            { label: 'llms.txt', to: 'pathname:///plug-store/llms.txt' },
           ],
         },
         {
