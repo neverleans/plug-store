@@ -109,6 +109,7 @@ const config: Config = {
           title: 'Docs',
           items: [
             { label: 'Getting started', to: '/docs/getting-started/cli' },
+            { label: 'Built for Brazil', to: '/docs/brazil' },
             { label: 'Guides', to: '/docs/guides/configuration' },
             { label: 'API reference', to: '/docs/reference/exports' },
           ],
@@ -117,6 +118,7 @@ const config: Config = {
           title: 'Project',
           items: [
             { label: 'GitHub', href: 'https://github.com/neverleans/plug-store' },
+            { label: 'How this is maintained', to: '/docs/maintenance' },
             { label: 'Changelog', href: 'https://github.com/neverleans/plug-store/blob/master/CHANGELOG.md' },
             { label: 'Contributing', href: 'https://github.com/neverleans/plug-store/blob/master/CONTRIBUTING.md' },
             // Generated at build time by ./plugins/llms-txt.ts.

@@ -112,6 +112,7 @@ everything else, is in the documentation:
 | | |
 |---|---|
 | [Getting started](https://neverleans.github.io/plug-store/docs/getting-started/cli/) | CLI, manual install, **Tailwind setup**, deploy |
+| [Built for Brazil](https://neverleans.github.io/plug-store/docs/brazil/) | What the framework knows about Brazilian commerce — and where it stops |
 | [How it works](https://neverleans.github.io/plug-store/docs/architecture/) | The provider tree and the checkout flow |
 | [Configuration](https://neverleans.github.io/plug-store/docs/guides/configuration/) | Every `CatalogConfig` option |
 | [Themes](https://neverleans.github.io/plug-store/docs/guides/themes/) | Colour tokens, fonts, layouts, `defineTheme` |
@@ -119,10 +120,14 @@ everything else, is in the documentation:
 | [Checkout](https://neverleans.github.io/plug-store/docs/guides/checkout/) | WhatsApp, Pix, Stripe, Mercado Pago, custom adapters |
 | [Pix](https://neverleans.github.io/plug-store/docs/guides/pix/) | The BR Code field by field, with a live generator |
 | [API reference](https://neverleans.github.io/plug-store/docs/reference/exports/) | Every export, prop and type |
+| [How this is maintained](https://neverleans.github.io/plug-store/docs/maintenance/) | What is verified before a release reaches you, and what is not |
 
 **React 18 and React 19 are both supported.** Every release is verified by building a real
-scaffolded project against both majors, on Linux and Windows — see the `e2e-consumer` job
-in [`ci.yml`](./.github/workflows/ci.yml). Neither needs `--legacy-peer-deps`.
+scaffolded project against both majors, on Linux and Windows — the `e2e-consumer` job in
+[`ci.yml`](./.github/workflows/ci.yml), explained in
+[How this is maintained](https://neverleans.github.io/plug-store/docs/maintenance/).
+Neither major needs `--legacy-peer-deps`. You can run the same check yourself with
+`pnpm e2e`.
 
 ---
 
@@ -137,6 +142,10 @@ PlugStore is built on an **Open-Core philosophy**:
   the free tier — think maintained integrations (NFe, live shipping quotes, marketplace
   sync) and operational tooling, not paywalled components. Nothing is gated behind it
   today; everything in the documentation ships free.
+
+Since that layer would be sold as *maintenance*, the free version of it is written down
+first — including the releases that broke — in
+[How this is maintained](https://neverleans.github.io/plug-store/docs/maintenance/).
 
 ---
 

@@ -1,4 +1,10 @@
 {
+  "home.feature.brazil.title": {
+    "message": "Feito para o Brasil"
+  },
+  "home.feature.brazil.text": {
+    "message": "Pix, WhatsApp e Mercado Pago são adaptadores de checkout que já vêm na caixa, não plugins que você sai procurando. A página também diz sem rodeio onde esse conhecimento acaba."
+  },
   "home.feature.themes.title": {
     "message": "50 temas por segmento"
   },
@@ -34,6 +40,12 @@
   },
   "home.feature.license.text": {
     "message": "Todo recurso documentado neste site é livre e open source. Nada nestas páginas está atrás de um plano pago."
+  },
+  "home.feature.maintained.title": {
+    "message": "Mantido, com comprovante"
+  },
+  "home.feature.maintained.text": {
+    "message": "Três pacotes num número de versão só, e um job de CI que instala tudo do jeito que você vai instalar — fora do workspace, em dois sistemas operacionais e duas versões maiores do React."
   },
   "home.hero.eyebrow": {
     "message": "React · Tailwind · Apache-2.0"

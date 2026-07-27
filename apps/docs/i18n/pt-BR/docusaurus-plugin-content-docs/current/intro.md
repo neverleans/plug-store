@@ -70,6 +70,10 @@ Veja [Como funciona](./architecture.md) para entender a relação entre os dois.
 - **Seu backend, não o nosso.** Um data provider são cinco funções assíncronas.
   Aponte a loja para REST, Supabase, Firebase, Prisma ou GraphQL.
 
+A metade brasileira dessa lista é a parte com que framework global não se
+incomoda. [Feito para o Brasil](./brazil.md) diz exatamente o que vem na caixa e
+onde acaba.
+
 ## Quando *não* usar o PlugStore
 
 Ser honesto aqui economiza uma semana sua:
@@ -99,6 +103,10 @@ Existe um estudo de camada comercial separada para agências — integrações
 mantidas e ferramentas de operação, não componentes atrás de paywall. Nada
 descrito nesta documentação depende dela.
 
+"Mantido" é palavra que todo projeto usa, então aqui ela está escrita como
+verificações que você pode rodar, não como promessa: veja
+[Como isto é mantido](./maintenance.md), com as falhas incluídas.
+
 Se uma das paredes acima é o que separa você de uma loja no ar,
 [diga qual](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
 Estamos mapeando em quais as pessoas realmente esbarram antes de construir
@@ -107,5 +115,6 @@ qualquer coisa.
 ## Próximos passos
 
 - [Crie sua primeira loja](./getting-started/cli.md) com a CLI.
+- [Veja o que ele sabe sobre o Brasil](./brazil.md) — e o que ele não sabe.
 - [Entenda a arquitetura](./architecture.md) antes de se comprometer.
 - [Veja os 50 temas](./themes/gallery.mdx) para saber de onde você parte.

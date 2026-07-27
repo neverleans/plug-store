@@ -69,6 +69,10 @@ See [Architecture](./architecture.md) for how the two relate.
 - **Your backend, not ours.** A data provider is five async functions. Point the
   storefront at REST, Supabase, Firebase, Prisma or GraphQL.
 
+The Brazilian half of that list is the part global frameworks do not bother with.
+[Built for Brazil](./brazil.md) sets out exactly what is in the box and where it
+stops.
+
 ## When *not* to use PlugStore
 
 Being honest about this saves you a week:
@@ -97,6 +101,10 @@ A separate commercial layer for agencies is being explored — maintained
 integrations and operational tooling, not paywalled components. Nothing
 described in these docs depends on it.
 
+"Maintained" is a word every project uses, so it is written down here as checks
+you can run rather than a promise: see
+[How this is maintained](./maintenance.md), failures included.
+
 If one of the walls above is what stands between you and a live store,
 [say which one](https://github.com/neverleans/plug-store/issues/new?template=production_need.yml).
 We are mapping which ones people actually hit before building anything.
@@ -104,5 +112,6 @@ We are mapping which ones people actually hit before building anything.
 ## Next
 
 - [Create your first store](./getting-started/cli.md) with the CLI.
+- [See what it knows about Brazil](./brazil.md) — and what it does not.
 - [Understand the architecture](./architecture.md) before you commit to it.
 - [Browse the 50 themes](./themes/gallery.mdx) to see what you are starting from.

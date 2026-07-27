@@ -5,6 +5,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **"Built for Brazil"** documentation page, in both locales. The docs demonstrated the
+  Brazilian side of the framework page by page without ever stating it as the thing that
+  makes it different — including the CRC-16 variant and the ASCII folding rule, the two
+  places a Pix payload silently stops scanning. The page also lists what is *not* built
+  (payment confirmation, NFe, real shipping quotes, marketplace sync, WhatsApp Business
+  API, CPF/CNPJ validation) so nobody discovers those by hitting them in production.
+- **"How this is maintained"** documentation page, in both locales. The `e2e-consumer`
+  gate is the strongest evidence the project produces and it only existed inside a YAML
+  file. The page spells out what each check catches, names the two packaging bugs and the
+  version-drift release that reached users, lists what is *not* covered, and gives the
+  command to run the same gate locally.
+- Both pages surfaced from the homepage, the sidebar, the footer and the README, and
+  picked up automatically by `llms.txt` (26 pages indexed per locale, was 24).
+
 ## [0.1.2] - 2026-07-27
 
 ### Added

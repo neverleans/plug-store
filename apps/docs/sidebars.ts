@@ -11,7 +11,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Start here',
       collapsed: false,
-      items: ['intro', 'architecture'],
+      items: ['intro', 'brazil', 'architecture', 'maintenance'],
     },
     {
       type: 'category',

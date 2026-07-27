@@ -2,7 +2,7 @@
 id: architecture
 title: How it works
 sidebar_label: How it works
-sidebar_position: 2
+sidebar_position: 3
 description: How CatalogApp, CatalogProvider, the contexts and the data provider fit together, and where to plug your own code in.
 ---
 

@@ -12,6 +12,16 @@ type Feature = {
 
 const features: Feature[] = [
   {
+    icon: '🇧🇷',
+    title: translate({ id: 'home.feature.brazil.title', message: 'Built for Brazil' }),
+    text: translate({
+      id: 'home.feature.brazil.text',
+      message:
+        'Pix, WhatsApp and Mercado Pago are checkout adapters that ship in the box, not plugins you go find. The page also says plainly where that knowledge stops.',
+    }),
+    to: '/docs/brazil',
+  },
+  {
     icon: '🎨',
     title: translate({ id: 'home.feature.themes.title', message: '50 industry themes' }),
     text: translate({
@@ -70,6 +80,16 @@ const features: Feature[] = [
         'Every feature documented on this site is free and open source. Nothing on these pages is gated behind a paid tier.',
     }),
     to: '/docs/intro',
+  },
+  {
+    icon: '🛠️',
+    title: translate({ id: 'home.feature.maintained.title', message: 'Maintained, with receipts' }),
+    text: translate({
+      id: 'home.feature.maintained.text',
+      message:
+        'Three packages on one version number, and a CI job that installs them the way you will — outside the workspace, on two operating systems and two React majors.',
+    }),
+    to: '/docs/maintenance',
   },
 ];
 
