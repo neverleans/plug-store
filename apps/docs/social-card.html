@@ -1,0 +1,143 @@
+<!doctype html>
+<!--
+  Source for static/img/social-card.png — the og:image every page of this site
+  points at, and the only thing most people will see before deciding whether to
+  click. It lives here, versioned, rather than in a design tool, so it can be
+  regenerated when the positioning changes.
+
+  Deliberately not in static/: everything under that directory is copied to the
+  build output, and this file is a source, not a page to serve.
+
+  Regenerate at exactly 1200x630 with headless Chrome:
+
+    chrome --headless --disable-gpu --hide-scrollbars \
+      --force-device-scale-factor=1 --window-size=1200,630 \
+      --screenshot=static/img/social-card.png apps/docs/social-card.html
+
+  The committed PNG was then recompressed losslessly (same pixels, zlib level 9)
+  which saves about 10%. Skipping that step is fine; it only costs ~30 kB.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #14092e;
+    color: #fff;
+    position: relative;
+  }
+  /* Brand gradient, same stops as --ps-gradient in the docs theme. */
+  .glow {
+    position: absolute;
+    inset: -30% -10% auto -25%;
+    height: 150%;
+    background:
+      radial-gradient(60% 55% at 22% 28%, rgba(109, 59, 245, .95) 0%, transparent 62%),
+      radial-gradient(55% 50% at 72% 20%, rgba(168, 85, 247, .75) 0%, transparent 60%),
+      radial-gradient(50% 55% at 88% 88%, rgba(236, 72, 153, .70) 0%, transparent 60%);
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(160deg, #000 15%, transparent 78%);
+  }
+  .wrap { position: relative; padding: 60px 76px; height: 100%; display: flex; flex-direction: column; }
+
+  .brand { display: flex; align-items: center; gap: 20px; }
+  .brand svg { width: 62px; height: 62px; }
+  .brand .name { font-size: 42px; font-weight: 700; letter-spacing: -.5px; }
+
+  h1 {
+    margin-top: 30px;
+    font-size: 67px;
+    line-height: 1.04;
+    font-weight: 800;
+    letter-spacing: -2px;
+    max-width: 990px;
+  }
+  h1 .accent {
+    background: linear-gradient(96deg, #f0abfc 0%, #fda4af 60%, #fcd34d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .sub {
+    margin-top: 22px;
+    font-size: 26px;
+    line-height: 1.42;
+    color: rgba(255,255,255,.80);
+    max-width: 900px;
+    font-weight: 400;
+  }
+
+  .foot {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+  }
+  .cmd {
+    font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+    font-size: 25px;
+    padding: 17px 28px;
+    border-radius: 13px;
+    background: rgba(0,0,0,.42);
+    border: 1px solid rgba(255,255,255,.20);
+    white-space: nowrap;
+  }
+  .cmd .p { color: #c4b5fd; }
+  .tags { display: flex; gap: 11px; flex-wrap: wrap; justify-content: flex-end; }
+  .tag {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 11px 19px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.13);
+    border: 1px solid rgba(255,255,255,.20);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="grid"></div>
+
+  <div class="wrap">
+    <div class="brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <rect width="32" height="32" rx="8" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.35)" stroke-width=".8"/>
+        <g fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 7v5"/><path d="M20 7v5"/>
+          <path d="M9 12h14v3a7 7 0 0 1-7 7 7 7 0 0 1-7-7z"/><path d="M16 22v4"/>
+        </g>
+      </svg>
+      <div class="name">PlugStore</div>
+    </div>
+
+    <h1>A storefront your client can <span class="accent">sell from today</span></h1>
+
+    <div class="sub">
+      Turnkey React &amp; Tailwind commerce, built for Brazil — real Pix BR&nbsp;Codes,
+      WhatsApp checkout, 50 industry themes.
+    </div>
+
+    <div class="foot">
+      <div class="cmd"><span class="p">$</span> npm create plug-store</div>
+      <div class="tags">
+        <div class="tag">Pix</div>
+        <div class="tag">WhatsApp</div>
+        <div class="tag">50 themes</div>
+        <div class="tag">Apache-2.0</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
