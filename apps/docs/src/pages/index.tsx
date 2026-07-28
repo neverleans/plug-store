@@ -161,7 +161,12 @@ function Hero() {
 export default function Home() {
   return (
     <Layout
-      title={translate({ id: 'home.meta.title', message: 'Catalog & e-commerce framework for React' })}
+      // This is the headline of every shared link preview and every search
+      // result, so it carries the differentiator rather than the category.
+      title={translate({
+        id: 'home.meta.title',
+        message: 'Catalog & e-commerce framework for React, built for Brazil',
+      })}
       description={translate({
         id: 'home.meta.description',
         message:
